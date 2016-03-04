@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A better catalog searcher for Carnegie Mellon University. See classes that are happening and discover new courses!">
+    <meta name="keywords" content="CMU,cmucoursefind,cmu course find,cmu catalog,soc,catalog finder,cmu courses">
+
+    {% if searchText and searchText != "" %}
+    <title>{{ searchText }} - CMU Course Find</title>
+    {% else %}
+    <title>CMU Course Find</title>
+    {% endif %}
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+    <!-- Customized CSS -->
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/style.css' %}" />
+
+  </head>
+
+  <body>
+  <!-- The navigation bar -->
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#" data-activates="slide-out" class="button-collapse hide-on-med-and-up"><i class="mdi-navigation-menu"></i></a>
+          <a href="/" class="brand-logo left hide-on-small-only light" id="brand-logo">&nbsp; Course Find</a>
+          <div class="row">
+              <form method="GET" action="/" class="col s8 m10 l11" id="search-box">
+                <div class="input-field">
+                    <input type="search" name="q" class="field {% if search_tip %}tooltipped{% endif %}"
+                    {% if search_tip %}
+                    data-position="bottom" data-delay="300" data-tooltip="{{ search_tip }}"
+                    {% endif %}
+                    required maxlength="100" value="{{ searchText }}" placeholder="Search" id="search-text">
+                    <label for="search-text"><i class="mdi-action-search" id="search-icon"></i></label>
+                    <i class="mdi-navigation-close" href="#" onclick="clearForm()"></i>
+                </div>
+              </form>
+              <ul class="right">
+                <li><a href="#" onclick="$('#search-box').submit();"><i class="mdi-content-send"></i></a></li>
+              </ul>
+          </div>
+        </div>
+        <ul id="slide-out" class="side-nav">
+          <li><a href="/" style="font-size:150%;">Course Find</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/disclaimer">Disclaimer</a></li>
+          <li><a href="mailto:justinchuby@cmu.edu?subject=CourseFind Feedback">Feedback</a></li>
+        </ul>
+      </nav>
+    </div>
+    {% block content %}{% endblock %}
+
+    <footer class="page-footer blue-grey darken-1">
+      <div class="container">
+        <div class="row">
+          <div class="col m5 s12">
+            <span class="grey-text text-lighten-4 light">
+              Spring 2016 / Catalog updated on 26 Jan 2016
+            </span>
+          </div>
+          <div class="col m7 s12">
+            <span class="grey-text text-lighten-4 light right">
+            Please <a class="teal-text text-accent-1" href="mailto:justinchuby@cmu.edu?subject=CourseFind Feedback">send me feedbacks !</a><br>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+          <div class="row">
+            <div class="col s5">
+              <a class="light grey-text text-lighten-1" href="/"> CMU Course Find </a>
+            </div>
+            <div class="col s7">
+              <div class="right">
+                <a class="light grey-text text-lighten-3" href="/">Home</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="light grey-text text-lighten-3" href="/about">About</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="light grey-text text-lighten-3" href="/disclaimer">Disclaimer</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+    <script src="{% static 'app/scripts/custom.js' %}"></script>
+  </body>
+</html>

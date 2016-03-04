@@ -1,0 +1,58 @@
+{
+    "results": [
+      {
+        "name":"Porter Hall",
+        "abbr":"PH",
+        "location": {
+             "__type": "GeoPoint",
+             "latitude": 40.441686,
+             "longitude": -79.945962
+        }
+      },
+      {
+        "name":"Baker Hall",
+        "abbr":"BH",
+        "location": {
+             "__type": "GeoPoint",
+             "latitude": 40.441453,
+             "longitude": -79.944787
+        }
+      },
+      {
+        "name":"Wean Hall",
+        "abbr":"WEH",
+        "location": {
+             "__type": "GeoPoint",
+             "latitude": 40.442664,
+             "longitude": -79.945752
+        }
+      },
+      {
+        "name":"Newell-Simon Hall",
+        "abbr":" NSH",
+        "location": {
+             "__type": "GeoPoint",
+             "latitude": 40.443367,
+             "longitude": -79.945623
+        }
+      },
+      {
+        "name":"Gates and Hillman Centers",
+        "abbr":" GHC",
+        "location": {
+             "__type": "GeoPoint",
+             "latitude": 40.443444,
+             "longitude": -79.944634
+        }
+      },
+      {
+        "name":"College of Fine Arts",
+        "abbr":" CFA",
+        "location": {
+             "__type": "GeoPoint",
+             "latitude": 40.441558,
+             "longitude": -79.942963
+        }
+      }
+    ]
+}

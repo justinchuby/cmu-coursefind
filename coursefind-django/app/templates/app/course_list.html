@@ -1,0 +1,60 @@
+{% load template_filter %}
+
+{% for time_attr, time_text in time_flags %}
+  {% if events|get_attr:time_attr %}
+  <div class="section">
+    <h5 class="blue-grey-text"> &nbsp; {{ time_text }} <br><br> </h5>
+    <ul class="collapsible collapsible-accordion" data-collapsible="accordion">
+      {% for course in events|get_attr:time_attr %}
+        <li class="">
+          <div class="collapsible-header waves-effect hoverable">
+            <div class="row nomargin">
+              <div class="col s12 m8 l8 truncate">
+                <i class="material-icons hide-on-small-only">class</i>
+                <span>
+                  {{ course.number }} &nbsp;
+                  {% if course.lecsec != "Lec"%}
+                    {{ course.lecsec }}
+                  {% endif %} &nbsp;&nbsp;
+                  {{ course.name }}
+                </span>
+              </div>
+              <div class="col hide-on-small-only">
+                <span class="right badge">
+                  {% if course.building != "TBA" %}
+                    {{ course.building }} {{ course.room }} |
+                  {% endif %}
+                  {% if course.diffText %}
+                    {{ course.diffText }}
+                  {% endif %}
+                </span>
+              </div>
+              <div class="col s12 hide-on-med-and-up">
+                <span class="right grey-text text-darken-1">
+                  {% if course.building != "TBA" %}
+                    {{ course.building }} {{ course.room }} |
+                  {% endif %}
+                  {% if course.diffText %}
+                    {{ course.diffText }}
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-body blue-grey darken-1" style="display: none;">
+            <p class="grey-text text-lighten-5">
+              <span class="flow-text"><a class="amber-text text-accent-4" href="/?q={{ course.number }}">{{ course.number }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
+              / &nbsp; {{ course.department }} &nbsp; / <br>
+              {{ course.days_text }} &nbsp; | <a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ course.building_text }}" target="_blank">
+               {{ course.building_text }} </a> {{ course.room }}<br>
+              <span class="grey-text text-lighten-2">From</span> {{ course.beginTime }} <span class="grey-text text-lighten-2">to</span> {{ course.endTime }} <br><br>
+              <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructor|title }}<br><br>
+              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.number }}?from=cmucoursefind&keyword={{ searchText }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a>
+            </p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+{% endfor %}
