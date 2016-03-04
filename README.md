@@ -20,9 +20,7 @@ With CourseFind, students can easily find out what’s going on in a class room.
 
     To run the site locally, cd into the coursefind-django folder, and run
 
-```
-#!bash
-
+```bash
 $ python3 manage.py runserver
 ```
 
