@@ -1,4 +1,9 @@
-﻿ONETWELVE = ["I love 112 !",
+﻿# @file cmu_info.py
+# @brief Stores information about CMU.
+# @author Justin Chu (justinchuby@cmu.edu)
+
+
+ONETWELVE = ["I love 112 !",
              "Carpe Diem !",
              "Hot Diggity",
              "\"THINK rather than kicking the code a little bit and somehow let it pass test cases.\"",
@@ -6,30 +11,30 @@
              "\"Live purposefully.\""]
 
 CMU_BUILDINGS = {
-"baker": "BH",
-"cyert": "CYH",
-"doherty": "DH",
-"stadium": "GES",
-"gates": "GHC",
-"weigand": "GYM",
-"gymnasium": "GYM",
-"gym": "GYM",
-"hamburg": "HBH",
-"hamerschlag": "HH",
-"hunt": "HL",
-"library": "HL",
-"tepper": "POS",
-"posner": "POS",
-"gsia": "IA",
-"mellon": "MI",
-"newell": "NSH",
-"simon": "NSH",
-"purnell": "PCA",
-"porter": "PH",
-"roberts": "REH",
-"scaife": "SH",
-"warner": "WH",
-"wean": "WEH"
+    "baker": "BH",
+    "cyert": "CYH",
+    "doherty": "DH",
+    "stadium": "GES",
+    "gates": "GHC",
+    "weigand": "GYM",
+    "gymnasium": "GYM",
+    "gym": "GYM",
+    "hamburg": "HBH",
+    "hamerschlag": "HH",
+    "hunt": "HL",
+    "library": "HL",
+    "tepper": "POS",
+    "posner": "POS",
+    "gsia": "IA",
+    "mellon": "MI",
+    "newell": "NSH",
+    "simon": "NSH",
+    "purnell": "PCA",
+    "porter": "PH",
+    "roberts": "REH",
+    "scaife": "SH",
+    "warner": "WH",
+    "wean": "WEH"
 }
 
 CMU_BUILDINGS_ABBR = {'bh', 'cfa', 'cic', 'cyh', 'dh', 'eds', 'ges',

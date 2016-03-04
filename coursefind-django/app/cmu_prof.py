@@ -1,3 +1,7 @@
+# @file cmu_prof.py
+# @brief Stores the instructor info at CMU
+# @author Justin Chu (justinchuby@cmu.edu)
+
 def getFullName(course, name):
     if course.number in NUM_PROFS:
         for prof in NUM_PROFS[course.number]:

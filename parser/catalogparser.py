@@ -1,4 +1,7 @@
-# readFile() and writeFile() come from CMU 15112 class notes
+# @file catalogparser.py
+# @brief Parse the catalog from the SOC page as an html file.
+# @author Justin Chu (justinchuby@cmu.edu)
+
 
 from html.parser import HTMLParser
 import coursecat, cmu_prof
@@ -163,7 +166,7 @@ def parseSOC(path):
     courses = getProf(courses)
     return courses
 
-
+# @deprecated
 def parseCSV(path):
     f = openFile(path)
     courses = []

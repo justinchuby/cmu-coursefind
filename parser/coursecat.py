@@ -1,3 +1,8 @@
+# @file coursecat.py
+# @brief Contains the Event, Course etc. classes.
+# @author Justin Chu (justinchuby@cmu.edu)
+
+
 import re
 import datetime
 import string
@@ -7,6 +12,9 @@ except:
     from .utilities import *
 
 
+##
+## @brief      A list that contains the events.
+##
 class EventList(list):
     def __init__(self, L=None):
         if L is None:
@@ -20,7 +28,16 @@ class EventList(list):
         self.len = 0
         self.ready()
 
-
+    ##
+    ## @brief      Places the course objects into different lists.
+    ##
+    ## @param      self             Self
+    ## @param      currentDatetime  (datetime.datetime)  Specify the current
+    ##                              date and time
+    ## @param      timeDelta        (int)  the time to define 'future' events
+    ##
+    ## @return     None
+    ##
     def ready(self, currentDatetime=None, timeDelta=60):
         self.len = self.__len__()
         self.past = []
@@ -29,7 +46,7 @@ class EventList(list):
         self.rest = []
         self.laterToday = []
         _dateTime = datetime.datetime(2015,1,1)
-        # timeDelta = datetime.timedelta(minutes = timeDelta)
+
         if not isinstance(currentDatetime, datetime.datetime):
             currentDatetime = datetime.datetime.now()
         currentTime = currentDatetime.time()
@@ -42,7 +59,6 @@ class EventList(list):
             event.building_text = getBuildingText(event.building)
             event.department = getCourseDepartment(event.number_searchable)
 
-            # try:
             if currentDay in event.days_searchable:
                 # ended event
                 if event.endTime < currentTime:
@@ -74,41 +90,6 @@ class EventList(list):
             else:
                 event.diffText = event.days_text
                 self.rest.append(event)
-            # except:
-                # pass
-
-    # def filter(self, currentDatetime, mode, timeDelta=60):
-    #     timeDelta = datetime.timedelta(minutes = time)
-    #     currentTime = currentDatetime.time()
-    #     currentDay = currentDatetime.weekday()
-    #     result = []
-    #     for event in self:
-    #         isInSpan = False
-    #         try:
-    #             if mode == "current":
-    #                 isInSpan = event.intBeginTime < currentTime < event.intEndTime
-    #             elif mode == "future":
-    #                 isInSpan = (event.intBeginTime > currentTime and
-    #                         event.intBeginTime < currentTime + timeDelta)
-    #             elif mode == "past":
-    #                 isInSpan = (event.intEndTime < currentTime)
-    #             if (isInSpan and currentDay in event.days_searchable):
-    #                 result.append(event)
-    #         except:
-    #             pass
-    #     return result
-
-    # def current(self, currentDatetime=None):
-    #     # return filter(self, currentDatetime, "current")
-    #     return self.current
-
-    # def future(self, currentDatetime=None, timeDelta=60):
-    #     # return filter(self, currentDatetime, "future", timeDelta)
-    #     return self.future
-
-    # def past(self, currentDatetime=None):
-    #     # return filter(self, currentDatetime, "past")
-    #     return self.past
 
 
     def sortByTime(self, currentDatetime=None):
@@ -116,12 +97,13 @@ class EventList(list):
         return self.current + self.future + self.laterToday + self.past + self.rest
         
 
-
-
 class CourseList(EventList):
     pass
 
 
+##
+## @brief      Event type. Stores a course's information
+##
 class Event(object):
     EMPTY = Empty()
     COMMA = ";"
@@ -195,9 +177,6 @@ class Event(object):
         return self.__dict__
 
     def refresh(self, _key=None):
-        # for key, value in self.__dict__.items():
-        #     if isinstance(value, str):
-        #         self.__dict__[key] = value.replace(",", Event.COMMA)
         if _key is None or _key == "beginTime":
             if isinstance(self.beginTime, str) and self.beginTime != Event.EMPTY:
                 self.beginTime = parseTime(self.beginTime, "CTG")
@@ -233,6 +212,11 @@ class Event(object):
         L = [d[key] for key in keys]
         return L
 
+    ##
+    ## @brief      Creates a JSON representation of the course info as dictionary
+    ##
+    ## @return     (dict)
+    ##
     def JSONDict(self):
         d = self.getDictRepr()
         d["beginTime"] = inMinutes(d["beginTime"])
@@ -278,39 +262,13 @@ class Course(Event):
             for key in Event.SEARCHABLE_KEYS:
                 if key in data:
                     self.updateKey(key, data[key])
-
-            # self.number = data.get("number", Course.EMPTY)
-            # self.name = data.get("name", Course.EMPTY)
-            # self.units = data.get("units", Course.EMPTY)
-            # self.lecsec = data.get("lecsec", Course.EMPTY)
-            # self.days = data.get("days", Course.EMPTY)
-            # self.beginTime = data.get("beginTime", Course.EMPTY)
-            # self.endTime = data.get("endTime", Course.EMPTY)
-            # self.building = data.get("building", Course.EMPTY)
-            # self.room = data.get("room", Course.EMPTY)
-            # self.city = data.get("city", Course.EMPTY)
-            # self.instructor = data.get("instructor", Course.EMPTY)
-            # self.typ = data.get("typ", Course.EMPTY)
-            # self.beginDate = data.get("beginDate", Course.EMPTY)
-            # self.endDate = data.get("endDate", Course.EMPTY)
-            # self.location = data.get("location", Course.EMPTY)
-            # self.objectId = data.get("objectId", Course.EMPTY)
         self.refresh()
 
-    def isLegal(self):
-        d = self.__dict__
-        courseNumber = d.get("number", Event.EMPTY)
-        if (not courseNumber == Event.EMPTY) and (not courseNumber.isdigit()):
-            # course number cant be a list
-            return False
-        if self.name == "TBA":
-            return False
-        if self.room == "DNM" or self.building == "DNM":
-            return False
-        if self.beginTime == Event.EMPTY:
-            return False
-        return True
-
+    ##
+    ## @brief      Determine whether this is a lecture or a section.
+    ##
+    ## @return     A list with (str) course type as elements.
+    ##
     def getType(self):
         if isinstance(self.lecsec, str):
             if "Lec" in self.lecsec:
@@ -332,6 +290,9 @@ class Course(Event):
         return Event.EMPTY
 
 
+##
+## @brief      A special class used for parsing the SOC page.
+##
 class SOCCourse(Course):
     def __init__(self, data=None):
         super().__init__()
@@ -356,8 +317,6 @@ class SOCCourse(Course):
         self.refresh()
 
     def refresh(self, _key=None):
-        # super().refresh deleted
-
         # get rid of commas
         # for key, value in self.__dict__.items():
         #     if isinstance(value, str):
@@ -394,6 +353,22 @@ class SOCCourse(Course):
 
         # get the type attribute
         self.typ = self.getType()
+
+
+    def isLegal(self):
+        d = self.__dict__
+        courseNumber = d.get("number", Event.EMPTY)
+        if (not courseNumber == Event.EMPTY) and (not courseNumber.isdigit()):
+            # course number cant be a list
+            return False
+        if self.name == "TBA":
+            return False
+        if self.room == "DNM" or self.building == "DNM":
+            return False
+        if self.beginTime == Event.EMPTY:
+            return False
+        return True
+
 
     def isCompleted(self):
         L = [self.number, self.name, self.units, self.lecsec, self.days,

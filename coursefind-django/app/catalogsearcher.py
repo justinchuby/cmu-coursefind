@@ -1,4 +1,7 @@
-﻿# the fetch() function is adapted from https://parse.com/docs/rest/guide
+﻿# @file catalogsearcher.py
+# @brief Interprets the input. Queries the parse server, and then returns the result.
+# @author Justin Chu (justinchuby@cmu.edu)
+
 
 import datetime
 import re
@@ -30,6 +33,13 @@ DAYS_STRING = {"monday": "0",
                "sat": "5",
                "sun": "6"}
 
+##
+## @brief      Checks if there is a None in a list/tuple/set/dict.
+##
+## @param      thing
+##
+## @return     bool
+##
 def containsNone(thing):
     if thing is None:
         return True
@@ -38,11 +48,21 @@ def containsNone(thing):
     if ((isinstance(thing, list) or isinstance(thing, tuple)
         or isinstance(thing, set) or isinstance(thing, dict)) and None in thing):
         return True
-
     return False
 
+
+##
+## @brief      Defines a Searcher object.
+##
 class Searcher(object):
 
+    ##
+    ## @brief      init
+    ##
+    ## @param      self        
+    ## @param      s           The query text
+    ## @param      looseField  The field to use loose search
+    ##
     def __init__(self, s="", looseField=None):
         self.text = s.strip()
         self.rawQuery = dict()
@@ -57,6 +77,15 @@ class Searcher(object):
     def __repr__(self):
         return str(self.rawQuery)
 
+    ##
+    ## @brief      Constructs the query for a given field.
+    ##
+    ## @param      s      (str) Input text
+    ## @param      field  (str) The specified field type
+    ##
+    ## @return     Depends on the field type. List or tuple for multiple
+    ##             outputs, string for a single output, None if nothing.
+    ##
     @staticmethod
     def getField(s, field):
         if field == "number":
@@ -98,7 +127,16 @@ class Searcher(object):
                 return s
             return None
 
-
+    ##
+    ## @brief      Gets the query for a specified from the searchable list
+    ##
+    ## @param      self
+    ## @param      searchable  The searchable list consists of strings as elements
+    ## @param      field       The specified field
+    ## @param      multiple    Whether or not to look for multiple results
+    ##
+    ## @return     A query string for the field if multiple is False; a list of query strings if multiple is Ture.
+    ##
     def getFieldFromList(self, searchable, field, multiple=False):
         # the fields below are not popped
         dontPopFields = {"number"}
@@ -122,14 +160,21 @@ class Searcher(object):
         else:
             return found
 
+    ##
+    ## @brief      Gets rid of the empty queries in the rawQuery.
+    ##
     def cleanUpRawQuery(self):
         d = copy.copy(self.rawQuery)
         for key, value in d.items():
             if containsNone(value) or value == [] or value == "":
                 del self.rawQuery[key]
 
+    ##
+    ## @brief      Uses the searchable to generate field of search for constructing a query.
+    ## 
+    ## @return     None
+    ##
     def parseSearchBox(self):
-        # takes in a string and returns field of search for constructing a query
         # converts the time into datetime format
         searchable = copy.copy(self.searchable)
         if self.length == 0:
@@ -163,26 +208,7 @@ class Searcher(object):
                     # the rest might be a part of a course name
                     self.rawQuery["name_searchable"] = searchable
 
-        # elif self.length == 2:
-        #     # first consider (PH 100) type of things
-        #     building = self.getField(searchable[0], "building")
-        #     room = self.getField(searchable[1], "room")
-        #     if building is not None and room is not None:
-        #         self.rawQuery["building"] = building
-        #         self.rawQuery["room"] = room
-        #         self.rawQuery["day"] = self.getFieldFromList(searchable, "days")
-        #     else:
-        #         self.rawQuery["name_searchable"] = searchable
-        #         self.rawQuery["instructor"] = searchable
-
         else:
-            # if self.length == 2:
-            #     # check if it's a professor's full name
-            #     self.rawQuery["instructor_known"] = []
-            #     if " ".join(self.searchable) in cmu_prof.FULL_NAMES:
-            #         self.rawQuery["instructor_known"] = self.searchable
-
-            # if self.length > 2 or len(self.rawQuery["instructor_known"]) < 2:
             self.rawQuery["number"] = self.getFieldFromList(searchable, "number")
             (building, room) = self.getFieldFromList(searchable, "building_room")
             if building is not None:
@@ -210,8 +236,6 @@ class Searcher(object):
             for elem in searchable:
                 if elem.isdigit():
                     searchableSet.discard(elem)
-# DEBUG
-                    # print(elem, "!")
             searchable = list(searchableSet)
 
             # the string left is a course name or a prof's name
@@ -222,6 +246,13 @@ class Searcher(object):
         self.rawQuery["city"] = ["pittsburgh"]
         self.cleanUpRawQuery()
 
+    ##
+    ## @brief      Generate the query for the database.
+    ## 
+    ## @param      service  The service that's being used. Parse as default.
+    ##
+    ## @return     (dict) The query for querying the database.
+    ##
     def generateQuery(self, service="parse"):
         return self.generateQueryFromRaw(self.rawQuery, service, self.looseField)
 
@@ -270,15 +301,6 @@ class Searcher(object):
                                             "$all": rawQuery["name_searchable"]
                                         }})
 
-
-            # if "instructor" in rawQuery:
-            #     for i in range(len(rawQuery["instructor"])):
-            #         query["$or"].append({"instructor_searchable": 
-            #                                 rawQuery["instructor"][i]
-            #                             })
-
-            # query["instructor_searchable"] = {"$all": []}
-
             # first check if it is a recorded instructor
             if "instructor_known" in rawQuery:
                 instructors = rawQuery["instructor_known"]
@@ -310,9 +332,17 @@ class Searcher(object):
                 del query["$or"]
         return query
 
-    def printJSONQuery(self):
-        jsonQuery = json.dumps(self.generateQuery(), sort_keys=True, indent=4)
+    # def printJSONQuery(self):
+    #     jsonQuery = json.dumps(self.generateQuery(), sort_keys=True, indent=4)
 
+##
+## @brief      Gets current courses from the database.
+##
+## @param      timeDelta        The time in minutes to find classes that are going to happen.
+## @param      currentDatetime  (datetime.datetime)
+##
+## @return     A list of (coursecat.course) courses.
+##
 def getCurrentCourses(timeDelta=60, currentDatetime=None):
     if currentDatetime is None:
         currentDatetime = datetime.datetime.now()
@@ -342,6 +372,14 @@ def presearch(searchText):
     return True, None
 
 
+##
+## @brief      The main search function.
+##
+## @param      searchText  Input text.
+## @param      looseField  Search fields to loose search.
+##
+## @return     A list of (coursecat.course) courses.
+## 
 def search(searchText, looseField=None):
     searcher = Searcher(searchText)
     courses = []
@@ -372,7 +410,7 @@ def fetchCourse(query):
         return parseJSONToCourses(fetch(query, table))
     except:
 # DEBUG
-        print("unable to get courses")
+        # print("unable to get courses")
         return []
 
 
@@ -414,6 +452,7 @@ def test_containsNone():
     assert(containsNone(['None', 'None']) is False)
     assert(containsNone((None, None)) is True)
     assert(containsNone(([None, None])) is True)
+
 
 def test_dayFilter():
     currentDatetime = datetime.datetime.now()

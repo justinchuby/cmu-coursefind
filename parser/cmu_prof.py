@@ -1,3 +1,16 @@
+# @file cmu_prof.py
+# @brief (Used by the parser) Stores the instructor info at CMU
+# @author Justin Chu (justinchuby@cmu.edu)
+
+
+##
+## @brief      Gets the full name of an instructor.
+##
+## @param      course  A course object with a course number.
+## @param      name    (str) The instructor's last name.
+##
+## @return     (str) The instructor's full name.
+##
 def getFullName(course, name):
     if course.number in NUM_PROFS:
         for prof in NUM_PROFS[course.number]:

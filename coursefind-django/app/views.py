@@ -10,10 +10,6 @@ except:
     import catalogsearcher, coursecat
 
 
-# def loading(request):
-#     return render(request, 'app/loading.html')
-
-
 def getText(displayMode, tab, eventList):
     result = None
     try:
@@ -160,10 +156,6 @@ def home(request, **kwargs):
                 courses_lec.append(course)
             elif "sec" in course.typ:
                 courses_sec.append(course)
-
-        # for course in courses_lec:
-        #     if course.number == "15112" and "search" in displayMode:
-        #         mainpage_toast = "I love 112 !"
 
         # dont forget to call ready
         courses_lec.ready(currentDatetime=searchDatetime)

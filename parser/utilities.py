@@ -20,6 +20,9 @@ SOC_TABLE_ORDER = {
 }
 
 
+##
+## @brief      Empty object
+##
 class Empty(object):
     def __init__(self, s=" "):
         self.string = s
@@ -43,6 +46,13 @@ class Empty(object):
         return False
 
 
+##
+## @brief      Represent a time in minutes.
+##
+## @param      time  Can be (datetime.time), (datetime.datetime) or (datetime.timedelta).
+##
+## @return     (int) minutes, or and Empty object if failed to convert.
+##
 def inMinutes(time):
     # represent a time in minutes
     if isinstance(time, datetime.time) or isinstance(time, datetime.datetime):
@@ -90,12 +100,26 @@ def parseTime(s, frm=None):
     return None
 
 
+##
+## @brief      Eliminates spaces and makes each word in lower case.
+##
+## @param      s          The input string.
+## @param      separator  The separator in the string
+##
+## @return     A list of strings.
+##
 def splitString(s, separator=","):
-    # eliminates spaces and makes each string lower case as well
     return [elem.strip().lower() for elem
             in s.split(separator) if elem.strip() != ""]
 
 
+##
+## @brief      Gets the string rid of punctuations.
+##
+## @param      s     (str)
+##
+## @return     (str)
+##
 def eliminatePunc(s):
     return re.sub(r"[%s]" % string.punctuation, " ", s)
 
@@ -131,6 +155,13 @@ def getDaysText(days):
     return ", ".join(result)
 
 
+##
+## @brief      Gets the full name of a building from its abbreviation.
+##
+## @param      building  (str)
+##
+## @return     (str)
+##
 def getBuildingText(building):
     _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
     if building in _CMU_BUILDINGS_FROM_ABBR:
@@ -139,6 +170,13 @@ def getBuildingText(building):
         return building
 
 
+##
+## @brief      Gets the name of the department that offers the course.
+##
+## @param      number_searchable
+##
+## @return     The name of the department if found, original input of not found.
+##
 def getCourseDepartment(number_searchable):
     try:
         num = number_searchable[0]
