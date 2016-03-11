@@ -49,7 +49,8 @@
                {{ course.building_text }} </a> {{ course.room }}<br>
               <span class="grey-text text-lighten-2">From</span> {{ course.beginTime }} <span class="grey-text text-lighten-2">to</span> {{ course.endTime }} <br><br>
               <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructor|title }}<br><br>
-              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.number }}?from=cmucoursefind&keyword={{ searchText }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a>
+              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.number }}?from=cmucoursefind&keyword={{ searchText }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a><br>
+              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://www.ratemyprofessors.com/search.jsp?query={{ course.instructor }}" target="_blank" rel="nofollow">Search for the instructor on <span class="amber-text text-accent-4">ratemyprofessors.com</span>&nbsp;<i class="tiny material-icons">launch</i></a>
             </p>
           </div>
         </li>
