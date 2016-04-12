@@ -156,7 +156,7 @@ class Event(object):
         return False
 
     def __ne__(self, other):
-        return self.__eq__(other)
+        return not self.__eq__(other)
 
     def isCompleted(self):
         pass
