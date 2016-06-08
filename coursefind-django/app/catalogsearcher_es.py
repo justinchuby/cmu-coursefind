@@ -7,85 +7,15 @@ import json
 try:
     from . import cmu_info
     from .utilities import *
+    from .coursescotty import *
 except:
     import cmu_info
     from utilities import *
+    from coursescotty import *
 
 
 from elasticsearch import Elasticsearch
 import elasticsearch
-
-
-class Course(object):
-    def __init__(self, scotty_dict):
-        self.courseid = scotty_dict["id"]
-        self.scottyDict = copy.deepcopy(scotty_dict)
-        self.lectures = self.scottyDict["lectures"]
-        self.sections = self.scottyDict["sections"]
-
-    def __repr__(self):
-        s = ""
-        for key, item in self.scottyDict.items():
-            s += "{}: {}\n".format(repr(key), repr(item))
-        s = "</Course: " + s + "/>"
-        return s
-
-    ##
-    ## @brief      Get lists of lectures and sections in a dictionary.
-    ##
-    ## @param      self  The Course object.
-    ##
-    ## @return     A dictionary of two lists.
-    ##
-    def split(self):
-        output = {
-            "lectures": [],
-            "sections": []
-        }
-
-        baseInfo = copy.copy(self.scottyDict)
-        baseInfo["number"] = baseInfo["id"]
-        del baseInfo["lectures"]
-        del baseInfo["sections"]
-
-        _KEYS = ["lectures", "sections"]
-        for key in _KEYS:
-            if self.__dict__[key] != []:
-                for lecsecDict in self.__dict__[key]:
-                    _baseInfo = copy.deepcopy(baseInfo)
-
-                    # Add type
-                    if key == "lectures":
-                        _baseInfo["type"] = "lec"
-                    elif key == "sections":
-                        _baseInfo["type"] = "sec"
-
-                    # Pull up the lecture/section object one level
-                    for field in lecsecDict:
-                        if field == "name":
-                            _baseInfo["lecsec"] = lecsecDict[field]
-                        else:
-                            _baseInfo[field] = lecsecDict[field]
-                    output[key].append(LectureSection(_baseInfo))
-        return output
-
-
-class LectureSection(object):
-    def __init__(self, reduced_scotty_dict):
-        self.KEYS = ["number", "name", "units", "lecsec", "times", "instructors",
-                     "rundate", "department", "coreqs", "prereqs", "type"]
-        for key in self.KEYS:
-            self.__dict__[key] = copy.deepcopy(reduced_scotty_dict[key])
-
-    def __repr__(self):
-        s = ""
-        for key in self.KEYS:
-            s += "{}: {}, ".format(repr(key), repr(self.__dict__[key]))
-        s = "</LectureSection: " + s + "/>"
-        return s
-
-    def update(self, reduced_scotty_dict):
-        self.__init__(reduced_scotty_dict)
 
 
 ##
@@ -363,6 +293,16 @@ class Searcher(object):
                 query["query"]["bool"]["must"] = {"match_all": {}}
 
         return query
+
+
+def presearch(searchText):
+    # returns shouldSearch, message
+    searchText = " ".join(getSearchable(searchText))
+
+    match = re.search("15112|112|kosbie|kos", searchText)
+    if match:
+        return True, random.choice(cmu_info.ONETWELVE)
+    return True, None
 
 
 def search(text):

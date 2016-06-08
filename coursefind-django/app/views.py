@@ -5,9 +5,9 @@ import re
 import random
 
 try:
-    from . import catalogsearcher, coursecat
+    from . import catalogsearcher_es, coursecat
 except:
-    import catalogsearcher, coursecat
+    import catalogsearcher_es, coursecat
 
 
 def getText(displayMode, tab, eventList):
@@ -16,9 +16,7 @@ def getText(displayMode, tab, eventList):
         if "search" in displayMode:
             if "room" not in displayMode:
                 if tab == "lecture" or tab == "section":
-                    if len(eventList) > 98:
-                        result = "Found more than 98 {}s.".format(tab)
-                    elif len(eventList) > 1:
+                    if len(eventList) > 1:
                         result = "Found {} {}s.".format(len(eventList), tab)
                     elif len(eventList) == 1:
                         result = "Found one {}.".format(tab)
@@ -31,9 +29,7 @@ def getText(displayMode, tab, eventList):
         elif "time" in displayMode:
             displayTime = displayMode["time"].strftime("%H:%M")
             if tab == "lecture" or tab == "section":
-                if len(eventList.current) > 98:
-                    result = "There are more than 98 {}s at {}.".format(tab, displayTime)
-                elif len(eventList.current) > 1:
+                if len(eventList.current) > 1:
                     result = "There are {} {}s at {}.".format(len(eventList.current), tab, displayTime)
                 elif len(eventList.current) == 1:
                     result = "One {} happening at {}.".format(tab, displayTime)
@@ -44,9 +40,7 @@ def getText(displayMode, tab, eventList):
 
         elif "current" in displayMode:
             if tab == "lecture" or tab == "section":
-                if len(eventList.current) > 98:
-                    result = "There are currently more than 98 {}s happening.".format(tab)
-                elif len(eventList.current) > 1:
+                if len(eventList.current) > 1:
                     result = "There are currently {} {}s happening.".format(len(eventList.current), tab)
                 elif len(eventList.current) == 1:
                     result = "One {} happening at this time.".format(tab)
@@ -62,19 +56,18 @@ def getText(displayMode, tab, eventList):
 
 def home(request, **kwargs):
 # DEBUG
-    print(request.GET, request.POST)
+    # print(request.GET, request.POST)
     currentDatetime = datetime.datetime.now()
     searchDatetime = currentDatetime
     currentDate = currentDatetime.date()
     searchDate = currentDate
     currentTime = currentDatetime.time()
     searchTime = currentTime
-    # currentDay = currentDatetime.weekday()
-    # timeInMinutes = coursecat.inMinutes(currentTime)
-    courses = []
+
+    courseDict = dict()
     searchText = ""
     shouldSearch = True
-    looseSearched = False
+
     displayMode = {"current": None}
     courses_lec = coursecat.CourseList()
     courses_sec = coursecat.CourseList()
@@ -92,20 +85,7 @@ def home(request, **kwargs):
 
     if request.method == "GET":
         data = dict(request.GET)
-        # searchDate = ""
 
-        # set currentDatetime as the search time
-        # if "date" in data:
-        #     if isinstance(data["date"], list):
-        #         searchDate = data["date"][0]
-        #     elif isinstance(data["date"], str):
-        #         searchDate = data["date"]
-        #     match = re.search("(\d\d?)\s*([a-zA-Z]*),\s(\d\d\d\d)", searchDate)
-        #     if match:
-        #         currentDate = datetime.datetime.strptime(match.group(), "%d %b, %Y").date()
-        #         currentDatetime = datetime.datetime.combine(currentDate, currentTime)
-        #     elif searchDate != "":
-        #         searchDate = currentDate.strftime("%d %b, %Y")
         if "q" in data:
             # searching
             displayMode["search"] = None
@@ -133,29 +113,19 @@ def home(request, **kwargs):
             if coursecat.getSearchable(searchTextWithoutTime) == []:
 # TODO needs to change the displayMode according to search date
                 del displayMode["search"]
-                courses = catalogsearcher.getCurrentCourses(currentDatetime=searchDatetime)
+                courseDict = catalogsearcher_es.getCurrentCourses(currentDatetime=searchDatetime)
             else:
-                shouldSearch, mainpage_toast = catalogsearcher.presearch(searchTextWithoutTime)
+                shouldSearch, mainpage_toast = catalogsearcher_es.presearch(searchTextWithoutTime)
                 if shouldSearch:
-                    courses = catalogsearcher.search(searchTextWithoutTime)
+                    courseDict = catalogsearcher_es.search(searchTextWithoutTime)
 
-                    if courses == []:
-                        # if no course returns
-                        courses = catalogsearcher.search(searchTextWithoutTime, looseField={"name"})
-                        if courses != []:
-                            # now there are courses!
-                            looseSearched = True
-                            displayMode["looseSearched"] = None
         else:
-            courses = catalogsearcher.getCurrentCourses(currentDatetime=searchDatetime)
+            courseDict = catalogsearcher_es.getCurrentCourses(currentDatetime=searchDatetime)
 
     # put courses into lectures and sections
-    if courses != []:
-        for course in courses:
-            if "lec" in course.typ:
-                courses_lec.append(course)
-            elif "sec" in course.typ:
-                courses_sec.append(course)
+    if courseDict is not None:
+        courses_lec += courseDict["lectures"]
+        courses_sec += courseDict["sections"]
 
         # dont forget to call ready
         courses_lec.ready(currentDatetime=searchDatetime)
@@ -169,15 +139,12 @@ def home(request, **kwargs):
 
     # get different time divisions
     time_flags = [["current", "Now happening"],
-                 ["future", "In an hour"],
-                 ["laterToday", "Later today"],
-                 ["past", "Ended"],
-                 ["rest", "On other days"]]
+                  ["future", "In an hour"],
+                  ["laterToday", "Later today"],
+                  ["past", "Ended"],
+                  ["rest", "On other days"]]
 
     search_tip = "Try searching for " + random.choice(SEARCH_TIPS)
-
-# DEBUG
-    # print("searching:", searchText)
 
     context = {'searchText': searchText,
                'courses_lec': courses_lec,
@@ -195,6 +162,7 @@ def home(request, **kwargs):
 def about(request):
     context = dict()
     return render(request, 'app/about.html', context)
+
 
 def disclaimer(request):
     context = dict()
