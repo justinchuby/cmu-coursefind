@@ -3,8 +3,7 @@ import re
 import copy
 import random
 
-import json, urllib
-from http import client as Client
+import json
 
 try:
     from . import cmu_info
@@ -15,6 +14,7 @@ except:
 
 
 from elasticsearch import Elasticsearch
+import elasticsearch
 
 # class Server():
 #     def __init__(self, address, port):
@@ -177,7 +177,6 @@ class Searcher(object):
                 self.rawQuery["rest"] = s
 
         else:
-            self.rawQuery["number"] = self.getFieldFromList(searchable, "number")
             (self.rawQuery["building"], self.rawQuery["room"]) = self.getFieldFromList(searchable, "building_room")
             if self.rawQuery["room"] is None:
                 self.rawQuery["building"] = self.getFieldFromList(searchable, "building")
@@ -320,19 +319,44 @@ class Searcher(object):
 def search(text):
     searcher = Searcher(text)
     query = searcher.generateQuery()
-    index = "test7"
+    index = getCurrentIndex()
     servers = ["courseapi-scotty.rhcloud.com:80"]
     response = fetch(index, query, servers)
-    for hit in response['hits']['hits']:
-        print(hit['_source'])
+    print()
+    if "hits" in response:
+        for hit in response['hits']['hits']:
+            print(hit['_source'])
+
+
+def getCurrentIndex():
+    # currentYear = datetime.date.today().year
+    # currentMonth = datetime.date.today().month
+    # return getIndex(currentYear, currentMonth)
+    return "test9"
+
+
+def getIndex(year, month):
+    if 1 <= month <= 4:
+        semester = "s"
+    elif 5 <= month <= 6:
+        semester = "m1"
+    elif month == 7:
+        semester = "m2"
+    else:
+        semester = "f"
+    index = semester + str(year)[2:]
+    return index
 
 
 def fetch(index, query, servers):
     es = Elasticsearch(servers)
-    response = es.search(
-        index = index,
-        body = query,
-        size = 20
+    response = dict()
+    try:
+        response = es.search(
+            index = index,
+            body = query,
+            size = 1000
         )
+    except elasticsearch.exceptions.NotFoundError:
+        print("'index_not_found_exception', 'no such index'")
     return response
-
