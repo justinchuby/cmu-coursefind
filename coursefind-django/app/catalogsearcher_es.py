@@ -50,7 +50,7 @@ class Searcher(object):
     ## @param      self        
     ## @param      s           The query text
     ##
-    def __init__(self, s="", looseField=None):
+    def __init__(self, s=""):
         self.text = s.strip()
         self.rawQuery = dict()
         self.searchable = splitString(self.text.lower(), " ")
@@ -195,15 +195,15 @@ class Searcher(object):
         return self.constructESQueryFromRaw(self.rawQuery)
 
     @staticmethod
-    def constructESQueryFromRaw(rawQuery):
-        print(rawQuery)
+    def constructESQueryFromRaw(raw_query):
+        print(raw_query)
         # Filtering fields are not in the query
-        if (("day" not in rawQuery) and ("building" not in rawQuery) and
-            ("room" not in rawQuery) and ("number" not in rawQuery)):
+        if (("day" not in raw_query) and ("building" not in raw_query) and
+            ("room" not in raw_query) and ("number" not in raw_query)):
             query = {
                 "query": { 
                   "query_string" : {
-                     "query" : rawQuery["rest"]
+                     "query" : raw_query["rest"]
                   }
                 }
             }
@@ -273,43 +273,43 @@ class Searcher(object):
             query = json.loads(QUERY_BASE)
 
             # fields: building, building_room, number, time
-            if "day" in rawQuery:
+            if "day" in raw_query:
                 query["query"]["bool"]["filter"]["or"][0]\
                      ["nested"]["query"]["bool"]["must"]\
                      ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"lectures.times.days": rawQuery["day"]}})
+                        {"match": {"lectures.times.days": raw_query["day"]}})
                 query["query"]["bool"]["filter"]["or"][1]\
                      ["nested"]["query"]["bool"]["must"]\
                      ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"sections.times.days": rawQuery["day"]}})
+                        {"match": {"sections.times.days": raw_query["day"]}})
 
-            if "building" in rawQuery:
+            if "building" in raw_query:
                 query["query"]["bool"]["filter"]["or"][0]\
                      ["nested"]["query"]["bool"]["must"]\
                      ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"lectures.times.building": rawQuery["building"]}})
+                        {"match": {"lectures.times.building": raw_query["building"]}})
                 query["query"]["bool"]["filter"]["or"][1]\
                      ["nested"]["query"]["bool"]["must"]\
                      ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"sections.times.building": rawQuery["building"]}})
+                        {"match": {"sections.times.building": raw_query["building"]}})
 
-            if "room" in rawQuery:
+            if "room" in raw_query:
                 query["query"]["bool"]["filter"]["or"][0]\
                      ["nested"]["query"]["bool"]["must"]\
                      ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"lectures.times.room": rawQuery["room"]}})
+                        {"match": {"lectures.times.room": raw_query["room"]}})
                 query["query"]["bool"]["filter"]["or"][1]\
                      ["nested"]["query"]["bool"]["must"]\
                      ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"sections.times.room": rawQuery["room"]}})
+                        {"match": {"sections.times.room": raw_query["room"]}})
 
-            if "number" in rawQuery:
-                query["query"]["bool"]["must"] = {"term": {"id": rawQuery["number"]}}
-                if (("day" not in rawQuery) and ("building" not in rawQuery) and
-                    ("room" not in rawQuery)):
+            if "number" in raw_query:
+                query["query"]["bool"]["must"] = {"term": {"id": raw_query["number"]}}
+                if (("day" not in raw_query) and ("building" not in raw_query) and
+                    ("room" not in raw_query)):
                     del query["query"]["bool"]["filter"]
-            elif "rest" in rawQuery:
-                query["query"]["query_string"] = {"query": rawQuery["rest"]}
+            elif "rest" in raw_query:
+                query["query"]["query_string"] = {"query": raw_query["rest"]}
             else:
                 query["query"]["bool"]["must"] = {"match_all": {}}
 
@@ -360,3 +360,47 @@ def fetch(index, query, servers):
     except elasticsearch.exceptions.NotFoundError:
         print("'index_not_found_exception', 'no such index'")
     return response
+
+
+class Course(object):
+    def __init__(self, scotty_dict):
+        self.courseid = scotty_dict["id"]
+        self.scottyDict = copy.deepcopy(scotty_dict)
+        self.lectures = self.scottyDict["lectures"]
+        self.sections = self.scottyDict["sections"]
+
+    ##
+    ## @brief      Get lists of lectures and sections in a dictionary.
+    ##
+    ## @param      self  The Course object.
+    ##
+    ## @return     A dictionary of two lists.
+    ##
+    def getList(self):
+        lectures = []
+        sections = []
+        baseInfo = dict()
+        for key in self.scottyDict:
+            if key != "lectures" and key != "sections":
+                baseInfo[key] = self.scottyDict[key]
+        if self.lectures != []:
+            for obj in self.lectures:
+                newElem = copy.deepcopy(baseInfo)
+                for field in obj:
+                    newElem[field] = obj[field]
+                lectures.append(newElem)
+        if self.sections != []:
+            for obj in self.sections:
+                newElem = copy.deepcopy(baseInfo)
+                for field in obj:
+                    newElem[field] = obj[field]
+                sections.append(newElem)
+        return {"lectures": lectures, "sections": sections}
+
+
+def parseResponse(response):
+    courses = []
+    if "hits" in response and response['hits']['hits'] != []:
+        for courseObj in response['hits']['hits']['_source']:
+            courses += Course(courseObj)
+    return courses
