@@ -164,15 +164,17 @@ class Searcher(object):
             self.rawQuery["number"] = self.getField(s, "number")
 
             # building and room combined
-            self.rawQuery["building_room"] = self.getField(s, "building_room")
+            (self.rawQuery["building"], self.rawQuery["room"]) = self.getField(s, "building_room")
 
             if s.isalpha():
                 # might be a day
                 self.rawQuery["day"] = self.getField(s, "day")
                 # might be a building name
                 self.rawQuery["building"] = self.getField(s, "building")
-                if not self.rawQuery["day"] and not self.rawQuery["building"]:
-                    self.rawQuery["rest"] = s
+# TODO: This doesn't look good
+            self.cleanUpRawQuery()
+            if self.rawQuery == dict():
+                self.rawQuery["rest"] = s
 
         else:
             self.rawQuery["number"] = self.getFieldFromList(searchable, "number")
@@ -181,7 +183,7 @@ class Searcher(object):
                 self.rawQuery["building"] = self.getFieldFromList(searchable, "building")
 
             self.rawQuery["day"] = self.getFieldFromList(searchable, "day")
-            self.rawQuery["rest"] = searchable.join(" ")
+            self.rawQuery["rest"] = " ".join(searchable)
 
         self.cleanUpRawQuery()
 
@@ -241,14 +243,14 @@ class Searcher(object):
                            {
                               "nested": {
                                  "inner_hits": {},
-                                 "path": "lectures",
+                                 "path": "sections",
                                  "score_mode": "avg",
                                  "query": {
                                     "bool": {
                                        "must": 
                                           {
                                              "nested": {
-                                                "path": "lectures.times",
+                                                "path": "sections.times",
                                                 "score_mode": "avg",
                                                 "query": {
                                                    "bool": {
