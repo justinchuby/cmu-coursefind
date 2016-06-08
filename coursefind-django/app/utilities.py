@@ -206,53 +206,19 @@ def getCourseDepartment(number_searchable):
 #         self.days = -1
 
 
-#################################
-
-def test_Course():
-    print("testing testCourses...")
-    L1 = ["12345", "12345", "12345", "12345", "12345", "12345", "12345", "12345", "12345", "12345"]
-    course1 = SOCCourse(L1)
-    assert(course1.isLegal() is True)
-    L2 = [" ", "12345", "12345", "12345", "12345", "12345", "12345", "12345", "12345", "12345"]
-    course2 = SOCCourse(L2)
-    assert(course2.isLegal() is True)
-    assert(course2.isEmpty() is False)
-    L3 = ["Archi", "12345", "12345", " ", "12345", "12345", "12345", "12345", "12345", "12345"]
-    course3 = SOCCourse(L3)
-    assert(course3.isLegal() is False)
-    assert(course3.isEmpty() is False)
-    print("Passed!")
-
-
-# def test_SimpleTime():
-#     print("test_SimpleTime")
-#     assert(SimpleTime("08:00AM", "SOC").inMinutes() == 480)
-#     assert(SimpleTime("08:00PM", "SOC").inMinutes() == 1200)
-#     assert(SimpleTime("12:00AM", "SOC").inMinutes() == 0)
-#     assert(SimpleTime("12:00PM", "SOC").inMinutes() == 720)
-#     assert(SimpleTime("02:50PM", "SOC").inMinutes() == 890)
-#     assert(SimpleTime("890").inMinutes() == 890)
-#     print(SimpleTime("890"))
-#     print("Passed")
-
-def test_parseTime():
-    print("test_parseTime...")
-    assert(parseTime("08:00AM", "SOC") == parseTime("480"))
-    assert(parseTime("08:00PM", "SOC") == parseTime("1200"))
-    assert(parseTime("12:00AM", "SOC") == parseTime("0"))
-    assert(parseTime("12:00PM", "SOC") == parseTime("720"))
-    assert(parseTime("02:50PM", "SOC") == parseTime("890"))
-    print("parseTime('890')", parseTime("890"))
-    print("Passed!")
-
-
-def testAll():
-    test_Course()
-    # test_SimpleTime()
-    test_parseTime()
-
-
-if __name__ == '__main__':
-    testAll()
-
-
+##
+## @brief      Checks if there is a None in a list/tuple/set/dict.
+##
+## @param      thing
+##
+## @return     bool
+##
+def containsNone(thing):
+    if thing is None:
+        return True
+    if isinstance(thing, str):
+        return False
+    if ((isinstance(thing, list) or isinstance(thing, tuple)
+        or isinstance(thing, set) or isinstance(thing, dict)) and None in thing):
+        return True
+    return False

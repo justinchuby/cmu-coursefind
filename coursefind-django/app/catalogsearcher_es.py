@@ -1,7 +1,6 @@
 ﻿import datetime
 import re
 import copy
-import random
 
 import json
 
@@ -16,27 +15,77 @@ except:
 from elasticsearch import Elasticsearch
 import elasticsearch
 
-# class Server():
-#     def __init__(self, address, port):
-#         self.address = address
-#         self.port = port
 
-##
-## @brief      Checks if there is a None in a list/tuple/set/dict.
-##
-## @param      thing
-##
-## @return     bool
-##
-def containsNone(thing):
-    if thing is None:
-        return True
-    if isinstance(thing, str):
-        return False
-    if ((isinstance(thing, list) or isinstance(thing, tuple)
-        or isinstance(thing, set) or isinstance(thing, dict)) and None in thing):
-        return True
-    return False
+class Course(object):
+    def __init__(self, scotty_dict):
+        self.courseid = scotty_dict["id"]
+        self.scottyDict = copy.deepcopy(scotty_dict)
+        self.lectures = self.scottyDict["lectures"]
+        self.sections = self.scottyDict["sections"]
+
+    def __repr__(self):
+        s = ""
+        for key, item in self.scottyDict.items():
+            s += "{}: {}\n".format(repr(key), repr(item))
+        s = "</Course: " + s + "/>"
+        return s
+
+    ##
+    ## @brief      Get lists of lectures and sections in a dictionary.
+    ##
+    ## @param      self  The Course object.
+    ##
+    ## @return     A dictionary of two lists.
+    ##
+    def split(self):
+        output = {
+            "lectures": [],
+            "sections": []
+        }
+
+        baseInfo = copy.copy(self.scottyDict)
+        baseInfo["number"] = baseInfo["id"]
+        del baseInfo["lectures"]
+        del baseInfo["sections"]
+
+        _KEYS = ["lectures", "sections"]
+        for key in _KEYS:
+            if self.__dict__[key] != []:
+                for lecsecDict in self.__dict__[key]:
+                    _baseInfo = copy.deepcopy(baseInfo)
+
+                    # Add type
+                    if key == "lectures":
+                        _baseInfo["type"] = "lec"
+                    elif key == "sections":
+                        _baseInfo["type"] = "sec"
+
+                    # Pull up the lecture/section object one level
+                    for field in lecsecDict:
+                        if field == "name":
+                            _baseInfo["lecsec"] = lecsecDict[field]
+                        else:
+                            _baseInfo[field] = lecsecDict[field]
+                    output[key].append(LectureSection(_baseInfo))
+        return output
+
+
+class LectureSection(object):
+    def __init__(self, reduced_scotty_dict):
+        self.KEYS = ["number", "name", "units", "lecsec", "times", "instructors",
+                     "rundate", "department", "coreqs", "prereqs", "type"]
+        for key in self.KEYS:
+            self.__dict__[key] = copy.deepcopy(reduced_scotty_dict[key])
+
+    def __repr__(self):
+        s = ""
+        for key in self.KEYS:
+            s += "{}: {}, ".format(repr(key), repr(self.__dict__[key]))
+        s = "</LectureSection: " + s + "/>"
+        return s
+
+    def update(self, reduced_scotty_dict):
+        self.__init__(reduced_scotty_dict)
 
 
 ##
@@ -322,10 +371,11 @@ def search(text):
     index = getCurrentIndex()
     servers = ["courseapi-scotty.rhcloud.com:80"]
     response = fetch(index, query, servers)
-    print()
+ 
     if "hits" in response:
-        for hit in response['hits']['hits']:
-            print(hit['_source'])
+        return parseResponse(response)
+    else:
+        return None
 
 
 def getCurrentIndex():
@@ -355,52 +405,22 @@ def fetch(index, query, servers):
         response = es.search(
             index = index,
             body = query,
-            size = 1000
+            size = 2
         )
     except elasticsearch.exceptions.NotFoundError:
         print("'index_not_found_exception', 'no such index'")
     return response
 
 
-class Course(object):
-    def __init__(self, scotty_dict):
-        self.courseid = scotty_dict["id"]
-        self.scottyDict = copy.deepcopy(scotty_dict)
-        self.lectures = self.scottyDict["lectures"]
-        self.sections = self.scottyDict["sections"]
-
-    ##
-    ## @brief      Get lists of lectures and sections in a dictionary.
-    ##
-    ## @param      self  The Course object.
-    ##
-    ## @return     A dictionary of two lists.
-    ##
-    def getList(self):
-        lectures = []
-        sections = []
-        baseInfo = dict()
-        for key in self.scottyDict:
-            if key != "lectures" and key != "sections":
-                baseInfo[key] = self.scottyDict[key]
-        if self.lectures != []:
-            for obj in self.lectures:
-                newElem = copy.deepcopy(baseInfo)
-                for field in obj:
-                    newElem[field] = obj[field]
-                lectures.append(newElem)
-        if self.sections != []:
-            for obj in self.sections:
-                newElem = copy.deepcopy(baseInfo)
-                for field in obj:
-                    newElem[field] = obj[field]
-                sections.append(newElem)
-        return {"lectures": lectures, "sections": sections}
-
-
 def parseResponse(response):
-    courses = []
+    courseDict = {
+        "lectures": [],
+        "sections": []
+    }
     if "hits" in response and response['hits']['hits'] != []:
-        for courseObj in response['hits']['hits']['_source']:
-            courses += Course(courseObj)
-    return courses
+        for hit in response['hits']['hits']:
+                d = Course(hit['_source']).split()
+                courseDict["lectures"] += d["lectures"]
+                courseDict["sections"] += d["sections"]
+    return courseDict
+
