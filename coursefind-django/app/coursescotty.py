@@ -84,9 +84,8 @@ class LectureSection(object):
         self.__init__(reduced_scotty_dict)
 
 
-
 ##
-## @brief      A list that contains the events.
+## @brief      A list that contains the courses.
 ##
 class CourseList(list):
     def __init__(self, L=None):
@@ -95,9 +94,9 @@ class CourseList(list):
         super().__init__(L)
         self.past = []
         self.current = []
+        self.laterToday = []
         self.future = []
         self.rest = []
-        self.laterToday = []
         self.len = 0
         self.ready()
 
@@ -121,50 +120,101 @@ class CourseList(list):
         _dateTime = datetime.datetime(2015,1,1)
 
         if not isinstance(currentDatetime, datetime.datetime):
-            currentDatetime = datetime.datetime.now()
-        currentTime = currentDatetime.time()
-        currentDay = str(currentDatetime.isoweekday() % 7)
+            currentDatetime = datetime.datetime.now()  # datetime.datetime
+        currentTime = currentDatetime.time()  # datetime.time
+        currentDay = currentDatetime.isoweekday() % 7  # integer
 
         for event in self:
-            for time in event.times
-            # add attribute to event for diaplay
-            event.days_text = getDaysText(event.days)
-            event.building_text = getBuildingText(event.building)
 
-            if currentDay in event.times:
-                # ended event
-                if event.endTime < currentTime:
-                    event.diffText = "{}:{}".format(event.beginTime.hour, event.beginTime.minute)
-                    self.past.append(event)
-                # current event
-                elif event.beginTime < currentTime < event.endTime:
-                    diff = getTimeDifference(event, "current", currentDatetime)
-                    _time = _dateTime + diff
-                    if diff.seconds <= 3600:
-                        event.diffText = "Ends in {} minutes".format(_time.minute)
-                    else:
-                        event.diffText = "Ends in {} h {} minutes".format(_time.hour, _time.minute)
-                    self.current.append(event)
-                # future event (in timeDelta minutes)
-                elif (event.beginTime > currentTime and
-                        event.intBeginTime < inMinutes(currentTime) + timeDelta):
-                    diff = getTimeDifference(event, "future", currentDatetime)
-                    _time = _dateTime + diff
-                    if diff.seconds <= 3600:
-                        event.diffText = "Begins in {} minutes".format(_time.minute)
-                    else:
-                        event.diffText = "Begins in {} h {} minutes".format(_time.hour, _time.minute)
-                    self.future.append(event)
-                # other
+# TODO: fix here
+            # add attribute to event for diaplay
+            event.days_texts = getScottyDaysText(event.times)
+            event.building_texts = getScottyBuildingText(event.times)
+
+# if today in days:
+#   if both/some:
+#     find a current time
+#     if not happening:
+#       find a later time
+#   if just one:
+#     find current time
+#     if not happening;
+#       use the rest
+#   if none:
+#     "on other days"
+
+            inNearFutureTimeObj = None
+            latestBeginTimeObj = None
+
+            for timeObj in event.times:
+                # Check if time and day exist
+                if ((timeObj["days"] is not None) and (timeObj["begin"] is not None)
+                    and (timeObj["end"] is not None)):
+
+                    _beginTime = parseTime(timeObj["begin"])
+                    _endTime = parseTime(timeObj["end"])
+
+                    if currentDay in timeObj["days"]:  # this event is happening today
+                        if _beginTime < currentTime < _endTime:  # and happening now
+                            _diff = getTimeDifference(_beginTime, _endTime, currentDatetime, "current")
+                            _time = _dateTime + _diff
+                            if _diff.seconds <= 3600:
+                                event.diffText = "Ends in {} minutes".format(_time.minute)
+                            else:
+                                event.diffText = "Ends in {} h {} minutes".format(_time.hour, _time.minute)
+                            self.current.append(event)
+                            break
+                        else:
+                            # not happening now, temporarily store it
+                            if latestBeginTimeObj is None or _beginTime > latestBeginTimeObj:
+                                latestBeginTimeObj = timeObj
+                            if (_beginTime > currentTime and
+                                inMinutes(_beginTime) < inMinutes(currentTime) + timeDelta):
+                                inNearFutureTimeObj = timeObj
+            # this event is not happening now, but still happening today
+            if inNearFutureTimeObj is not None:  # in one hour!
+                _beginTime = parseTime(timeObj["begin"])
+                _endTime = parseTime(timeObj["end"])
+                _diff = getTimeDifference(_beginTime, _endTime, currentDatetime, "future")
+                _time = _dateTime + _diff
+                if _diff.seconds <= 3600:
+                    event.diffText = "Begins in {} minutes".format(_time.minute)
                 else:
-                    event.diffText = "{}:{}".format(event.beginTime.hour, event.beginTime.minute)
+                    event.diffText = "Begins in {} h {} minutes".format(_time.hour, _time.minute)
+                self.future.append(event)
+            elif latestBeginTimeObj is not None:  # ended or later today
+                _latestBeginTime = parseTime(latestBeginTimeObj["begin"])
+                _latestEndTime = parseTime(latestBeginTimeObj["end"])
+                if _latestEndTime < currentTime:  # ended event
+                    event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                    self.past.append(event)
+                elif not (_latestBeginTime > currentTime and
+                          inMinutes(_latestBeginTime) < inMinutes(currentTime) + timeDelta):  # later today
+                    event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
                     self.laterToday.append(event)
+            # happening on other days
             else:
-                event.diffText = event.days_text
+                event.diffText = " ".join(event.days_texts)
                 self.rest.append(event)
 
 
     def sortByTime(self, currentDatetime=None):
         self.ready(currentDatetime)
         return self.current + self.future + self.laterToday + self.past + self.rest
-        
+
+
+def getTimeDifference(beginTime, endTime, currentDatetime, typ):
+    # if not isinstance(currentDatetime, datetime.datetime):
+    #     currentDatetime = datetime.datetime.now()
+    currentDate = currentDatetime.date()
+
+    if typ == "current":
+        diff = datetime.datetime.combine(currentDate, endTime) - currentDatetime
+        return diff
+    elif typ == "future":
+        diff = datetime.datetime.combine(currentDate, beginTime) - currentDatetime
+        return diff
+
+
+def parseTime(time_string):
+    return datetime.datetime.strptime(time_string, "%I:%M%p").time()

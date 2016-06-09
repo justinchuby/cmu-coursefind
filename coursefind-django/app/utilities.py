@@ -128,18 +128,6 @@ def getSearchable(s):
     return splitString(eliminatePunc(s).lower(), " ")
 
 
-def getTimeDifference(event, typ, currentDatetime):
-    # if not isinstance(currentDatetime, datetime.datetime):
-    #     currentDatetime = datetime.datetime.now()
-    currentDate = currentDatetime.date()
-
-    if typ == "current":
-        diff = datetime.datetime.combine(currentDate, event.endTime) - currentDatetime
-        return diff
-    elif typ == "future":
-        diff = datetime.datetime.combine(currentDate, event.beginTime) - currentDatetime
-        return diff
-
 def getDaysText(days):
     _DAYS = {"1": "Mon",
              "2": "Tue",
@@ -155,6 +143,26 @@ def getDaysText(days):
     return ", ".join(result)
 
 
+def getScottyDaysText(times):
+    _DAYS = {1: "Mon",
+             2: "Tue",
+             3: "Wed",
+             4: "Thu",
+             5: "Fri",
+             6: "Sat",
+             0: "Sun"}
+    days_texts = []
+    for time in times:
+        _days = []
+        if time["days"] is not None:
+            for day in time["days"]:
+                if day in _DAYS:
+                    _days.append(_DAYS[day])
+        days_texts.append(", ".join(_days))
+
+    return days_texts
+
+
 ##
 ## @brief      Gets the full name of a building from its abbreviation.
 ##
@@ -168,6 +176,21 @@ def getBuildingText(building):
         return _CMU_BUILDINGS_FROM_ABBR[building]
     else:
         return building
+
+
+def getScottyBuildingText(times):
+    _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
+    buildings = []
+    for time in times:
+        building = time["building"]
+        if building is not None:
+            if building in _CMU_BUILDINGS_FROM_ABBR:
+                buildings.append(_CMU_BUILDINGS_FROM_ABBR[building])
+            else:
+                buildings.append(building)
+        else:
+            buildings.append("")
+    return buildings
 
 
 ##
