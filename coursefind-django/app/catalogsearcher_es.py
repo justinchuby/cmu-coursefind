@@ -295,11 +295,11 @@ class Searcher(object):
         return query
 
 
-def presearch(searchText):
+def presearch(search_text):
     # returns shouldSearch, message
-    searchText = " ".join(getSearchable(searchText))
+    search_text = " ".join(getSearchable(search_text))
 
-    match = re.search("15112|112|kosbie|kos", searchText)
+    match = re.search("15112|112|kosbie|kos", search_text)
     if match:
         return True, random.choice(cmu_info.ONETWELVE)
     return True, None

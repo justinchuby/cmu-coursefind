@@ -3,8 +3,8 @@
 # @author Justin Chu (justinchuby@cmu.edu)
 
 
-import re
 import datetime
+import copy
 
 try:
     from utilities import *
@@ -110,7 +110,7 @@ class CourseList(list):
     ##
     ## @return     None
     ##
-    def ready(self, currentDatetime=None, timeDelta=60):
+    def ready(self, current_datetime=None, time_delta=60):
         self.len = self.__len__()
         self.past = []
         self.current = []
@@ -119,10 +119,10 @@ class CourseList(list):
         self.laterToday = []
         _dateTime = datetime.datetime(2015,1,1)
 
-        if not isinstance(currentDatetime, datetime.datetime):
-            currentDatetime = datetime.datetime.now()  # datetime.datetime
-        currentTime = currentDatetime.time()  # datetime.time
-        currentDay = currentDatetime.isoweekday() % 7  # integer
+        if not isinstance(current_datetime, datetime.datetime):
+            current_datetime = datetime.datetime.now()  # datetime.datetime
+        currentTime = current_datetime.time()  # datetime.time
+        currentDay = current_datetime.isoweekday() % 7  # integer
 
         for event in self:
 
@@ -156,7 +156,7 @@ class CourseList(list):
 
                     if currentDay in timeObj["days"]:  # this event is happening today
                         if _beginTime < currentTime < _endTime:  # and happening now
-                            _diff = getTimeDifference(_beginTime, _endTime, currentDatetime, "current")
+                            _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "current")
                             _time = _dateTime + _diff
                             if _diff.seconds <= 3600:
                                 event.diffText = "Ends in {} minutes".format(_time.minute)
@@ -169,13 +169,13 @@ class CourseList(list):
                             if latestBeginTimeObj is None or _beginTime > latestBeginTimeObj:
                                 latestBeginTimeObj = timeObj
                             if (_beginTime > currentTime and
-                                inMinutes(_beginTime) < inMinutes(currentTime) + timeDelta):
+                                inMinutes(_beginTime) < inMinutes(currentTime) + time_delta):
                                 inNearFutureTimeObj = timeObj
             # this event is not happening now, but still happening today
             if inNearFutureTimeObj is not None:  # in one hour!
                 _beginTime = parseTime(timeObj["begin"])
                 _endTime = parseTime(timeObj["end"])
-                _diff = getTimeDifference(_beginTime, _endTime, currentDatetime, "future")
+                _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "future")
                 _time = _dateTime + _diff
                 if _diff.seconds <= 3600:
                     event.diffText = "Begins in {} minutes".format(_time.minute)
@@ -189,7 +189,7 @@ class CourseList(list):
                     event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
                     self.past.append(event)
                 elif not (_latestBeginTime > currentTime and
-                          inMinutes(_latestBeginTime) < inMinutes(currentTime) + timeDelta):  # later today
+                          inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):  # later today
                     event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
                     self.laterToday.append(event)
             # happening on other days
@@ -198,21 +198,21 @@ class CourseList(list):
                 self.rest.append(event)
 
 
-    def sortByTime(self, currentDatetime=None):
-        self.ready(currentDatetime)
+    def sortByTime(self, current_datetime=None):
+        self.ready(current_datetime)
         return self.current + self.future + self.laterToday + self.past + self.rest
 
 
-def getTimeDifference(beginTime, endTime, currentDatetime, typ):
+def getTimeDifference(begin_time, end_time, current_datetime, typ):
     # if not isinstance(currentDatetime, datetime.datetime):
     #     currentDatetime = datetime.datetime.now()
-    currentDate = currentDatetime.date()
+    currentDate = current_datetime.date()
 
     if typ == "current":
-        diff = datetime.datetime.combine(currentDate, endTime) - currentDatetime
+        diff = datetime.datetime.combine(currentDate, end_time) - current_datetime
         return diff
     elif typ == "future":
-        diff = datetime.datetime.combine(currentDate, beginTime) - currentDatetime
+        diff = datetime.datetime.combine(currentDate, begin_time) - current_datetime
         return diff
 
 

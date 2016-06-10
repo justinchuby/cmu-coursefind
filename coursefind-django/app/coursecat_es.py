@@ -38,7 +38,7 @@ class EventList(list):
     ##
     ## @return     None
     ##
-    def ready(self, currentDatetime=None, timeDelta=60):
+    def ready(self, current_datetime=None, time_delta=60):
         self.len = self.__len__()
         self.past = []
         self.current = []
@@ -47,10 +47,10 @@ class EventList(list):
         self.laterToday = []
         _dateTime = datetime.datetime(2015,1,1)
 
-        if not isinstance(currentDatetime, datetime.datetime):
-            currentDatetime = datetime.datetime.now()
-        currentTime = currentDatetime.time()
-        currentDay = str(currentDatetime.weekday())
+        if not isinstance(current_datetime, datetime.datetime):
+            current_datetime = datetime.datetime.now()
+        currentTime = current_datetime.time()
+        currentDay = str(current_datetime.weekday())
 
         for event in self:
 
@@ -66,17 +66,17 @@ class EventList(list):
                     self.past.append(event)
                 # current event
                 elif event.beginTime < currentTime < event.endTime:
-                    diff = getTimeDifference(event, "current", currentDatetime)
+                    diff = getTimeDifference(event, "current", current_datetime)
                     _time = _dateTime + diff
                     if diff.seconds <= 3600:
                         event.diffText = "Ends in {} minutes".format(_time.minute)
                     else:
                         event.diffText = "Ends in {} h {} minutes".format(_time.hour, _time.minute)
                     self.current.append(event)
-                # future event (in timeDelta minutes)
+                # future event (in time_delta minutes)
                 elif (event.beginTime > currentTime and
-                        event.intBeginTime < inMinutes(currentTime) + timeDelta):
-                    diff = getTimeDifference(event, "future", currentDatetime)
+                        event.intBeginTime < inMinutes(currentTime) + time_delta):
+                    diff = getTimeDifference(event, "future", current_datetime)
                     _time = _dateTime + diff
                     if diff.seconds <= 3600:
                         event.diffText = "Begins in {} minutes".format(_time.minute)
@@ -92,8 +92,8 @@ class EventList(list):
                 self.rest.append(event)
 
 
-    def sortByTime(self, currentDatetime=None):
-        self.ready(currentDatetime)
+    def sortByTime(self, current_datetime=None):
+        self.ready(current_datetime)
         return self.current + self.future + self.laterToday + self.past + self.rest
 
 

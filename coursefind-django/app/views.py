@@ -10,43 +10,43 @@ except:
     import catalogsearcher_es, coursecat
 
 
-def getText(displayMode, tab, eventList):
+def getText(display_mode, tab, event_list):
     result = None
     try:
-        if "search" in displayMode:
-            if "room" not in displayMode:
+        if "search" in display_mode:
+            if "room" not in display_mode:
                 if tab == "lecture" or tab == "section":
-                    if len(eventList) > 1:
-                        result = "Found {} {}s.".format(len(eventList), tab)
-                    elif len(eventList) == 1:
+                    if len(event_list) > 1:
+                        result = "Found {} {}s.".format(len(event_list), tab)
+                    elif len(event_list) == 1:
                         result = "Found one {}.".format(tab)
-                    elif len(eventList) == 0:
+                    elif len(event_list) == 0:
                         result = "Found no {} that matches.".format(tab)
 
-                    if "looseSearched" in displayMode:
+                    if "looseSearched" in display_mode:
                         result += "\nBut no {}'s name satisfies the whole search text.".format(tab)
 
-        elif "time" in displayMode:
-            displayTime = displayMode["time"].strftime("%H:%M")
+        elif "time" in display_mode:
+            displayTime = display_mode["time"].strftime("%H:%M")
             if tab == "lecture" or tab == "section":
-                if len(eventList.current) > 1:
-                    result = "There are {} {}s at {}.".format(len(eventList.current), tab, displayTime)
-                elif len(eventList.current) == 1:
+                if len(event_list.current) > 1:
+                    result = "There are {} {}s at {}.".format(len(event_list.current), tab, displayTime)
+                elif len(event_list.current) == 1:
                     result = "One {} happening at {}.".format(tab, displayTime)
-                elif len(eventList.future) > 0:
+                elif len(event_list.future) > 0:
                     result = "There are {}s in an hour after {}.".format(tab, displayTime)
-                elif len(eventList) == 0:
+                elif len(event_list) == 0:
                     result = "No {} happening at {}. Take a break :)".format(tab, displayTime)
 
-        elif "current" in displayMode:
+        elif "current" in display_mode:
             if tab == "lecture" or tab == "section":
-                if len(eventList.current) > 1:
-                    result = "There are currently {} {}s happening.".format(len(eventList.current), tab)
-                elif len(eventList.current) == 1:
+                if len(event_list.current) > 1:
+                    result = "There are currently {} {}s happening.".format(len(event_list.current), tab)
+                elif len(event_list.current) == 1:
                     result = "One {} happening at this time.".format(tab)
-                elif len(eventList.future) > 0:
+                elif len(event_list.future) > 0:
                     result = "There are {}s happening in an hour.".format(tab)
-                elif len(eventList) == 0:
+                elif len(event_list) == 0:
                     result = "No {} happening at this time. Take a break :)".format(tab)
 
     except:
@@ -128,8 +128,8 @@ def home(request, **kwargs):
         courses_sec += courseDict["sections"]
 
         # dont forget to call ready
-        courses_lec.ready(currentDatetime=searchDatetime)
-        courses_sec.ready(currentDatetime=searchDatetime)
+        courses_lec.ready(current_datetime=searchDatetime)
+        courses_sec.ready(current_datetime=searchDatetime)
 
     # generate the result prompt
     lecture_tab_text = getText(displayMode, "lecture", courses_lec)
