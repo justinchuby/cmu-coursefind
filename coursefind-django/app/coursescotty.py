@@ -157,19 +157,23 @@ class CourseList(list):
                     _beginTime = timeObj["beginTime"]
                     _endTime = timeObj["endTime"]
 
-                    if currentDay in timeObj["days"]:  # this event is happening today
-                        if _beginTime < currentTime < _endTime:  # and happening now
+                    # this event is happening today
+                    if currentDay in timeObj["days"]:
+                        # and happening now
+                        if _beginTime < currentTime < _endTime:
+                            event.matchedTime = timeObj
                             _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "current")
                             _time = _dateTime + _diff
                             if _diff.seconds <= 3600:
                                 event.diffText = "Ends in {} minutes".format(_time.minute)
                             else:
                                 event.diffText = "Ends in {} h {} minutes".format(_time.hour, _time.minute)
+
                             self.current.append(event)
                             isHappening = True
                             break
+                        # not happening now, temporarily store it
                         else:
-                            # not happening now, temporarily store it
                             if latestBeginTimeObj is None or _beginTime > latestBeginTimeObj:
                                 latestBeginTimeObj = timeObj
                             if (_beginTime > currentTime and
@@ -182,6 +186,8 @@ class CourseList(list):
 # DEGUG
                 # print("%s %s is not happening" % (event.name, event.lecsec))
                 if inNearFutureTimeObj is not None:
+                    event.matchedTime = inNearFutureTimeObj
+
                     _beginTime = inNearFutureTimeObj["beginTime"]
                     _endTime = inNearFutureTimeObj["endTime"]
                     _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "future")
@@ -194,6 +200,8 @@ class CourseList(list):
 
                 # ended or later today
                 elif latestBeginTimeObj is not None:
+                    event.matchedTime = latestBeginTimeObj
+
                     _latestBeginTime = latestBeginTimeObj["beginTime"]
                     _latestEndTime = latestBeginTimeObj["endTime"]
 

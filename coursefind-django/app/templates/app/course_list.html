@@ -21,8 +21,8 @@
               </div>
               <div class="col hide-on-small-only">
                 <span class="right badge">
-                  {% if course.building != "TBA" %}
-                    {{ course.building }} {{ course.room }} |
+                  {% if course.matchedTime.building != "TBA" %}
+                    {{ course.matchedTime.building }} {{ course.matchedTime.room }} |
                   {% endif %}
                   {% if course.diffText %}
                     {{ course.diffText }}
@@ -31,8 +31,8 @@
               </div>
               <div class="col s12 hide-on-med-and-up">
                 <span class="right grey-text text-darken-1">
-                  {% if course.building != "TBA" %}
-                    {{ course.building }} {{ course.room }} |
+                  {% if course.matchedTime.building != "TBA" %}
+                    {{ course.matchedTime.building }} {{ course.matchedTime.room }} |
                   {% endif %}
                   {% if course.diffText %}
                     {{ course.diffText }}
@@ -45,10 +45,10 @@
             <p class="grey-text text-lighten-5">
               <span class="flow-text"><a class="amber-text text-accent-4" href="/?q={{ course.number }}">{{ course.number }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
               / &nbsp; {{ course.department }} &nbsp; / <br>
-              {{ course.days_text }} &nbsp; | <a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ course.building_text }}" target="_blank">
-               {{ course.building_text }} </a> {{ course.room }}<br>
-              <span class="grey-text text-lighten-2">From</span> {{ course.beginTime }} <span class="grey-text text-lighten-2">to</span> {{ course.endTime }} <br><br>
-              <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructor|title }}<br><br>
+              {{ course.days_texts }} &nbsp; | <a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ course.building_texts }}" target="_blank">
+               {{ course.building_texts }} </a> {{ course.matchedTime.room }}<br>
+              <span class="grey-text text-lighten-2">From</span> {{ course.matchedTime.beginTime }} <span class="grey-text text-lighten-2">to</span> {{ course.matchedTime.endTime }} <br><br>
+              <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructors|title }}<br><br>
               <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.number }}?from=cmucoursefind&keyword={{ searchText }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a><br>
               <a class="waves-effect waves-light grey-text text-lighten-5" href="http://www.ratemyprofessors.com/search.jsp?query={{ course.instructor }}" target="_blank" rel="nofollow">Search for the instructor on <span class="amber-text text-accent-4">ratemyprofessors.com</span>&nbsp;<i class="tiny material-icons">launch</i></a>
             </p>
