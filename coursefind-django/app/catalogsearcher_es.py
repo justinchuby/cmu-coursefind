@@ -250,53 +250,43 @@ class Searcher(object):
              ["nested"]["query"]["bool"]["must"].append(
                 {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
 
-
-        if (("day" not in raw_query) and ("building" not in raw_query) and
-            ("room" not in raw_query) and ("number" not in raw_query)):
-            query["query"]["query_string"] = {
-                "query" : raw_query["rest"]
-            }
+        if "number" in raw_query:
+            query["query"]["bool"]["must"] = {"term": {"id": raw_query["number"]}}
+        elif "rest" in raw_query:
+            query["query"]["query_string"] = {"query": raw_query["rest"]}
         else:
-            # fields: building, building_room, number, time
-            if "day" in raw_query:
-                query["query"]["bool"]["filter"]["or"][0]\
-                     ["nested"]["query"]["bool"]["must"]\
-                     ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"lectures.times.days": raw_query["day"]}})
-                query["query"]["bool"]["filter"]["or"][1]\
-                     ["nested"]["query"]["bool"]["must"]\
-                     ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"sections.times.days": raw_query["day"]}})
+            query["query"]["bool"]["must"] = {"match_all": {}}
 
-            if "building" in raw_query:
-                query["query"]["bool"]["filter"]["or"][0]\
-                     ["nested"]["query"]["bool"]["must"]\
-                     ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"lectures.times.building": raw_query["building"]}})
-                query["query"]["bool"]["filter"]["or"][1]\
-                     ["nested"]["query"]["bool"]["must"]\
-                     ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"sections.times.building": raw_query["building"]}})
+        # fields: building, building_room, number, time
+        if "day" in raw_query:
+            query["query"]["bool"]["filter"]["or"][0]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"lectures.times.days": raw_query["day"]}})
+            query["query"]["bool"]["filter"]["or"][1]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"sections.times.days": raw_query["day"]}})
 
-            if "room" in raw_query:
-                query["query"]["bool"]["filter"]["or"][0]\
-                     ["nested"]["query"]["bool"]["must"]\
-                     ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"lectures.times.room": raw_query["room"]}})
-                query["query"]["bool"]["filter"]["or"][1]\
-                     ["nested"]["query"]["bool"]["must"]\
-                     ["nested"]["query"]["bool"]["must"].append(
-                        {"match": {"sections.times.room": raw_query["room"]}})
+        if "building" in raw_query:
+            query["query"]["bool"]["filter"]["or"][0]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"lectures.times.building": raw_query["building"]}})
+            query["query"]["bool"]["filter"]["or"][1]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"sections.times.building": raw_query["building"]}})
 
-            if "number" in raw_query:
-                query["query"]["bool"]["must"] = {"term": {"id": raw_query["number"]}}
-                if (("day" not in raw_query) and ("building" not in raw_query) and
-                    ("room" not in raw_query)):
-                    del query["query"]["bool"]["filter"]
-            elif "rest" in raw_query:
-                query["query"]["query_string"] = {"query": raw_query["rest"]}
-            else:
-                query["query"]["bool"]["must"] = {"match_all": {}}
+        if "room" in raw_query:
+            query["query"]["bool"]["filter"]["or"][0]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"lectures.times.room": raw_query["room"]}})
+            query["query"]["bool"]["filter"]["or"][1]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"sections.times.room": raw_query["room"]}})
 
         return query
 
