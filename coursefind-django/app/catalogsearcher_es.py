@@ -55,7 +55,7 @@ class Searcher(object):
 # DEBUG
         print("##s:", s, field)
         # Match course id in forms of "36217" or "36-217"
-        if field == "number":
+        if field == "courseid":
             if s.isdigit() and len(s) == 5:
                 return s[:2] + "-" + s[2:]
             else:
@@ -136,12 +136,12 @@ class Searcher(object):
 
         if self.length == 1:
             s = searchable[0]
-            # it might be a course name, a course number, a room number,
+            # it might be a course name, a course id, a room courseid,
             # (a building name),
             # or a building and room combined
 
-            # course number
-            self.rawQuery["number"] = self.getField(s, "number")
+            # course id
+            self.rawQuery["courseid"] = self.getField(s, "courseid")
 
             # building and room combined
             (self.rawQuery["building"], self.rawQuery["room"]) = self.getField(s, "building_room")
@@ -251,14 +251,14 @@ class Searcher(object):
         #      ["nested"]["query"]["bool"]["must"].append(
         #         {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
 
-        if "number" in raw_query:
-            query["query"]["bool"]["must"] = {"term": {"id": raw_query["number"]}}
+        if "courseid" in raw_query:
+            query["query"]["bool"]["must"] = {"term": {"id": raw_query["courseid"]}}
         elif "rest" in raw_query:
             query["query"]["bool"]["must"] = {"query_string": {"query": raw_query["rest"]}}
         else:
             query["query"]["bool"]["must"] = {"match_all": {}}
 
-        # fields: building, building_room, number, time
+        # fields: building, building_room, time
         if "day" in raw_query:
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
@@ -525,19 +525,27 @@ def parseResponse(response):
         for hit in response['hits']['hits']:
             d = Course(hit['_source']).split()
 
-            hitLectures = hit.get("inner_hits", {}).get("lectures", {})\
-                             .get("hits", {}).get("hits", None)
-            hitSections = hit.get("inner_hits", {}).get("sections", {})\
-                             .get("hits", {}).get("hits", None)
+            hitLectures = None
+            hitSections = None
+
+            try:
+                hitLectures = hit["inner_hits"]["lectures"]["hits"]["hits"]
+            except:
+                pass
+            try:
+                hitSections = hit["inner_hits"]["sections"]["hits"]["hits"]
+            except:
+                pass
+
             d["lectures"] = filterPittsburgh(d["lectures"])
             d["sections"] = filterPittsburgh(d["sections"])
 
-            if shouldFilter and hitLectures:
+            if shouldFilter and hitLectures is not None:
                 courseDict["lectures"] += filterWithInnerHits(d["lectures"], hitLectures)
             else:
                 courseDict["lectures"] += d["lectures"]
 
-            if shouldFilter and hitSections:
+            if shouldFilter and hitSections is not None:
                 courseDict["sections"] += filterWithInnerHits(d["sections"], hitSections)
             else:
                 courseDict["sections"] += d["sections"]
@@ -548,6 +556,7 @@ def parseResponse(response):
 def filterWithInnerHits(events, innerhits_hits_hits):
     names = [hit['_source']['name'] for hit in innerhits_hits_hits]
     names = set(names)
+    # print(innerhits_hits_hits)
     filteredEvents = []
     for event in events:
         # print(event.lecsec)
@@ -558,6 +567,6 @@ def filterWithInnerHits(events, innerhits_hits_hits):
 def filterPittsburgh(events):
     newEvents = []
     for event in events:
-        if event.times[0]["location"] == "Pittsburgh, Pennsylvania":
+        if event.times[0].get("location") == "Pittsburgh, Pennsylvania":
             newEvents.append(event)
     return newEvents

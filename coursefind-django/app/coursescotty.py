@@ -14,16 +14,19 @@ except:
 
 class Course(object):
     def __init__(self, scotty_dict):
-        self.courseid = scotty_dict["id"]
+        _PROPS = ["name", "department", "units", "semester", "desc",
+                  "prereqs", "prereqs_obj", "coreqs", "coreqs_obj",
+                  "lectures", "sections", "semester",
+                  "courseid", "rundate", "semester_current"]
         self.scottyDict = copy.deepcopy(scotty_dict)
-        self.lectures = self.scottyDict["lectures"]
-        self.sections = self.scottyDict["sections"]
+        for key in _PROPS:
+            self.add(key, self.scottyDict.get(key))
+        self.courseid = scotty_dict["id"]
+        self.lectures = [Meeting(meeting) for meeting in self.scottyDict["lectures"]]
+        self.sections = [Meeting(meeting) for meeting in self.scottyDict["sections"]]
 
     def __repr__(self):
-        s = ""
-        for key, item in self.scottyDict.items():
-            s += "{}: {}\n".format(repr(key), repr(item))
-        s = "</Course: " + s + "/>"
+        s = "</Course- {} />".format(self.__dict__)
         return s
 
     ##
@@ -39,49 +42,79 @@ class Course(object):
             "sections": []
         }
 
-        baseInfo = copy.copy(self.scottyDict)
-        baseInfo["number"] = baseInfo["id"]
-        del baseInfo["lectures"]
-        del baseInfo["sections"]
-
         _KEYS = ["lectures", "sections"]
+
         for key in _KEYS:
             if self.__dict__[key] != []:
-                for lecsecDict in self.__dict__[key]:
-                    _baseInfo = copy.deepcopy(baseInfo)
-
-                    # Add type
-                    if key == "lectures":
-                        _baseInfo["type"] = "lec"
-                    elif key == "sections":
-                        _baseInfo["type"] = "sec"
-
-                    # Pull up the lecture/section object one level
-                    for field in lecsecDict:
-                        if field == "name":
-                            _baseInfo["lecsec"] = lecsecDict[field]
-                        else:
-                            _baseInfo[field] = lecsecDict[field]
-                    output[key].append(LectureSection(_baseInfo))
+                for meeting in self.__dict__[key]:
+                    output[key].append(LectureSection(self, meeting))
         return output
+
+    def add(self, key, value):
+        self.__dict__[key] = copy.deepcopy(value)
+
+    def get(self, key):
+        return copy.deepcopy(self.__dict__.get(key))
+
+
+class Meeting(object):
+    def __init__(self, meeting_dict):
+        # _PROPS = ["instructors", "name", "times"]
+        self.instructors = meeting_dict["instructors"]
+        self.name = meeting_dict["name"]
+        self.times = [TimeObj(time) for time in meeting_dict["times"]]
+
+    def __repr__(self):
+        s = "</Meeting- {} />".format(self.__dict__)
+        return s
+
+    def get(self, key):
+        return copy.deepcopy(self.__dict__.get(key))
+
+    def expose(self):
+        return copy.deepcopy(self.__dict__)
+
+
+class TimeObj(object):
+    def __init__(self, time_dict):
+        _PROPS = ["begin", "end", "days", "location", "building", "room"]
+        for key in _PROPS:
+            self.__dict__[key] = time_dict[key]
+        self.begin = parseTime(self.begin)
+        self.end = parseTime(self.end)
+
+    def __repr__(self):
+        s = "</TimeObj- {} />".format(self.__dict__)
+        return s
+
+    def get(self, key):
+        return copy.deepcopy(self.__dict__.get(key))
 
 
 class LectureSection(object):
-    def __init__(self, reduced_scotty_dict):
-        self.KEYS = ["number", "name", "units", "lecsec", "times", "instructors",
-                     "rundate", "department", "coreqs", "prereqs", "type"]
-        for key in self.KEYS:
-            self.__dict__[key] = copy.deepcopy(reduced_scotty_dict[key])
+    def __init__(self, course_obj, meeting_obj, typ=""):
+        _KEYS = ["name",  "units", "semester", "desc", "coreqs", "prereqs",
+                "courseid", "rundate", "department", "semester_current"]
+        # _PROPS = ["courseid", "name", "units", "lecsec", "times", "instructors",
+        #               "rundate", "department", "coreqs", "prereqs", "type"]
+        self.type = typ
+        self.lecsec = meeting_obj.get("name")
+        _meetingDict = meeting_obj.expose()
+        for key in _KEYS:
+            self.add(key, course_obj.get(key))
+        for key in _meetingDict:
+            if key != "name":
+                self.add(key, meeting_obj.get(key))
 
     def __repr__(self):
-        s = ""
-        for key in self.KEYS:
-            s += "{}: {}, ".format(repr(key), repr(self.__dict__[key]))
-        s = "</LectureSection: " + s + "/>"
+        s = "</LectureSection- {} />".format(self.__dict__)
         return s
 
-    def update(self, reduced_scotty_dict):
-        self.__init__(reduced_scotty_dict)
+    def add(self, key, value):
+        self.__dict__[key] = copy.deepcopy(value)
+
+    def expose(self):
+        return copy.deepcopy(self.__dict__)
 
 
 ##
@@ -142,23 +175,25 @@ class CourseList(list):
 #       use the rest
 #   if none:
 #     "on other days"
+
             isHappening = False
             inNearFutureTimeObj = None
             latestBeginTimeObj = None
 
             for timeObj in event.times:
                 # Check if time and day exist
-                if ((timeObj["days"] is not None) and (timeObj["begin"] is not None)
-                    and (timeObj["end"] is not None)):
+                if ((timeObj.days is not None) and (timeObj.begin is not None)
+                    and (timeObj.end is not None)):
 
-                    timeObj["beginTime"] = parseTime(timeObj["begin"])
-                    timeObj["endTime"] = parseTime(timeObj["end"])
+                    # Add beginTime and endTime for compatibility
+                    timeObj.beginTime = timeObj.begin
+                    timeObj.endTime = timeObj.end
 
-                    _beginTime = timeObj["beginTime"]
-                    _endTime = timeObj["endTime"]
+                    _beginTime = timeObj.begin
+                    _endTime = timeObj.end
 
                     # this event is happening today
-                    if currentDay in timeObj["days"]:
+                    if currentDay in timeObj.days:
                         # and happening now
                         if _beginTime < currentTime < _endTime:
                             event.matchedTime = timeObj
@@ -187,9 +222,9 @@ class CourseList(list):
                 # print("%s %s is not happening" % (event.name, event.lecsec))
                 if inNearFutureTimeObj is not None:
                     event.matchedTime = inNearFutureTimeObj
+                    _beginTime = inNearFutureTimeObj.begin
+                    _endTime = inNearFutureTimeObj.end
 
-                    _beginTime = inNearFutureTimeObj["beginTime"]
-                    _endTime = inNearFutureTimeObj["endTime"]
                     _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "future")
                     _time = _dateTime + _diff
                     if _diff.seconds <= 3600:
@@ -201,9 +236,8 @@ class CourseList(list):
                 # ended or later today
                 elif latestBeginTimeObj is not None:
                     event.matchedTime = latestBeginTimeObj
-
-                    _latestBeginTime = latestBeginTimeObj["beginTime"]
-                    _latestEndTime = latestBeginTimeObj["endTime"]
+                    _latestBeginTime = latestBeginTimeObj.begin
+                    _latestEndTime = latestBeginTimeObj.end
 
                     # ended event
                     if _latestEndTime < currentTime:

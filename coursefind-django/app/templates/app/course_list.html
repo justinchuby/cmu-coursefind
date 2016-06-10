@@ -12,7 +12,7 @@
               <div class="col s12 m8 l8 truncate">
                 <i class="material-icons hide-on-small-only">class</i>
                 <span>
-                  {{ course.number }} &nbsp;
+                  {{ course.courseid }} &nbsp;
                   {% if course.lecsec != "Lec"%}
                     {{ course.lecsec }}
                   {% endif %} &nbsp;&nbsp;
@@ -43,13 +43,13 @@
           </div>
           <div class="collapsible-body blue-grey darken-1" style="display: none;">
             <p class="grey-text text-lighten-5">
-              <span class="flow-text"><a class="amber-text text-accent-4" href="/?q={{ course.number }}">{{ course.number }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
+              <span class="flow-text"><a class="amber-text text-accent-4" href="/?q={{ course.courseid }}">{{ course.courseid }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
               / &nbsp; {{ course.department }} &nbsp; / <br>
               {{ course.days_texts }} &nbsp; | <a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ course.building_texts }}" target="_blank">
                {{ course.building_texts }} </a> {{ course.matchedTime.room }}<br>
               <span class="grey-text text-lighten-2">From</span> {{ course.matchedTime.beginTime }} <span class="grey-text text-lighten-2">to</span> {{ course.matchedTime.endTime }} <br><br>
               <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructors|title }}<br><br>
-              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.number }}?from=cmucoursefind&keyword={{ searchText }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a><br>
+              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.courseid }}?from=cmucoursefind&keyword={{ searchText }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a><br>
               <a class="waves-effect waves-light grey-text text-lighten-5" href="http://www.ratemyprofessors.com/search.jsp?query={{ course.instructor }}" target="_blank" rel="nofollow">Search for the instructor on <span class="amber-text text-accent-4">ratemyprofessors.com</span>&nbsp;<i class="tiny material-icons">launch</i></a>
             </p>
           </div>

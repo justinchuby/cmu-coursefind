@@ -154,12 +154,13 @@ def getScottyDaysText(times):
     days_texts = []
     for time in times:
         _days = []
-        if time["days"] is not None:
-            for day in time["days"]:
+        try:
+            for day in time.get("days"):
                 if day in _DAYS:
                     _days.append(_DAYS[day])
-        days_texts.append(", ".join(_days))
-
+            days_texts.append(", ".join(_days))
+        except:
+            pass
     return days_texts
 
 
@@ -182,7 +183,7 @@ def getScottyBuildingText(times):
     _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
     buildings = []
     for time in times:
-        building = time["building"]
+        building = time.get("building")
         if building is not None:
             if building in _CMU_BUILDINGS_FROM_ABBR:
                 buildings.append(_CMU_BUILDINGS_FROM_ABBR[building])
