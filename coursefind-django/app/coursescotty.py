@@ -218,6 +218,8 @@ class CourseList(list):
 
                 # happening on other days
                 else:
+# TODO: the line below is a patch
+                    event.matchedTime = event.times[0]
                     event.diffText = " ".join(event.days_texts)
                     self.rest.append(event)
 
