@@ -187,7 +187,6 @@ class CourseList(list):
                 else:
                     event.diffText = "Begins in {} h {} minutes".format(_time.hour, _time.minute)
                 self.future.append(event)
-            elif latestBeginTimeObj is not None:  # ended or later today
 
             # ended or later today
             elif latestBeginTimeObj is not None:
