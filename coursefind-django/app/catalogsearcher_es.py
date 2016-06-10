@@ -177,80 +177,86 @@ class Searcher(object):
     def constructESQueryFromRaw(raw_query):
         print(raw_query)
         # Filtering fields are not in the query
+
+        QUERY_BASE = '''
+        {
+           "query": {
+              "bool": {
+                 "filter": {
+                    "or": [
+                       {
+                          "nested": {
+                             "inner_hits": {},
+                             "path": "lectures",
+                             "score_mode": "avg",
+                             "query": {
+                                "bool": {
+                                   "must": 
+                                      {
+                                         "nested": {
+                                            "path": "lectures.times",
+                                            "score_mode": "avg",
+                                            "query": {
+                                               "bool": {
+                                                  "must": []
+                                               }
+                                            }
+                                         }
+                                      }
+                                   
+                                }
+                             }
+                          }
+                       },
+                       {
+                          "nested": {
+                             "inner_hits": {},
+                             "path": "sections",
+                             "score_mode": "avg",
+                             "query": {
+                                "bool": {
+                                   "must": 
+                                      {
+                                         "nested": {
+                                            "path": "sections.times",
+                                            "score_mode": "avg",
+                                            "query": {
+                                               "bool": {
+                                                  "must": []
+                                               }
+                                            }
+                                         }
+                                      }
+                                   
+                                }
+                             }
+                          }
+                       }
+                    ]
+                 }
+              }
+           }
+        }
+        '''
+
+        query = json.loads(QUERY_BASE)
+
+        query["query"]["bool"]["filter"]["or"][0]\
+             ["nested"]["query"]["bool"]["must"]\
+             ["nested"]["query"]["bool"]["must"].append(
+                {"match": {"lectures.times.location": "Pittsburgh, Pennsylvania"}})
+        query["query"]["bool"]["filter"]["or"][1]\
+             ["nested"]["query"]["bool"]["must"]\
+             ["nested"]["query"]["bool"]["must"].append(
+                {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
+
+
         if (("day" not in raw_query) and ("building" not in raw_query) and
             ("room" not in raw_query) and ("number" not in raw_query)):
-            query = {
-                "query": { 
-                  "query_string" : {
-                     "query" : raw_query["rest"]
-                  }
-                }
+            query["query"]["query_string"] = {
+                "query" : raw_query["rest"]
             }
-
         else:
-            QUERY_BASE = '''
-            {
-               "query": {
-                  "bool": {
-                     "filter": {
-                        "or": [
-                           {
-                              "nested": {
-                                 "inner_hits": {},
-                                 "path": "lectures",
-                                 "score_mode": "avg",
-                                 "query": {
-                                    "bool": {
-                                       "must": 
-                                          {
-                                             "nested": {
-                                                "path": "lectures.times",
-                                                "score_mode": "avg",
-                                                "query": {
-                                                   "bool": {
-                                                      "must": []
-                                                   }
-                                                }
-                                             }
-                                          }
-                                       
-                                    }
-                                 }
-                              }
-                           },
-                           {
-                              "nested": {
-                                 "inner_hits": {},
-                                 "path": "sections",
-                                 "score_mode": "avg",
-                                 "query": {
-                                    "bool": {
-                                       "must": 
-                                          {
-                                             "nested": {
-                                                "path": "sections.times",
-                                                "score_mode": "avg",
-                                                "query": {
-                                                   "bool": {
-                                                      "must": []
-                                                   }
-                                                }
-                                             }
-                                          }
-                                       
-                                    }
-                                 }
-                              }
-                           }
-                        ]
-                     }
-                  }
-               }
-            }
-            '''
-
-            query = json.loads(QUERY_BASE)
-
             # fields: building, building_room, number, time
             if "day" in raw_query:
                 query["query"]["bool"]["filter"]["or"][0]\
@@ -293,6 +299,145 @@ class Searcher(object):
                 query["query"]["bool"]["must"] = {"match_all": {}}
 
         return query
+
+
+##
+## @brief      Gets current courses from the server.
+##
+## @param      current_datetime  (datetime.datetime)
+## @param      time_delta        (int) The added time in minutes to find classes
+##                               that are going to happen.
+##
+## @return     A dict with two fields: "lectures", "sections", under which are
+##             lists of (coursescotty.Lecturesection) courses.
+##
+def getCurrentCourses(current_datetime=None, time_delta=60):
+    if current_datetime is None:
+        current_datetime = datetime.datetime.now()
+    shiftedDatetime = current_datetime + datetime.timedelta(minutes=time_delta)
+    currentDay = current_datetime.isoweekday() % 7
+    time = inMinutes(currentTime)
+
+    QUERY_BASE = '''
+    {
+       "query":{
+          "bool":{
+             "must":{
+                "match_all":{
+
+                }
+             },
+             "filter":{
+                "or":[
+                   {
+                      "nested":{
+                         "inner_hits":{
+
+                         },
+                         "path":"lectures",
+                         "score_mode":"avg",
+                         "query":{
+                            "bool":{
+                               "must":[
+                                  {
+                                     "nested":{
+                                        "path":"lectures.times",
+                                        "score_mode":"avg",
+                                        "query":{
+                                           "bool":{
+                                              "filter":{
+                                                 "and":[
+                                                    {
+                                                       "range":{
+                                                          "lectures.times.end":{
+                                                             "gte":"{0}"},
+                                                             "format":"hh:mma"
+                                                          }
+                                                       }
+                                                    },
+                                                    {
+                                                       "range":{
+                                                          "lectures.times.begin":{
+                                                             "lte":"{0}"},
+                                                             "format":"hh:mma"
+                                                          }
+                                                       }
+                                                    }
+                                                 ]
+                                              }
+                                           }
+                                        }
+                                     }
+                                  }
+                               ]
+                            }
+                         }
+                      }
+                   },
+                   {
+                      "nested":{
+                         "inner_hits":{
+
+                         },
+                         "path":"sections",
+                         "score_mode":"avg",
+                         "query":{
+                            "bool":{
+                               "must":[
+                                  {
+                                     "nested":{
+                                        "path":"sections.times",
+                                        "score_mode":"avg",
+                                        "query":{
+                                           "bool":{
+                                              "filter":{
+                                                 "and":[
+                                                    {
+                                                       "range":{
+                                                          "sections.times.end":{
+                                                             {"gte":"{1}"},
+                                                             "format":"hh:mma"
+                                                          }
+                                                       }
+                                                    },
+                                                    {
+                                                       "range":{
+                                                          "sections.times.begin":{
+                                                             "lte":"{1}}",
+                                                             "format":"hh:mma"
+                                                          }
+                                                       }
+                                                    }
+                                                 ]
+                                              }
+                                           }
+                                        }
+                                     }
+                                  }
+                               ]
+                            }
+                         }
+                      }
+                   }
+                ]
+             }
+          }
+       }
+    }
+    '''
+    
+    queryString = QUERY_BASE.format(shiftedDatetime.time().strftime("%I:%M%p"),
+                                    current_datetime.time().strftime("%I:%M%p"))
+    query = {
+             "intBeginTime": {"$lt": time + time_delta},
+             "intEndTime": {"$gt": time},
+             "city_searchable": {"$all": ["pittsburgh"]},
+             "days_searchable": str(currentDay)
+            }
+
+    courses = fetchCourse(query)
+
+    return courses
 
 
 def presearch(search_text):
