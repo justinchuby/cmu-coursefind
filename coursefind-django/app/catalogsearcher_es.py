@@ -454,9 +454,8 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
 
 def presearch(search_text):
     # returns shouldSearch, message
-    search_text = " ".join(getSearchable(search_text))
 
-    match = re.search("15112|112|kosbie|kos", search_text)
+    match = re.search("15112|15-112|kosbie|koz", search_text)
     if match:
         return True, random.choice(cmu_info.ONETWELVE)
     return True, None
@@ -563,6 +562,7 @@ def filterWithInnerHits(events, innerhits_hits_hits):
         if event.lecsec in names:
             filteredEvents.append(event)
     return filteredEvents
+
 
 def filterPittsburgh(events):
     newEvents = []

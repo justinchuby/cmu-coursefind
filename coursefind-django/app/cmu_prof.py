@@ -2,9 +2,14 @@
 # @brief Stores the instructor info at CMU
 # @author Justin Chu (justinchuby@cmu.edu)
 
-def getFullName(course, name):
-    if course.number in NUM_PROFS:
-        for prof in NUM_PROFS[course.number]:
+def getFullNames(course_num, names):
+    return [getFullName(course_num, name) for name in names]
+
+
+def getFullName(course_num, name):
+    name = name.lower()
+    if course_num in NUM_PROFS:
+        for prof in NUM_PROFS[course_num]:
             if name != "" and name in prof:
                 # if the name is part of the full name, replace the name with full name
                 return prof

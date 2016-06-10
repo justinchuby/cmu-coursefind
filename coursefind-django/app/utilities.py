@@ -63,43 +63,6 @@ def inMinutes(time):
         return Empty()
 
 
-# def parseTime(s, frm=None):
-#     h = m = 0
-#     if frm is None:
-#         if ("AM" in s.upper()) or ("PM" in s.upper()):
-#             return parseTime(s, "SOC")
-#         else:
-#             return parseTime(s, "CTG")
-
-#     elif frm == "CTG":
-#         try:
-#             # time represented in minutes
-#             t = int(s)
-#             h = t // 60
-#             m = t % 60
-#             return datetime.time(h, m)
-#         except:
-#             return None
-
-#     elif frm == "SOC":
-#         # mark does not support 24 hour format
-#         # may also use datetime.strptime(date_string, format)
-#         try:
-#             match = re.search("(\d*):(\d\d)([AP]M)", s)
-#             if match:
-#                 h = int(match.group(1)) % 12
-#                 if match.group(3) == "PM":
-#                     h += 12
-#                 m = int(match.group(2))
-#                 return datetime.time(h, m)
-#             else:
-#                 return None
-#         except:
-#             return None
-
-#     return None
-
-
 ##
 ## @brief      Eliminates spaces and makes each word in lower case.
 ##
@@ -137,10 +100,13 @@ def getDaysText(days):
              6: "Sat",
              0: "Sun"}
     result = []
-    for day in days:
-        if day in _DAYS:
-            result.append(_DAYS[day])
-    return ", ".join(result)
+    try:
+        for day in days:
+            if day in _DAYS:
+                result.append(_DAYS[day])
+        return ", ".join(result)
+    except:
+        return "TBA"
 
 
 def getScottyDaysTexts(times):
@@ -173,25 +139,27 @@ def getScottyDaysTexts(times):
 ##
 def getBuildingText(building):
     _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
-    if building in _CMU_BUILDINGS_FROM_ABBR:
+    if building is None:
+        return "TBA"
+    elif building in _CMU_BUILDINGS_FROM_ABBR:
         return _CMU_BUILDINGS_FROM_ABBR[building]
     else:
         return building
 
 
-def getScottyBuildingText(times):
-    _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
-    buildings = []
-    for time in times:
-        building = time.get("building")
-        if building is not None:
-            if building in _CMU_BUILDINGS_FROM_ABBR:
-                buildings.append(_CMU_BUILDINGS_FROM_ABBR[building])
-            else:
-                buildings.append(building)
-        else:
-            buildings.append("")
-    return buildings
+# def getScottyBuildingText(times):
+#     _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
+#     buildings = []
+#     for time in times:
+#         building = time.get("building")
+#         if building is not None:
+#             if building in _CMU_BUILDINGS_FROM_ABBR:
+#                 buildings.append(_CMU_BUILDINGS_FROM_ABBR[building])
+#             else:
+#                 buildings.append(building)
+#         else:
+#             buildings.append("")
+#     return buildings
 
 
 ##
@@ -246,3 +214,23 @@ def containsNone(thing):
         or isinstance(thing, set) or isinstance(thing, dict)) and None in thing):
         return True
     return False
+
+
+def getTimeDifference(begin_time, end_time, current_datetime, typ):
+    # if not isinstance(currentDatetime, datetime.datetime):
+    #     currentDatetime = datetime.datetime.now()
+    currentDate = current_datetime.date()
+
+    if typ == "current":
+        diff = datetime.datetime.combine(currentDate, end_time) - current_datetime
+        return diff
+    elif typ == "future":
+        diff = datetime.datetime.combine(currentDate, begin_time) - current_datetime
+        return diff
+
+
+def parseTime(time_string):
+    try:
+        return datetime.datetime.strptime(time_string, "%I:%M%p").time()
+    except:
+        return None

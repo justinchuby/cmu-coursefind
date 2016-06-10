@@ -7,9 +7,11 @@ import datetime
 import copy
 
 try:
-    from utilities import *
-except:
     from .utilities import *
+    from . import cmu_prof
+except:
+    from utilities import *
+    import cmu_prof
 
 
 class Course(object):
@@ -105,11 +107,20 @@ class LectureSection(object):
         for key in _meetingDict:
             if key != "name":
                 self.add(key, meeting_obj.get(key))
-        ##
-        ## add days_text and building_text for the web app
+
+        # add days_text and building_text for the web app
         for timeObj in self.times:
+            if timeObj.building is None:
+                self.building = "TBA"
+            if timeObj.room is None:
+                self.room = "TBA"
             timeObj.days_text = getDaysText(timeObj.days) 
             timeObj.building_text = getBuildingText(timeObj.building)
+# TODO: Delete later
+        # Get full names of instructors
+        self.instructors = cmu_prof.getFullNames(self.courseid[:2]+
+                                                 self.courseid[3:],
+                                                 self.instructors)
 
     def __repr__(self):
         s = "</LectureSection- {} />".format(self.__dict__)
@@ -211,7 +222,7 @@ class CourseList(list):
                             break
                         # not happening now, temporarily store it
                         else:
-                            if latestBeginTimeObj is None or _beginTime > latestBeginTimeObj:
+                            if latestBeginTimeObj is None or _beginTime > latestBeginTimeObj.begin:
                                 latestBeginTimeObj = timeObj
                             if (_beginTime > currentTime and
                                 inMinutes(_beginTime) < inMinutes(currentTime) + time_delta):
@@ -262,20 +273,3 @@ class CourseList(list):
     def sortByTime(self, current_datetime=None):
         self.ready(current_datetime)
         return self.current + self.future + self.laterToday + self.past + self.rest
-
-
-def getTimeDifference(begin_time, end_time, current_datetime, typ):
-    # if not isinstance(currentDatetime, datetime.datetime):
-    #     currentDatetime = datetime.datetime.now()
-    currentDate = current_datetime.date()
-
-    if typ == "current":
-        diff = datetime.datetime.combine(currentDate, end_time) - current_datetime
-        return diff
-    elif typ == "future":
-        diff = datetime.datetime.combine(currentDate, begin_time) - current_datetime
-        return diff
-
-
-def parseTime(time_string):
-    return datetime.datetime.strptime(time_string, "%I:%M%p").time()
