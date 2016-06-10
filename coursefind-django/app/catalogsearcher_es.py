@@ -252,9 +252,13 @@ class Searcher(object):
         #         {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
 
         if "courseid" in raw_query:
-            query["query"]["bool"]["must"] = {"term": {"id": raw_query["courseid"]}}
+            # query["query"]["bool"]["must"] = {"term": {"id": raw_query["courseid"]}}
+            query["query"]["bool"]["must"] = {"match": {"id": {
+                                                "query" : raw_query["courseid"],
+                                                "operator" : "and"}}}
         elif "rest" in raw_query:
-            query["query"]["bool"]["must"] = {"query_string": {"query": raw_query["rest"]}}
+            query["query"]["bool"]["must"] = {"query_string": {
+                                                "query": raw_query["rest"]}}
         else:
             query["query"]["bool"]["must"] = {"match_all": {}}
 
@@ -483,7 +487,7 @@ def getCurrentIndex():
     # currentYear = datetime.date.today().year
     # currentMonth = datetime.date.today().month
     # return getIndex(currentYear, currentMonth)
-    return "test9"
+    return "test10"
 
 
 def getIndex(year, month):
