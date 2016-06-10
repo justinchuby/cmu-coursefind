@@ -151,8 +151,11 @@ class CourseList(list):
                 if ((timeObj["days"] is not None) and (timeObj["begin"] is not None)
                     and (timeObj["end"] is not None)):
 
-                    _beginTime = parseTime(timeObj["begin"])
-                    _endTime = parseTime(timeObj["end"])
+                    timeObj["beginTime"] = parseTime(timeObj["begin"])
+                    timeObj["endTime"] = parseTime(timeObj["end"])
+
+                    _beginTime = timeObj["beginTime"]
+                    _endTime = timeObj["endTime"]
 
                     if currentDay in timeObj["days"]:  # this event is happening today
                         if _beginTime < currentTime < _endTime:  # and happening now
@@ -171,10 +174,12 @@ class CourseList(list):
                             if (_beginTime > currentTime and
                                 inMinutes(_beginTime) < inMinutes(currentTime) + time_delta):
                                 inNearFutureTimeObj = timeObj
+
             # this event is not happening now, but still happening today
-            if inNearFutureTimeObj is not None:  # in one hour!
-                _beginTime = parseTime(timeObj["begin"])
-                _endTime = parseTime(timeObj["end"])
+            # in one hour!
+            if inNearFutureTimeObj is not None:
+                _beginTime = timeObj["beginTime"]
+                _endTime = timeObj["endTime"]
                 _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "future")
                 _time = _dateTime + _diff
                 if _diff.seconds <= 3600:
@@ -183,20 +188,27 @@ class CourseList(list):
                     event.diffText = "Begins in {} h {} minutes".format(_time.hour, _time.minute)
                 self.future.append(event)
             elif latestBeginTimeObj is not None:  # ended or later today
+
+            # ended or later today
+            elif latestBeginTimeObj is not None:
                 _latestBeginTime = parseTime(latestBeginTimeObj["begin"])
                 _latestEndTime = parseTime(latestBeginTimeObj["end"])
-                if _latestEndTime < currentTime:  # ended event
+
+                # ended event
+                if _latestEndTime < currentTime:
                     event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
                     self.past.append(event)
+
+                # later today
                 elif not (_latestBeginTime > currentTime and
-                          inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):  # later today
+                          inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):
                     event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
                     self.laterToday.append(event)
+
             # happening on other days
             else:
                 event.diffText = " ".join(event.days_texts)
                 self.rest.append(event)
-
 
     def sortByTime(self, current_datetime=None):
         self.ready(current_datetime)

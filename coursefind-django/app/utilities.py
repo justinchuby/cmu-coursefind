@@ -63,41 +63,41 @@ def inMinutes(time):
         return Empty()
 
 
-def parseTime(s, frm=None):
-    h = m = 0
-    if frm is None:
-        if ("AM" in s.upper()) or ("PM" in s.upper()):
-            return parseTime(s, "SOC")
-        else:
-            return parseTime(s, "CTG")
+# def parseTime(s, frm=None):
+#     h = m = 0
+#     if frm is None:
+#         if ("AM" in s.upper()) or ("PM" in s.upper()):
+#             return parseTime(s, "SOC")
+#         else:
+#             return parseTime(s, "CTG")
 
-    elif frm == "CTG":
-        try:
-            # time represented in minutes
-            t = int(s)
-            h = t // 60
-            m = t % 60
-            return datetime.time(h, m)
-        except:
-            return None
+#     elif frm == "CTG":
+#         try:
+#             # time represented in minutes
+#             t = int(s)
+#             h = t // 60
+#             m = t % 60
+#             return datetime.time(h, m)
+#         except:
+#             return None
 
-    elif frm == "SOC":
-        # mark does not support 24 hour format
-        # may also use datetime.strptime(date_string, format)
-        try:
-            match = re.search("(\d*):(\d\d)([AP]M)", s)
-            if match:
-                h = int(match.group(1)) % 12
-                if match.group(3) == "PM":
-                    h += 12
-                m = int(match.group(2))
-                return datetime.time(h, m)
-            else:
-                return None
-        except:
-            return None
+#     elif frm == "SOC":
+#         # mark does not support 24 hour format
+#         # may also use datetime.strptime(date_string, format)
+#         try:
+#             match = re.search("(\d*):(\d\d)([AP]M)", s)
+#             if match:
+#                 h = int(match.group(1)) % 12
+#                 if match.group(3) == "PM":
+#                     h += 12
+#                 m = int(match.group(2))
+#                 return datetime.time(h, m)
+#             else:
+#                 return None
+#         except:
+#             return None
 
-    return None
+#     return None
 
 
 ##
