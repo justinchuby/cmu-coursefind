@@ -5,9 +5,9 @@ import re
 import random
 
 try:
-    from . import catalogsearcher_es, coursecat
+    from . import catalogsearcher_es, coursescotty
 except:
-    import catalogsearcher_es, coursecat
+    import catalogsearcher_es, coursescotty
 
 
 def getText(display_mode, tab, event_list):
@@ -69,8 +69,8 @@ def home(request, **kwargs):
     shouldSearch = True
 
     displayMode = {"current": None}
-    courses_lec = coursecat.CourseList()
-    courses_sec = coursecat.CourseList()
+    courses_lec = coursescotty.CourseList()
+    courses_sec = coursescotty.CourseList()
     lecture_tab_text = ""
     section_tab_text = ""
 
@@ -110,17 +110,17 @@ def home(request, **kwargs):
                 # delete time from search text
                 searchTextWithoutTime = re.sub("\d\d?:\d\d", " ", searchText)
 
-            if coursecat.getSearchable(searchTextWithoutTime) == []:
+            if coursescotty.getSearchable(searchTextWithoutTime) == []:
 # TODO needs to change the displayMode according to search date
                 del displayMode["search"]
-                courseDict = catalogsearcher_es.getCurrentCourses(currentDatetime=searchDatetime)
+                courseDict = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
             else:
                 shouldSearch, mainpage_toast = catalogsearcher_es.presearch(searchTextWithoutTime)
                 if shouldSearch:
                     courseDict = catalogsearcher_es.search(searchTextWithoutTime)
 
         else:
-            courseDict = catalogsearcher_es.getCurrentCourses(currentDatetime=searchDatetime)
+            courseDict = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
 
     # put courses into lectures and sections
     if courseDict is not None:
