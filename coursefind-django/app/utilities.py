@@ -129,13 +129,13 @@ def getSearchable(s):
 
 
 def getDaysText(days):
-    _DAYS = {"1": "Mon",
-             "2": "Tue",
-             "3": "Wed",
-             "4": "Thu",
-             "5": "Fri",
-             "6": "Sat",
-             "0": "Sun"}
+    _DAYS = {1: "Mon",
+             2: "Tue",
+             3: "Wed",
+             4: "Thu",
+             5: "Fri",
+             6: "Sat",
+             0: "Sun"}
     result = []
     for day in days:
         if day in _DAYS:
@@ -143,7 +143,7 @@ def getDaysText(days):
     return ", ".join(result)
 
 
-def getScottyDaysText(times):
+def getScottyDaysTexts(times):
     _DAYS = {1: "Mon",
              2: "Tue",
              3: "Wed",

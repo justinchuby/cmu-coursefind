@@ -105,6 +105,11 @@ class LectureSection(object):
         for key in _meetingDict:
             if key != "name":
                 self.add(key, meeting_obj.get(key))
+        ##
+        ## add days_text and building_text for the web app
+        for timeObj in self.times:
+            timeObj.days_text = getDaysText(timeObj.days) 
+            timeObj.building_text = getBuildingText(timeObj.building)
 
     def __repr__(self):
         s = "</LectureSection- {} />".format(self.__dict__)
@@ -159,10 +164,7 @@ class CourseList(list):
 
         for event in self:
 
-# TODO: fix here
-            # add attribute to event for diaplay
-            event.days_texts = getScottyDaysText(event.times)
-            event.building_texts = getScottyBuildingText(event.times)
+            event.days_texts = getScottyDaysTexts(event.times)
 
 # if today in days:
 #   if both/some:
