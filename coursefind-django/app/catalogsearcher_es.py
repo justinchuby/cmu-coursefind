@@ -242,14 +242,14 @@ class Searcher(object):
 
         query = json.loads(QUERY_BASE)
 
-        query["query"]["bool"]["filter"]["or"][0]\
-             ["nested"]["query"]["bool"]["must"]\
-             ["nested"]["query"]["bool"]["must"].append(
-                {"match": {"lectures.times.location": "Pittsburgh, Pennsylvania"}})
-        query["query"]["bool"]["filter"]["or"][1]\
-             ["nested"]["query"]["bool"]["must"]\
-             ["nested"]["query"]["bool"]["must"].append(
-                {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
+        # query["query"]["bool"]["filter"]["or"][0]\
+        #      ["nested"]["query"]["bool"]["must"]\
+        #      ["nested"]["query"]["bool"]["must"].append(
+        #         {"match": {"lectures.times.location": "Pittsburgh, Pennsylvania"}})
+        # query["query"]["bool"]["filter"]["or"][1]\
+        #      ["nested"]["query"]["bool"]["must"]\
+        #      ["nested"]["query"]["bool"]["must"].append(
+        #         {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
 
         if "number" in raw_query:
             query["query"]["bool"]["must"] = {"term": {"id": raw_query["number"]}}
@@ -288,6 +288,11 @@ class Searcher(object):
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"sections.times.room": raw_query["room"]}})
+
+        if query["query"]["bool"]["filter"]["or"][0]\
+                ["nested"]["query"]["bool"]["must"]\
+                ["nested"]["query"]["bool"]["must"] == []:
+            del query["query"]["bool"]["filter"]
 
         return query
 
@@ -495,7 +500,7 @@ def getIndex(year, month):
     return index
 
 
-def fetch(index, query, servers, size=20):
+def fetch(index, query, servers, size=100):
     es = Elasticsearch(servers)
     response = dict()
     try:
@@ -511,7 +516,7 @@ def fetch(index, query, servers, size=20):
 
 def parseResponse(response):
     # The switch for filtering based on inner hits
-    shouldFilter = False
+    shouldFilter = True
     courseDict = {
         "lectures": [],
         "sections": []
@@ -524,6 +529,8 @@ def parseResponse(response):
                              .get("hits", {}).get("hits", None)
             hitSections = hit.get("inner_hits", {}).get("sections", {})\
                              .get("hits", {}).get("hits", None)
+            d["lectures"] = filterPittsburgh(d["lectures"])
+            d["sections"] = filterPittsburgh(d["sections"])
 
             if shouldFilter and hitLectures:
                 courseDict["lectures"] += filterWithInnerHits(d["lectures"], hitLectures)
@@ -543,6 +550,14 @@ def filterWithInnerHits(events, innerhits_hits_hits):
     names = set(names)
     filteredEvents = []
     for event in events:
+        # print(event.lecsec)
         if event.lecsec in names:
             filteredEvents.append(event)
     return filteredEvents
+
+def filterPittsburgh(events):
+    newEvents = []
+    for event in events:
+        if event.times[0]["location"] == "Pittsburgh, Pennsylvania":
+            newEvents.append(event)
+    return newEvents
