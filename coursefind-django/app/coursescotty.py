@@ -142,7 +142,7 @@ class CourseList(list):
 #       use the rest
 #   if none:
 #     "on other days"
-
+            isHappening = False
             inNearFutureTimeObj = None
             latestBeginTimeObj = None
 
@@ -166,6 +166,7 @@ class CourseList(list):
                             else:
                                 event.diffText = "Ends in {} h {} minutes".format(_time.hour, _time.minute)
                             self.current.append(event)
+                            isHappening = True
                             break
                         else:
                             # not happening now, temporarily store it
@@ -177,37 +178,40 @@ class CourseList(list):
 
             # this event is not happening now, but still happening today
             # in one hour!
-            if inNearFutureTimeObj is not None:
-                _beginTime = timeObj["beginTime"]
-                _endTime = timeObj["endTime"]
-                _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "future")
-                _time = _dateTime + _diff
-                if _diff.seconds <= 3600:
-                    event.diffText = "Begins in {} minutes".format(_time.minute)
+            if not isHappening:
+# DEGUG
+                # print("%s %s is not happening" % (event.name, event.lecsec))
+                if inNearFutureTimeObj is not None:
+                    _beginTime = inNearFutureTimeObj["beginTime"]
+                    _endTime = inNearFutureTimeObj["endTime"]
+                    _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "future")
+                    _time = _dateTime + _diff
+                    if _diff.seconds <= 3600:
+                        event.diffText = "Begins in {} minutes".format(_time.minute)
+                    else:
+                        event.diffText = "Begins in {} h {} minutes".format(_time.hour, _time.minute)
+                    self.future.append(event)
+
+                # ended or later today
+                elif latestBeginTimeObj is not None:
+                    _latestBeginTime = latestBeginTimeObj["beginTime"]
+                    _latestEndTime = latestBeginTimeObj["endTime"]
+
+                    # ended event
+                    if _latestEndTime < currentTime:
+                        event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                        self.past.append(event)
+
+                    # later today
+                    elif not (_latestBeginTime > currentTime and
+                              inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):
+                        event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                        self.laterToday.append(event)
+
+                # happening on other days
                 else:
-                    event.diffText = "Begins in {} h {} minutes".format(_time.hour, _time.minute)
-                self.future.append(event)
-
-            # ended or later today
-            elif latestBeginTimeObj is not None:
-                _latestBeginTime = parseTime(latestBeginTimeObj["begin"])
-                _latestEndTime = parseTime(latestBeginTimeObj["end"])
-
-                # ended event
-                if _latestEndTime < currentTime:
-                    event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
-                    self.past.append(event)
-
-                # later today
-                elif not (_latestBeginTime > currentTime and
-                          inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):
-                    event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
-                    self.laterToday.append(event)
-
-            # happening on other days
-            else:
-                event.diffText = " ".join(event.days_texts)
-                self.rest.append(event)
+                    event.diffText = " ".join(event.days_texts)
+                    self.rest.append(event)
 
     def sortByTime(self, current_datetime=None):
         self.ready(current_datetime)
