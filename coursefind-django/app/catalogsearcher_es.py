@@ -253,7 +253,7 @@ class Searcher(object):
         if "number" in raw_query:
             query["query"]["bool"]["must"] = {"term": {"id": raw_query["number"]}}
         elif "rest" in raw_query:
-            query["query"]["query_string"] = {"query": raw_query["rest"]}
+            query["query"]["bool"]["must"] = {"query_string": {"query": raw_query["rest"]}}
         else:
             query["query"]["bool"]["must"] = {"match_all": {}}
 
@@ -306,7 +306,9 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
         current_datetime = datetime.datetime.now()
     shiftedDatetime = current_datetime + datetime.timedelta(minutes=time_delta)
     currentDay = current_datetime.isoweekday() % 7
-    time = inMinutes(currentTime)
+
+    currentTimeString = current_datetime.time().strftime("%I:%M%p")
+    shiftedTimeString = shiftedDatetime.time().strftime("%I:%M%p")
 
     QUERY_BASE = '''
     {
@@ -328,7 +330,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                          "score_mode":"avg",
                          "query":{
                             "bool":{
-                               "must":[
+                               "must":
                                   {
                                      "nested":{
                                         "path":"lectures.times",
@@ -340,7 +342,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                                     {
                                                        "range":{
                                                           "lectures.times.end":{
-                                                             "gte":"{0}"},
+                                                             "gte":"%s",
                                                              "format":"hh:mma"
                                                           }
                                                        }
@@ -348,7 +350,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                                     {
                                                        "range":{
                                                           "lectures.times.begin":{
-                                                             "lte":"{0}"},
+                                                             "lte":"%s",
                                                              "format":"hh:mma"
                                                           }
                                                        }
@@ -359,7 +361,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                         }
                                      }
                                   }
-                               ]
+                               
                             }
                          }
                       }
@@ -373,7 +375,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                          "score_mode":"avg",
                          "query":{
                             "bool":{
-                               "must":[
+                               "must":
                                   {
                                      "nested":{
                                         "path":"sections.times",
@@ -385,7 +387,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                                     {
                                                        "range":{
                                                           "sections.times.end":{
-                                                             {"gte":"{1}"},
+                                                             "gte":"%s",
                                                              "format":"hh:mma"
                                                           }
                                                        }
@@ -393,7 +395,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                                     {
                                                        "range":{
                                                           "sections.times.begin":{
-                                                             "lte":"{1}}",
+                                                             "lte":"%s",
                                                              "format":"hh:mma"
                                                           }
                                                        }
@@ -404,7 +406,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                         }
                                      }
                                   }
-                               ]
+                               
                             }
                          }
                       }
@@ -416,18 +418,32 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
     }
     '''
     
-    queryString = QUERY_BASE.format(shiftedDatetime.time().strftime("%I:%M%p"),
-                                    current_datetime.time().strftime("%I:%M%p"))
-    query = {
-             "intBeginTime": {"$lt": time + time_delta},
-             "intEndTime": {"$gt": time},
-             "city_searchable": {"$all": ["pittsburgh"]},
-             "days_searchable": str(currentDay)
-            }
+    queryString = QUERY_BASE % (currentTimeString, shiftedTimeString, currentTimeString, shiftedTimeString)
+    query = json.loads(queryString)
 
-    courses = fetchCourse(query)
+    query["query"]["bool"]["filter"]["or"][0]\
+         ["nested"]["query"]["bool"]["must"]\
+         ["nested"]["query"]["bool"]["must"] = []
+    query["query"]["bool"]["filter"]["or"][1]\
+         ["nested"]["query"]["bool"]["must"]\
+         ["nested"]["query"]["bool"]["must"] = []
 
-    return courses
+    query["query"]["bool"]["filter"]["or"][0]\
+         ["nested"]["query"]["bool"]["must"]\
+         ["nested"]["query"]["bool"]["must"].append(
+            {"match": {"lectures.times.days": currentDay}})
+    query["query"]["bool"]["filter"]["or"][1]\
+         ["nested"]["query"]["bool"]["must"]\
+         ["nested"]["query"]["bool"]["must"].append(
+            {"match": {"sections.times.days": currentDay}})
+
+    response = queryCourse(query)
+
+    if "hits" in response:
+        courseDict = parseResponse(response)
+        return courseDict
+    else:
+        return None
 
 
 def presearch(search_text):
@@ -443,14 +459,19 @@ def presearch(search_text):
 def search(text):
     searcher = Searcher(text)
     query = searcher.generateQuery()
-    index = getCurrentIndex()
-    servers = ["courseapi-scotty.rhcloud.com:80"]
-    response = fetch(index, query, servers)
- 
+    response = queryCourse(query)
+
     if "hits" in response:
         return parseResponse(response)
     else:
         return None
+
+
+def queryCourse(query):
+    index = getCurrentIndex()
+    servers = ["courseapi-scotty.rhcloud.com:80"]
+    response = fetch(index, query, servers)
+    return response
 
 
 def getCurrentIndex():
@@ -473,14 +494,14 @@ def getIndex(year, month):
     return index
 
 
-def fetch(index, query, servers):
+def fetch(index, query, servers, size=20):
     es = Elasticsearch(servers)
     response = dict()
     try:
         response = es.search(
             index = index,
             body = query,
-            size = 2
+            size = size
         )
     except elasticsearch.exceptions.NotFoundError:
         print("'index_not_found_exception', 'no such index'")
@@ -488,14 +509,39 @@ def fetch(index, query, servers):
 
 
 def parseResponse(response):
+    # The switch for filtering based on inner hits
+    shouldFilter = False
     courseDict = {
         "lectures": [],
         "sections": []
     }
     if "hits" in response and response['hits']['hits'] != []:
         for hit in response['hits']['hits']:
-                d = Course(hit['_source']).split()
+            d = Course(hit['_source']).split()
+
+            hitLectures = hit.get("inner_hits", {}).get("lectures", {})\
+                             .get("hits", {}).get("hits", None)
+            hitSections = hit.get("inner_hits", {}).get("sections", {})\
+                             .get("hits", {}).get("hits", None)
+
+            if shouldFilter and hitLectures:
+                courseDict["lectures"] += filterWithInnerHits(d["lectures"], hitLectures)
+            else:
                 courseDict["lectures"] += d["lectures"]
+
+            if shouldFilter and hitSections:
+                courseDict["sections"] += filterWithInnerHits(d["sections"], hitSections)
+            else:
                 courseDict["sections"] += d["sections"]
+
     return courseDict
 
+
+def filterWithInnerHits(events, innerhits_hits_hits):
+    names = [hit['_source']['name'] for hit in innerhits_hits_hits]
+    names = set(names)
+    filteredEvents = []
+    for event in events:
+        if event.lecsec in names:
+            filteredEvents.append(event)
+    return filteredEvents
