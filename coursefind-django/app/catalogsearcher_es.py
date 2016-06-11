@@ -189,23 +189,13 @@ class Searcher(object):
         def cleanUp(query):
             if (query["query"]["bool"]["filter"]["or"][0]
                     ["nested"]["query"]["bool"]["must"]
-                    ["nested"]["query"]["bool"]["must"] == [] and
-                query["query"]["bool"]["filter"]["or"][0]
-                    ["nested"]["query"]["bool"]["must"]
-                    ["nested"]["query"]["bool"]["should"] == []):
-                del query["query"]["bool"]["filter"]
-            else:
-                for i in [0, 1]:
-                    q =  (query["query"]["bool"]["filter"]["or"][i]
-                                ["nested"]["query"]["bool"]["must"]
-                                ["nested"]["query"]["bool"]["must"])
-                    if q == []:
-                        del q
-                    q =  (query["query"]["bool"]["filter"]["or"][i]
-                                ["nested"]["query"]["bool"]["must"]
-                                ["nested"]["query"]["bool"]["should"])
-                    if q == []:
-                        del q
+                    ["nested"]["query"]["bool"]["must"] == []):
+                for i in range(0, 2):
+                    del query["query"]["bool"]["filter"]["or"][i]\
+                             ["nested"]["query"]["bool"]["must"]
+                if "should" not in query["query"]["bool"]["filter"]["or"][i]\
+                                        ["nested"]["query"]["bool"]:
+                    del query["query"]["bool"]["filter"]   
             return query
 
         print(raw_query)
@@ -297,14 +287,14 @@ class Searcher(object):
                  ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"sections.times.days": raw_query["day"]}})
 
-        if "building" in raw_query: # should
+        if "building" in raw_query: # must
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
-                 ["nested"]["query"]["bool"]["should"].append(
+                 ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"lectures.times.building": raw_query["building"]}})
             query["query"]["bool"]["filter"]["or"][1]\
                  ["nested"]["query"]["bool"]["must"]\
-                 ["nested"]["query"]["bool"]["should"].append(
+                 ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"sections.times.building": raw_query["building"]}})
 
         if "room" in raw_query: # must
@@ -318,10 +308,16 @@ class Searcher(object):
                     {"match": {"sections.times.room": raw_query["room"]}})
 
         if "instructor" in raw_query: #should
+            for i in range(0, 2):
+                query["query"]["bool"]["filter"]["or"][i]\
+                     ["nested"]["query"]["bool"]["should"] = []
+
             query["query"]["bool"]["filter"]["or"][0]\
-                 ["nested"]["query"]["bool"]["must"]\
-                 ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"lectures.times.room": raw_query["instructor"]}})
+                 ["nested"]["query"]["bool"]["should"].append(
+                    {"match": {"lectures.instructors": raw_query["instructor"]}})
+            query["query"]["bool"]["filter"]["or"][1]\
+                 ["nested"]["query"]["bool"]["should"].append(
+                    {"match": {"sections.instructors": raw_query["instructor"]}})
 
         query = cleanUp(query)
 
@@ -512,7 +508,7 @@ def getCurrentIndex():
     # currentYear = datetime.date.today().year
     # currentMonth = datetime.date.today().month
     # return getIndex(currentYear, currentMonth)
-    return "test10"
+    return "test9"
 
 
 def getIndex(year, month):

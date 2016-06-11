@@ -3,7 +3,7 @@
 # @author Justin Chu (justinchuby@cmu.edu)
 
 def getFullNames(names, course_num=None):
-    return [getFullName(course_num, name) for name in names]
+    return [getFullName(name, course_num) for name in names]
 
 
 def getFullName(name, course_num=None):
