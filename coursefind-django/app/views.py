@@ -82,6 +82,8 @@ def home(request, **kwargs):
                    "a building",
                    "a time")
     search_tip = None
+    catalog_semester = ""
+    catalog_date = ""
 
     if request.method == "GET":
         data = dict(request.GET)
@@ -123,7 +125,7 @@ def home(request, **kwargs):
             courseDict = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
 
     # put courses into lectures and sections
-    if courseDict is not None:
+    if courseDict != dict():
         courses_lec += courseDict["lectures"]
         courses_sec += courseDict["sections"]
 
@@ -145,6 +147,8 @@ def home(request, **kwargs):
                   ["rest", "On other days"]]
 
     search_tip = "Try searching for " + random.choice(SEARCH_TIPS)
+    catalog_semester = coursescotty.getCurrentSemester(courseDict)
+    catalog_date = coursescotty.getCatalogDate(courseDict)
 
     context = {'searchText': searchText,
                'courses_lec': courses_lec,
@@ -154,7 +158,9 @@ def home(request, **kwargs):
                'mainpage_toast': mainpage_toast,
                'displayMode': displayMode,
                'time_flags': time_flags,
-               'search_tip': search_tip}
+               'search_tip': search_tip,
+               'catalog_semester': catalog_semester,
+               'catalog_date': catalog_date}
 
     return render(request, 'app/index.html', context)
 

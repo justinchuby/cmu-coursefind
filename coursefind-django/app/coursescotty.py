@@ -273,3 +273,38 @@ class CourseList(list):
     def sortByTime(self, current_datetime=None):
         self.ready(current_datetime)
         return self.current + self.future + self.laterToday + self.past + self.rest
+
+
+def getCurrentSemester(course_dict):
+    try:
+        return course_dict["lectures"][0].semester_current
+    except:
+        pass
+    try:
+        return course_dict["sections"][0].semester_current
+    except:
+        def getSemester(year, month):
+            if 1 <= month <= 4:
+                semester = "Spring"
+            elif 5 <= month <= 6:
+                semester = "Summer-1"
+            elif month == 7:
+                semester = "Summer-2"
+            else:
+                semester = "Fall"
+            return "%s %s" % (semester, str(year))
+        currentYear = datetime.date.today().year
+        currentMonth = datetime.date.today().month
+        return getSemester(currentYear, currentMonth)
+
+
+def getCatalogDate(course_dict):
+    try:
+        return course_dict["lectures"][0].rundate
+    except:
+        pass
+    try:
+        return course_dict["sections"][0].rundate
+    except:
+        pass
+    return ""

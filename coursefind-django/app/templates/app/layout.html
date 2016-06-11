@@ -62,7 +62,7 @@
         <div class="row">
           <div class="col m5 s12">
             <span class="grey-text text-lighten-4 light">
-              Spring 2016 / Catalog updated on 26 Jan 2016
+              {{ catalog_semester }}{% if catalog_date %} / Catalog updated on {{ catalog_date }}{% endif %}
             </span>
           </div>
           <div class="col m7 s12">
