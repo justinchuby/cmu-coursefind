@@ -53,7 +53,7 @@ class Searcher(object):
     @staticmethod
     def getField(s, field):
 # DEBUG
-        print("##s:", s, field)
+        # print("##s:", s, field)
         # Match course id in forms of "36217" or "36-217"
         if field == "courseid":
             if s.isdigit() and len(s) == 5:
@@ -82,6 +82,13 @@ class Searcher(object):
                 return cmu_info.DAYS_STRING[s]
             return None
 
+        if field == "instructor":
+            # see if the string is a part of the name of a instructor
+            # could be first name or last name or both
+            if s in cmu_prof.NAMES:
+                return s
+            return None
+
     ##
     ## @brief      Gets the query for a specified from the searchable list
     ##
@@ -94,7 +101,7 @@ class Searcher(object):
     ##
     def getFieldFromList(self, searchable, field):
 # DEBUG
-        print("##s's:", searchable, field)
+        # print("##s's:", searchable, field)
         # the fields below are not popped
         dontPopFields = {}
         i = 0
@@ -151,7 +158,9 @@ class Searcher(object):
                 self.rawQuery["day"] = self.getField(s, "day")
                 # might be a building name
                 self.rawQuery["building"] = self.getField(s, "building")
-# TODO: This doesn't look good
+                # might be an instructor's name
+                self.rawQuery["instructor"] = self.getField(s, "instructor")
+
             self.cleanUpRawQuery()
             if self.rawQuery == dict():
                 self.rawQuery["rest"] = s
@@ -176,6 +185,29 @@ class Searcher(object):
 
     @staticmethod
     def constructESQueryFromRaw(raw_query):
+
+        def cleanUp(query):
+            if (query["query"]["bool"]["filter"]["or"][0]
+                    ["nested"]["query"]["bool"]["must"]
+                    ["nested"]["query"]["bool"]["must"] == [] and
+                query["query"]["bool"]["filter"]["or"][0]
+                    ["nested"]["query"]["bool"]["must"]
+                    ["nested"]["query"]["bool"]["should"] == []):
+                del query["query"]["bool"]["filter"]
+            else:
+                for i in [0, 1]:
+                    q =  (query["query"]["bool"]["filter"]["or"][i]
+                                ["nested"]["query"]["bool"]["must"]
+                                ["nested"]["query"]["bool"]["must"])
+                    if q == []:
+                        del q
+                    q =  (query["query"]["bool"]["filter"]["or"][i]
+                                ["nested"]["query"]["bool"]["must"]
+                                ["nested"]["query"]["bool"]["should"])
+                    if q == []:
+                        del q
+            return query
+
         print(raw_query)
         # Filtering fields are not in the query
 
@@ -242,28 +274,20 @@ class Searcher(object):
 
         query = json.loads(QUERY_BASE)
 
-        # query["query"]["bool"]["filter"]["or"][0]\
-        #      ["nested"]["query"]["bool"]["must"]\
-        #      ["nested"]["query"]["bool"]["must"].append(
-        #         {"match": {"lectures.times.location": "Pittsburgh, Pennsylvania"}})
-        # query["query"]["bool"]["filter"]["or"][1]\
-        #      ["nested"]["query"]["bool"]["must"]\
-        #      ["nested"]["query"]["bool"]["must"].append(
-        #         {"match": {"sections.times.location": "Pittsburgh, Pennsylvania"}})
-
         if "courseid" in raw_query:
             # query["query"]["bool"]["must"] = {"term": {"id": raw_query["courseid"]}}
             query["query"]["bool"]["must"] = {"match": {"id": {
                                                 "query" : raw_query["courseid"],
-                                                "operator" : "and"}}}
+                                                "operator" : "and",
+                                                "boost": 2}}}
         elif "rest" in raw_query:
             query["query"]["bool"]["must"] = {"query_string": {
                                                 "query": raw_query["rest"]}}
         else:
             query["query"]["bool"]["must"] = {"match_all": {}}
 
-        # fields: building, building_room, time
-        if "day" in raw_query:
+        # fields: day, building, room, instructor
+        if "day" in raw_query: # must
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
@@ -273,17 +297,17 @@ class Searcher(object):
                  ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"sections.times.days": raw_query["day"]}})
 
-        if "building" in raw_query:
+        if "building" in raw_query: # should
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
-                 ["nested"]["query"]["bool"]["must"].append(
+                 ["nested"]["query"]["bool"]["should"].append(
                     {"match": {"lectures.times.building": raw_query["building"]}})
             query["query"]["bool"]["filter"]["or"][1]\
                  ["nested"]["query"]["bool"]["must"]\
-                 ["nested"]["query"]["bool"]["must"].append(
+                 ["nested"]["query"]["bool"]["should"].append(
                     {"match": {"sections.times.building": raw_query["building"]}})
 
-        if "room" in raw_query:
+        if "room" in raw_query: # must
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
@@ -293,10 +317,13 @@ class Searcher(object):
                  ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"sections.times.room": raw_query["room"]}})
 
-        if query["query"]["bool"]["filter"]["or"][0]\
-                ["nested"]["query"]["bool"]["must"]\
-                ["nested"]["query"]["bool"]["must"] == []:
-            del query["query"]["bool"]["filter"]
+        if "instructor" in raw_query: #should
+            query["query"]["bool"]["filter"]["or"][0]\
+                 ["nested"]["query"]["bool"]["must"]\
+                 ["nested"]["query"]["bool"]["must"].append(
+                    {"match": {"lectures.times.room": raw_query["instructor"]}})
+
+        query = cleanUp(query)
 
         return query
 
@@ -431,12 +458,10 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
     queryString = QUERY_BASE % (currentTimeString, shiftedTimeString, currentTimeString, shiftedTimeString)
     query = json.loads(queryString)
 
-    query["query"]["bool"]["filter"]["or"][0]\
-         ["nested"]["query"]["bool"]["must"]\
-         ["nested"]["query"]["bool"]["must"] = []
-    query["query"]["bool"]["filter"]["or"][1]\
-         ["nested"]["query"]["bool"]["must"]\
-         ["nested"]["query"]["bool"]["must"] = []
+    for i in [0, 1]:
+        query["query"]["bool"]["filter"]["or"][i]\
+             ["nested"]["query"]["bool"]["must"]\
+             ["nested"]["query"]["bool"]["must"] = []
 
     query["query"]["bool"]["filter"]["or"][0]\
          ["nested"]["query"]["bool"]["must"]\
