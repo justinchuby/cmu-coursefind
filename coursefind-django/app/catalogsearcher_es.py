@@ -524,7 +524,7 @@ def getIndex(year, month):
     return index
 
 
-def fetch(index, query, servers, size=100):
+def fetch(index, query, servers, size=200):
     es = Elasticsearch(servers)
     response = dict()
     try:
