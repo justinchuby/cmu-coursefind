@@ -118,9 +118,9 @@ class LectureSection(object):
             timeObj.building_text = getBuildingText(timeObj.building)
 # TODO: Delete later
         # Get full names of instructors
-        self.instructors = cmu_prof.getFullNames(self.courseid[:2]+
-                                                 self.courseid[3:],
-                                                 self.instructors)
+        self.instructors = cmu_prof.getFullNames(self.instructors,
+                                                 self.courseid[:2]+
+                                                 self.courseid[3:])
 
     def __repr__(self):
         s = "</LectureSection- {} />".format(self.__dict__)
