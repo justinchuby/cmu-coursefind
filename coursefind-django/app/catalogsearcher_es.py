@@ -2,8 +2,8 @@
 import re
 import copy
 import random
-
 import json
+from functools import wraps
 
 try:
     from . import cmu_info
@@ -16,6 +16,46 @@ except:
 
 from elasticsearch import Elasticsearch
 import elasticsearch
+
+
+class LecsecFilter():
+    def filterPittsburgh(func):
+        def f(*args, **kwargs):
+            d = func(*args, **kwargs)
+            newDict = dict()
+            for key, L in d.items():
+                newL = []
+                for event in L:
+                    if event.times[0].get("location") == "Pittsburgh, Pennsylvania":
+                        newL.append(event)
+                newDict[key] = newL
+            return newDict
+        return f
+
+    def filterMini(mini=0):
+        assert(isinstance(mini, int))
+        if mini == 0:
+            mini = getCurrentMini()
+
+        def filterMini_decorator(func):
+            @wraps(func)
+            def f(*args, **kwargs):
+                d = func(*args, **kwargs)
+                newDict = dict()
+                for key, L in d.items():
+                    newL = []
+                    for event in L:
+                        _sem = 0
+                        match = re.search("(\d|[a-zA-Z])(\d)", event.lecsec)
+                        if match:
+                            # mini lecture or section
+                            _sem = int(match.group(2))
+                        if _sem == 0 or _sem == mini:
+                            newL.append(event)
+                    newDict[key] = newL
+                return newDict
+            return f
+        return filterMini_decorator
 
 
 ##
@@ -133,7 +173,10 @@ class Searcher(object):
         if "rest" in raw_query:
             query["query"]["bool"]["must"] = {"query_string": {
                                                 "query": raw_query["rest"][0]}}
-            query["query"]["bool"]["should"] = [{"match": {"id": raw_query["rest"][0]}}]
+            query["query"]["bool"]["should"] = [
+                                                {"match": {"id": raw_query["rest"][0]}},
+                                                {"match": {"name": raw_query["rest"][0]}}
+                                                ]
         elif "courseid" in raw_query:
             # query["query"]["bool"]["must"] = {"term": {"id": raw_query["courseid"]}}
             query["query"]["bool"]["must"] = {"match": {"id": {
@@ -346,7 +389,7 @@ class Parser(object):
             _building_room = self.getFieldFromList(searchable, "building_room")
             if _building_room:
                 self.rawQuery.concat(_building_room)
-            if self.rawQuery["room"] is None:
+            else:
                 self.rawQuery["building"] = self.getFieldFromList(searchable, "building").get("building")
 
             self.rawQuery["day"] = self.getFieldFromList(searchable, "day").get("day")
@@ -365,7 +408,9 @@ class Parser(object):
 ## @return     A dict with two fields: "lectures", "sections", under which are
 ##             lists of (coursescotty.Lecturesection) courses.
 ##
+@LecsecFilter.filterMini(3)
 def getCurrentCourses(current_datetime=None, time_delta=60):
+    courseDict = dict()
     if current_datetime is None:
         current_datetime = datetime.datetime.now()
     shiftedDatetime = current_datetime + datetime.timedelta(minutes=time_delta)
@@ -503,9 +548,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
 
     if "hits" in response:
         courseDict = parseResponse(response)
-        return courseDict
-    else:
-        return None
+    return courseDict
 
 
 def presearch(search_text):
@@ -572,6 +615,7 @@ def fetch(index, query, servers, size=200):
         return response
 
 
+@LecsecFilter.filterPittsburgh
 def parseResponse(response):
     # The switch for filtering based on inner hits
     shouldFilter = True
@@ -586,17 +630,10 @@ def parseResponse(response):
             hitLectures = None
             hitSections = None
 
-            try:
-                hitLectures = hit["inner_hits"]["lectures"]["hits"]["hits"]
-            except:
-                pass
-            try:
-                hitSections = hit["inner_hits"]["sections"]["hits"]["hits"]
-            except:
-                pass
-
-            d["lectures"] = filterPittsburgh(d["lectures"])
-            d["sections"] = filterPittsburgh(d["sections"])
+            try: hitLectures = hit["inner_hits"]["lectures"]["hits"]["hits"]
+            except: pass
+            try: hitSections = hit["inner_hits"]["sections"]["hits"]["hits"]
+            except: pass
 
             if shouldFilter and hitLectures is not None:
                 courseDict["lectures"] += filterWithInnerHits(d["lectures"], hitLectures)
@@ -622,10 +659,3 @@ def filterWithInnerHits(events, innerhits_hits_hits):
             filteredEvents.append(event)
     return filteredEvents
 
-
-def filterPittsburgh(events):
-    newEvents = []
-    for event in events:
-        if event.times[0].get("location") == "Pittsburgh, Pennsylvania":
-            newEvents.append(event)
-    return newEvents
