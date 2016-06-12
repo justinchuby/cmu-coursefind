@@ -170,10 +170,12 @@ def home(request, **kwargs):
 
 
 def about(request):
-    context = dict()
+    catalog_semester = coursescotty.getCurrentSemester()
+    context = {'catalog_semester': catalog_semester}
     return render(request, 'app/about.html', context)
 
 
 def disclaimer(request):
-    context = dict()
+    catalog_semester = coursescotty.getCurrentSemester()
+    context = {'catalog_semester': catalog_semester}
     return render(request, 'app/disclaimer.html', context)
