@@ -64,7 +64,7 @@ def home(request, **kwargs):
     currentTime = currentDatetime.time()
     searchTime = currentTime
 
-    courseDict = dict()
+    searchResult = None
     searchText = ""
     shouldSearch = True
 
@@ -115,23 +115,26 @@ def home(request, **kwargs):
             if coursescotty.getSearchable(searchTextWithoutTime) == []:
 # TODO needs to change the displayMode according to search date
                 del displayMode["search"]
-                courseDict = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
+                searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
             else:
                 shouldSearch, mainpage_toast = catalogsearcher_es.presearch(searchTextWithoutTime)
                 if shouldSearch:
-                    courseDict = catalogsearcher_es.search(searchTextWithoutTime)
+                    searchResult = catalogsearcher_es.search(searchTextWithoutTime)
 
         else:
-            courseDict = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
+            searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
 
     # put courses into lectures and sections
-    if courseDict != dict():
-        courses_lec += courseDict["lectures"]
-        courses_sec += courseDict["sections"]
+    if isinstance(searchResult, dict):
+        try:
+            courses_lec += searchResult["lectures"]
+            courses_sec += searchResult["sections"]
 
-        # dont forget to call ready
-        courses_lec.ready(current_datetime=searchDatetime)
-        courses_sec.ready(current_datetime=searchDatetime)
+            # dont forget to call ready
+            courses_lec.ready(current_datetime=searchDatetime)
+            courses_sec.ready(current_datetime=searchDatetime)
+        except KeyError:
+            pass
 
     # generate the result prompt
     lecture_tab_text = getText(displayMode, "lecture", courses_lec)
@@ -147,8 +150,8 @@ def home(request, **kwargs):
                   ["rest", "On other days"]]
 
     search_tip = "Try searching for " + random.choice(SEARCH_TIPS)
-    catalog_semester = coursescotty.getCurrentSemester(courseDict)
-    catalog_date = coursescotty.getCatalogDate(courseDict)
+    catalog_semester = coursescotty.getCurrentSemester(searchResult)
+    catalog_date = coursescotty.getCatalogDate(searchResult)
 
     context = {'searchText': searchText,
                'courses_lec': courses_lec,
@@ -160,7 +163,8 @@ def home(request, **kwargs):
                'time_flags': time_flags,
                'search_tip': search_tip,
                'catalog_semester': catalog_semester,
-               'catalog_date': catalog_date}
+               'catalog_date': catalog_date,
+               'coursereview_year': (currentDate.year - 1)}
 
     return render(request, 'app/index.html', context)
 

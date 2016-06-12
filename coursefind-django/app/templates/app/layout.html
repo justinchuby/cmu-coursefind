@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <!-- Customized CSS -->
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/style.css' %}" />
@@ -38,12 +38,12 @@
                     data-position="bottom" data-delay="300" data-tooltip="{{ search_tip }}"
                     {% endif %}
                     required maxlength="100" value="{{ searchText }}" placeholder="Search" id="search-text">
-                    <label for="search-text"><i class="mdi-action-search" id="search-icon"></i></label>
-                    <i class="mdi-navigation-close" href="#" onclick="clearForm()"></i>
+                    <label for="search-text"><i class="material-icons">search</i></label>
+                    <i class="material-icons" href="#" onclick="clearForm()">close</i>
                 </div>
               </form>
               <ul class="right">
-                <li><a href="#" onclick="$('#search-box').submit();"><i class="mdi-content-send"></i></a></li>
+                <li><a href="#" onclick="$('#search-box').submit();"><i class="material-icons">send</i></a></li>
               </ul>
           </div>
         </div>
@@ -93,7 +93,7 @@
     </footer>
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <script src="{% static 'app/scripts/custom.js' %}"></script>
   </body>
 </html>

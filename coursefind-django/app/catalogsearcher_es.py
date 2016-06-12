@@ -273,6 +273,7 @@ class Searcher(object):
         elif "rest" in raw_query:
             query["query"]["bool"]["must"] = {"query_string": {
                                                 "query": raw_query["rest"]}}
+            query["query"]["bool"]["should"] = [{"match": {"id": raw_query["rest"]}}]
         else:
             query["query"]["bool"]["must"] = {"match_all": {}}
 
@@ -307,7 +308,7 @@ class Searcher(object):
                  ["nested"]["query"]["bool"]["must"].append(
                     {"match": {"sections.times.room": raw_query["room"]}})
 
-        if "instructor" in raw_query: #should
+        if "instructor" in raw_query: # should
             for i in range(0, 2):
                 query["query"]["bool"]["filter"]["or"][i]\
                      ["nested"]["query"]["bool"]["should"] = []
@@ -535,7 +536,10 @@ def fetch(index, query, servers, size=200):
         )
     except elasticsearch.exceptions.NotFoundError:
         print("'index_not_found_exception', 'no such index'")
-    return response
+    except elasticsearch.exceptions.RequestError:
+        print(e)
+    finally:
+        return response
 
 
 def parseResponse(response):
