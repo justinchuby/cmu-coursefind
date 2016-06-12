@@ -1,6 +1,7 @@
 import re
 import datetime
 import string
+import copy
 try:
     import cmu_info
 except:
@@ -45,6 +46,18 @@ class Empty(object):
     def isdigit(self):
         return False
 
+
+class Listdict(dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def concat(self, other):
+        _other = copy.deepcopy(other)
+        for key, value in _other.items():
+            if key in self:
+                self[key] += value
+            else:
+                self[key] = value
 
 ##
 ## @brief      Represent a time in minutes.
@@ -234,3 +247,5 @@ def parseTime(time_string):
         return datetime.datetime.strptime(time_string, "%I:%M%p").time()
     except:
         return None
+
+

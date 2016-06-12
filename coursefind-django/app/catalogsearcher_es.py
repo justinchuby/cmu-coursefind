@@ -14,7 +14,6 @@ except:
     from utilities import *
     from coursescotty import *
 
-
 from elasticsearch import Elasticsearch
 import elasticsearch
 
@@ -33,147 +32,13 @@ class Searcher(object):
     def __init__(self, s=""):
         self.text = s.strip()
         self.rawQuery = dict()
-        self.searchable = splitString(self.text.lower(), " ")
-        self.length = len(self.searchable)
-
-        self.parseSearchBox()
+        parser = Parser(s)
+        self.searchable = parser.searchable
+        self.length = parser.length
+        self.rawQuery = parser.rawQuery
 
     def __repr__(self):
-        return str(self.rawQuery)
-
-    ##
-    ## @brief      Constructs the query for a given field.
-    ##
-    ## @param      s      (str) Input text
-    ## @param      field  (str) The specified field type
-    ##
-    ## @return     Returns a dictionary of results with field as the key.
-    ##
-    @staticmethod
-    def getField(s, field):
-        result = dict()
-# DEBUG
-        # print("##s:", s, field)
-        # Match course id in forms of "36217" or "36-217"
-        if field == "courseid":
-            if s.isdigit() and len(s) == 5:
-                result[field] = (s[:2] + "-" + s[2:])
-            else:
-                match = re.search("\d\d-\d\d\d", s)
-                if match:
-                    result[field] = match.group()
-
-        # Match building in forms of "BH136A"
-        if field == "building_room":
-            match = re.search("^([a-zA-Z][a-zA-Z]+)(\d+\w*)", s)
-            if match:
-                result["building"] = match.group(1).upper()
-                result["room"] = match.group(2).upper()
-
-        if field == "building":
-            if s in cmu_info.CMU_BUILDINGS:
-                result[field] = cmu_info.CMU_BUILDINGS[s]
-            elif s in cmu_info.CMU_BUILDINGS_ABBR:
-                result[field] = s.upper()
-
-        if field == "day":
-            if s in cmu_info.DAYS_STRING:
-                result[field] = cmu_info.DAYS_STRING[s]
-
-        if field == "instructor":
-            # see if the string is a part of the name of a instructor
-            # could be first name or last name or both
-            if s in cmu_prof.NAMES:
-                result[field] = s
-
-        return result
-
-    ##
-    ## @brief      Gets the query for a specified from the searchable list
-    ##
-    ## @param      self
-    ## @param      searchable  The searchable list consists of strings as elements
-    ## @param      field       The specified field
-    ## @param      multiple    Whether or not to look for multiple results
-    ##
-    ## @return     A list of query strings if found, None if nothing is found.
-    ##
-
-# TODO 6-12: change this according to getField function.
-    def getFieldFromList(self, searchable, field):
-# DEBUG
-        # print("##s's:", searchable, field)
-
-        # the fields below are not popped
-        dontPopFields = {}
-        founds = []
-        i = 0
-        while i < len(searchable):
-            found = self.getField(searchable[i], field)
-            if not containsNone(found):
-                # found a valid search condition matching the specified field
-                if not (field in dontPopFields):
-                    searchable.pop(i)
-                    i -= 1  # step back because of the popped searchable
-                founds.append(found)
-            i += 1  # next searchable
-        return founds if founds != [] else None
-
-
-    ##
-    ## @brief      Gets rid of the empty queries in the rawQuery.
-    ##
-    def cleanUpRawQuery(self):
-        d = copy.copy(self.rawQuery)
-        for key, value in d.items():
-            if containsNone(value) or value == [] or value == "":
-                del self.rawQuery[key]
-
-
-    ##
-    ## @brief      Uses the searchable to generate field of search for constructing a query.
-    ## 
-    ## @return     None
-    ##
-    def parseSearchBox(self):
-        # converts the time into datetime format
-        searchable = copy.copy(self.searchable)
-        if self.length == 0:
-            return None
-
-        if self.length == 1:
-            s = searchable[0]
-            # it might be a course name, a course id, a room courseid,
-            # (a building name),
-            # or a building and room combined
-
-            # course id
-            self.rawQuery["courseid"] = [self.getField(s, "courseid")]
-
-            # building and room combined
-            (self.rawQuery["building"], self.rawQuery["room"]) = self.getField(s, "building_room")
-
-            if s.isalpha():
-                # might be a day
-                self.rawQuery["day"] = self.getField(s, "day")
-                # might be a building name
-                self.rawQuery["building"] = self.getField(s, "building")
-                # might be an instructor's name
-                self.rawQuery["instructor"] = self.getField(s, "instructor")
-
-            self.cleanUpRawQuery()
-            if self.rawQuery == dict():
-                self.rawQuery["rest"] = s
-
-        else:
-            (self.rawQuery["building"], self.rawQuery["room"]) = self.getFieldFromList(searchable, "building_room")
-            if self.rawQuery["room"] is None:
-                self.rawQuery["building"] = self.getFieldFromList(searchable, "building")
-
-            self.rawQuery["day"] = self.getFieldFromList(searchable, "day")
-            self.rawQuery["rest"] = " ".join(searchable)
-
-        self.cleanUpRawQuery()
+        return "<Searcher Object: text={}, rawQuery={}>".format(repr(self.text), repr(self.rawQuery))
 
     ##
     ## @brief      Generate the query for the database.
@@ -195,9 +60,10 @@ class Searcher(object):
                              ["nested"]["query"]["bool"]["must"]
                 if "should" not in query["query"]["bool"]["filter"]["or"][i]\
                                         ["nested"]["query"]["bool"]:
-                    del query["query"]["bool"]["filter"]   
+                    del query["query"]["bool"]["filter"]
             return query
 
+# DEBUG
         print(raw_query)
         # Filtering fields are not in the query
 
@@ -214,7 +80,7 @@ class Searcher(object):
                              "score_mode": "avg",
                              "query": {
                                 "bool": {
-                                   "must": 
+                                   "must":
                                       {
                                          "nested": {
                                             "path": "lectures.times",
@@ -226,7 +92,7 @@ class Searcher(object):
                                             }
                                          }
                                       }
-                                   
+
                                 }
                              }
                           }
@@ -238,7 +104,7 @@ class Searcher(object):
                              "score_mode": "avg",
                              "query": {
                                 "bool": {
-                                   "must": 
+                                   "must":
                                       {
                                          "nested": {
                                             "path": "sections.times",
@@ -250,7 +116,7 @@ class Searcher(object):
                                             }
                                          }
                                       }
-                                   
+
                                 }
                              }
                           }
@@ -264,16 +130,17 @@ class Searcher(object):
 
         query = json.loads(QUERY_BASE)
 
-        if "courseid" in raw_query:
+        if "rest" in raw_query:
+            query["query"]["bool"]["must"] = {"query_string": {
+                                                "query": raw_query["rest"][0]}}
+            query["query"]["bool"]["should"] = [{"match": {"id": raw_query["rest"][0]}}]
+        elif "courseid" in raw_query:
             # query["query"]["bool"]["must"] = {"term": {"id": raw_query["courseid"]}}
             query["query"]["bool"]["must"] = {"match": {"id": {
-                                                "query" : raw_query["courseid"],
-                                                "operator" : "and",
+                                                "query": raw_query["courseid"][0],
+                                                "operator": "and",
                                                 "boost": 2}}}
-        elif "rest" in raw_query:
-            query["query"]["bool"]["must"] = {"query_string": {
-                                                "query": raw_query["rest"]}}
-            query["query"]["bool"]["should"] = [{"match": {"id": raw_query["rest"]}}]
+
         else:
             query["query"]["bool"]["must"] = {"match_all": {}}
 
@@ -282,31 +149,31 @@ class Searcher(object):
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"lectures.times.days": raw_query["day"]}})
+                    {"match": {"lectures.times.days": raw_query["day"][0]}})
             query["query"]["bool"]["filter"]["or"][1]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"sections.times.days": raw_query["day"]}})
+                    {"match": {"sections.times.days": raw_query["day"][0]}})
 
         if "building" in raw_query: # must
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"lectures.times.building": raw_query["building"]}})
+                    {"match": {"lectures.times.building": raw_query["building"][0]}})
             query["query"]["bool"]["filter"]["or"][1]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"sections.times.building": raw_query["building"]}})
+                    {"match": {"sections.times.building": raw_query["building"][0]}})
 
         if "room" in raw_query: # must
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"lectures.times.room": raw_query["room"]}})
+                    {"match": {"lectures.times.room": raw_query["room"][0]}})
             query["query"]["bool"]["filter"]["or"][1]\
                  ["nested"]["query"]["bool"]["must"]\
                  ["nested"]["query"]["bool"]["must"].append(
-                    {"match": {"sections.times.room": raw_query["room"]}})
+                    {"match": {"sections.times.room": raw_query["room"][0]}})
 
         if "instructor" in raw_query: # should
             for i in range(0, 2):
@@ -315,14 +182,177 @@ class Searcher(object):
 
             query["query"]["bool"]["filter"]["or"][0]\
                  ["nested"]["query"]["bool"]["should"].append(
-                    {"match": {"lectures.instructors": raw_query["instructor"]}})
+                    {"match": {"lectures.instructors": raw_query["instructor"][0]}})
             query["query"]["bool"]["filter"]["or"][1]\
                  ["nested"]["query"]["bool"]["should"].append(
-                    {"match": {"sections.instructors": raw_query["instructor"]}})
+                    {"match": {"sections.instructors": raw_query["instructor"][0]}})
 
         query = cleanUp(query)
 
         return query
+
+
+class Parser(object):
+    def __init__(self, text):
+        self.text = text
+        self.rawQuery = Listdict()
+        self.searchable = splitString(self.text.lower(), " ")
+        self.length = len(self.searchable)
+        self.parse()
+
+    def __repr__(self):
+        return "<Parser Object: text={}, rawQuery={}>".format(repr(self.text), repr(self.rawQuery))
+
+
+    ##
+    ## @brief      Constructs the query for a given field.
+    ##
+    ## @param      s      (str) Input text
+    ## @param      field  (str) The specified field type
+    ##
+    ## @return     Returns a dictionary of results with field as the key.
+    ##
+    @staticmethod
+    def getField(s, field):
+        result = dict()
+# DEBUG
+        # print("##s:", s, field)
+        # Match course id in forms of "36217" or "36-217"
+        if field == "courseid":
+            if s.isdigit():
+                if len(s) == 5:
+                    result[field] = [(s[:2] + "-" + s[2:])]
+            else:
+                match = re.search("\d\d-\d\d\d", s)
+                if match:
+                    result[field] = [match.group()]
+                else:
+                    return None
+
+        # Match building in forms of "BH136A"
+        if field == "building_room":
+            match = re.search("^([a-zA-Z][a-zA-Z]+)(\d+\w*)", s)
+            if match:
+                result["building"] = [match.group(1).upper()]
+                result["room"] = [match.group(2).upper()]
+            else:
+                return None
+
+        if field == "building":
+            if s in cmu_info.CMU_BUILDINGS:
+                result[field] = [cmu_info.CMU_BUILDINGS[s]]
+            elif s in cmu_info.CMU_BUILDINGS_ABBR:
+                result[field] = [s.upper()]
+            else:
+                return None
+
+        if field == "day":
+            if s in cmu_info.DAYS_STRING:
+                result[field] = [cmu_info.DAYS_STRING[s]]
+            else:
+                return None
+
+        if field == "instructor":
+            # see if the string is a part of the name of a instructor
+            # could be first name or last name or both
+            if s in cmu_prof.NAMES:
+                result[field] = [s]
+            else:
+                return None
+
+        return result if result != dict() else None
+
+    ##
+    ## @brief      Gets the query for a specified from the searchable list
+    ##
+    ## @param      self        The object
+    ## @param      searchable  The searchable list consists of strings as
+    ##                         elements
+    ## @param      field       The specified field
+    ## @param      multiple  Whether or not to look for multiple results
+    ##
+    ## @return     A list of query strings if found, None if nothing is found.
+    ##
+    def getFieldFromList(self, searchable, field):
+# DEBUG
+        # print("##s's:", searchable, field)
+
+        # the fields below are not popped
+        dontPopFields = set()
+        founds = Listdict()
+        i = 0
+        while i < len(searchable):
+            found = self.getField(searchable[i], field)
+            if found:
+                # found a valid search condition matching the specified field
+                if not (field in dontPopFields):
+                    searchable.pop(i)
+                    i -= 1  # step back because of the popped searchable
+                founds.concat(found)
+            i += 1  # next searchable
+        return founds
+
+    ##
+    ## @brief      Gets rid of the empty queries in the rawQuery.
+    ##
+    def cleanUpRawQuery(self):
+        d = copy.copy(self.rawQuery)
+        for key, value in d.items():
+            if containsNone(value) or value == [] or value == "":
+                del self.rawQuery[key]
+
+    ##
+    ## @brief      Uses the searchable to generate field of search for constructing a query.
+    ##
+    ## @return     None
+    ##
+    def parse(self):
+        # converts the time into datetime format
+        searchable = copy.copy(self.searchable)
+        if self.length == 0:
+            return None
+
+        if self.length == 1:
+            s = searchable[0]
+            # it might be a course name, a course id, a room courseid,
+            # (a building name),
+            # or a building and room combined
+
+            # course id
+            try: self.rawQuery["courseid"] = self.getField(s, "courseid")["courseid"]
+            except TypeError: pass
+
+            # building and room combined
+            _building_room = self.getField(s, "building_room")
+            if _building_room:
+                self.rawQuery.concat(_building_room)
+
+            if s.isalpha():
+                # might be a day
+                try: self.rawQuery["day"] = self.getField(s, "day")["day"]
+                except TypeError: pass
+                # might be a building name
+                try: self.rawQuery["building"] = self.getField(s, "building")["building"]
+                except TypeError: pass
+                # might be an instructor's name
+                try: self.rawQuery["instructor"] = self.getField(s, "instructor")["instructor"]
+                except TypeError: pass
+
+            self.cleanUpRawQuery()
+            if self.rawQuery == dict():
+                self.rawQuery["rest"] = [s]
+
+        else:
+            _building_room = self.getFieldFromList(searchable, "building_room")
+            if _building_room:
+                self.rawQuery.concat(_building_room)
+            if self.rawQuery["room"] is None:
+                self.rawQuery["building"] = self.getFieldFromList(searchable, "building").get("building")
+
+            self.rawQuery["day"] = self.getFieldFromList(searchable, "day").get("day")
+            self.rawQuery["rest"] = [" ".join(searchable)]
+
+        self.cleanUpRawQuery()
 
 
 ##
@@ -509,7 +539,7 @@ def getCurrentIndex():
     # currentYear = datetime.date.today().year
     # currentMonth = datetime.date.today().month
     # return getIndex(currentYear, currentMonth)
-    return "test9"
+    return "test10"
 
 
 def getIndex(year, month):
