@@ -579,10 +579,9 @@ def queryCourse(query):
 
 
 def getCurrentIndex():
-    # currentYear = datetime.date.today().year
-    # currentMonth = datetime.date.today().month
-    # return getIndex(currentYear, currentMonth)
-    return "test10"
+    currentYear = datetime.date.today().year
+    currentMonth = datetime.date.today().month
+    return getIndex(currentYear, currentMonth)
 
 
 def getIndex(year, month):
