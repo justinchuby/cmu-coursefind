@@ -408,7 +408,7 @@ class Parser(object):
 ## @return     A dict with two fields: "lectures", "sections", under which are
 ##             lists of (coursescotty.Lecturesection) courses.
 ##
-@LecsecFilter.filterMini(3)
+@LecsecFilter.filterMini(getCurrentMini())
 def getCurrentCourses(current_datetime=None, time_delta=60):
     courseDict = dict()
     if current_datetime is None:
