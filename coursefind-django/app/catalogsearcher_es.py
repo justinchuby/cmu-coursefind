@@ -47,47 +47,46 @@ class Searcher(object):
     ## @param      s      (str) Input text
     ## @param      field  (str) The specified field type
     ##
-    ## @return     Depends on the field type. List or tuple for multiple
-    ##             outputs, string for a single output, None if nothing.
+    ## @return     Returns a dictionary of results with field as the key.
     ##
     @staticmethod
     def getField(s, field):
+        result = dict()
 # DEBUG
         # print("##s:", s, field)
         # Match course id in forms of "36217" or "36-217"
         if field == "courseid":
             if s.isdigit() and len(s) == 5:
-                return s[:2] + "-" + s[2:]
+                result[field] = (s[:2] + "-" + s[2:])
             else:
                 match = re.search("\d\d-\d\d\d", s)
                 if match:
-                    return match.group()
-            return None
+                    result[field] = match.group()
+
         # Match building in forms of "BH136A"
         if field == "building_room":
             match = re.search("^([a-zA-Z][a-zA-Z]+)(\d+\w*)", s)
             if match:
-                return (match.group(1).upper(), match.group(2).upper())
-            return (None, None)
+                result["building"] = match.group(1).upper()
+                result["room"] = match.group(2).upper()
 
         if field == "building":
             if s in cmu_info.CMU_BUILDINGS:
-                return cmu_info.CMU_BUILDINGS[s]
+                result[field] = cmu_info.CMU_BUILDINGS[s]
             elif s in cmu_info.CMU_BUILDINGS_ABBR:
-                return s.upper()
-            return None
+                result[field] = s.upper()
 
         if field == "day":
             if s in cmu_info.DAYS_STRING:
-                return cmu_info.DAYS_STRING[s]
-            return None
+                result[field] = cmu_info.DAYS_STRING[s]
 
         if field == "instructor":
             # see if the string is a part of the name of a instructor
             # could be first name or last name or both
             if s in cmu_prof.NAMES:
-                return s
-            return None
+                result[field] = s
+
+        return result
 
     ##
     ## @brief      Gets the query for a specified from the searchable list
@@ -97,27 +96,28 @@ class Searcher(object):
     ## @param      field       The specified field
     ## @param      multiple    Whether or not to look for multiple results
     ##
-    ## @return     A query string for the field if multiple is False; a list of query strings if multiple is Ture.
+    ## @return     A list of query strings if found, None if nothing is found.
     ##
+
+# TODO 6-12: change this according to getField function.
     def getFieldFromList(self, searchable, field):
 # DEBUG
         # print("##s's:", searchable, field)
+
         # the fields below are not popped
         dontPopFields = {}
+        founds = []
         i = 0
         while i < len(searchable):
             found = self.getField(searchable[i], field)
             if not containsNone(found):
-                # found a valid search condition
+                # found a valid search condition matching the specified field
                 if not (field in dontPopFields):
                     searchable.pop(i)
                     i -= 1  # step back because of the popped searchable
-                # if multiple:
-                #     founds.append(found)
-                # else:
-                return found
+                founds.append(found)
             i += 1  # next searchable
-        return found
+        return founds if founds != [] else None
 
 
     ##
@@ -148,7 +148,7 @@ class Searcher(object):
             # or a building and room combined
 
             # course id
-            self.rawQuery["courseid"] = self.getField(s, "courseid")
+            self.rawQuery["courseid"] = [self.getField(s, "courseid")]
 
             # building and room combined
             (self.rawQuery["building"], self.rawQuery["room"]) = self.getField(s, "building_room")
