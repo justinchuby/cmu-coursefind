@@ -275,7 +275,7 @@ class CourseList(list):
         return self.current + self.future + self.laterToday + self.past + self.rest
 
 
-def getCurrentSemester(course_dict):
+def getCurrentSemester(course_dict=None):
     try:
         return course_dict["lectures"][0].semester_current
     except:

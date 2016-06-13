@@ -1,6 +1,7 @@
 import re
 import datetime
 import string
+import copy
 try:
     import cmu_info
 except:
@@ -45,6 +46,18 @@ class Empty(object):
     def isdigit(self):
         return False
 
+
+class Listdict(dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def concat(self, other):
+        _other = copy.deepcopy(other)
+        for key, value in _other.items():
+            if key in self:
+                self[key] += value
+            else:
+                self[key] = value
 
 ##
 ## @brief      Represent a time in minutes.
@@ -234,3 +247,28 @@ def parseTime(time_string):
         return datetime.datetime.strptime(time_string, "%I:%M%p").time()
     except:
         return None
+
+##
+## @brief      Get the current mini.
+##
+## @return     (int) The current mini.
+##
+def getCurrentMini(current_date=None):
+    if current_date is None:
+        current_date = datetime.date.today()
+    elif isinstance(current_date, datetime.datetime):
+        current_date = current_date.date()
+    year = current_date.year
+    if datetime.date(year, 8, 20) < current_date <= datetime.date(year, 10, 15):
+        return 1
+    elif datetime.date(year, 10, 15) < current_date <= datetime.date(year, 12, 31):
+        return 2
+    elif datetime.date(year, 1, 1) <= current_date <= datetime.date(year, 3, 15):
+        return 3
+    elif datetime.date(year, 3, 15) < current_date <= datetime.date(year, 5, 15):
+        return 4
+    elif datetime.date(year, 5, 15) < current_date <= datetime.date(year, 6, 25):
+        return 5
+    elif datetime.date(year, 6, 25) < current_date <= datetime.date(year, 8, 20):
+        return 6
+    return 0
