@@ -104,7 +104,7 @@ class Searcher(object):
             return query
 
 # DEBUG
-        # print(raw_query)
+        print(raw_query)
 
         QUERY_BASE = '''
         {
@@ -320,7 +320,7 @@ class Parser(object):
         # print("##s's:", searchable, field)
 
         # the fields below are not popped
-        dontPopFields = set()
+        dontPopFields = {"courseid"}
         founds = Listdict()
         i = 0
         while i < len(searchable):
@@ -390,7 +390,7 @@ class Parser(object):
                 self.rawQuery.concat(_building_room)
             else:
                 self.rawQuery["building"] = self.getFieldFromList(searchable, "building").get("building")
-
+            self.rawQuery["courseid"] = self.getFieldFromList(searchable, "courseid").get("courseid")
             self.rawQuery["day"] = self.getFieldFromList(searchable, "day").get("day")
             self.rawQuery["rest"] = [" ".join(searchable)]
 
