@@ -254,13 +254,13 @@ class CourseList(list):
 
                     # ended event
                     if _latestEndTime < currentTime:
-                        event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                        event.diffText = _latestBeginTime.strftime("%-H:%M")
                         self.past.append(event)
 
                     # later today
                     elif not (_latestBeginTime > currentTime and
                               inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):
-                        event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                        event.diffText = _latestBeginTime.strftime("%-H:%M")
                         self.laterToday.append(event)
 
                 # happening on other days

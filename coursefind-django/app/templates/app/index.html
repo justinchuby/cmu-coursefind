@@ -1,7 +1,5 @@
 {% extends "app/layout.html" %}
-
 {% block content %}
-
 <main>
     <div class="container">
         <div class="row">
@@ -24,19 +22,13 @@
           </div>
         </div>
 
-
-
         <!-- The lecture tab -->
         <div id="lec" class="row">
             <div class="col s12">
                 {% if lecture_tab_text %}
                 <p class="flow-text grey-text text-darken-1">{{ lecture_tab_text|linebreaksbr }}</p>
                 {% endif %}
-                <!-- {% if looseSearched %}
-                  <p class="flow-text">But no lecture's name satisfies the whole search text.</p>
-                {% endif %} -->
                 {% include "app/course_list.html" with events=courses_lec %}
-
             </div>
         </div>
 
@@ -46,9 +38,7 @@
                 {% if section_tab_text %}
                 <p class="flow-text grey-text text-darken-1">{{ section_tab_text }}</p>
                 {% endif %}
-
                 {% include "app/course_list.html" with events=courses_sec %}
-
             </div>
         </div>
     </div>
