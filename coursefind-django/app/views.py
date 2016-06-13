@@ -99,11 +99,12 @@ def home(request, **kwargs):
                 searchText = data["q"]
             searchTextWithoutTime = searchText
             # find time first
-            match = re.search("\d\d?:\d\d", searchText)
+            match = re.search("(\d\d?:\d{2})([ap]m)?", searchText)
             if match:
                 try:
                     # the 2015 1 1 has no meaning, just to construct a datetime instance
                     searchTime = datetime.datetime.strptime("2015 1 1 %s" % match.group(), "%Y %m %d %H:%M").time()
+# TODO: clean here
                     searchDatetime = datetime.datetime.combine(searchDate, searchTime)
                     displayMode["time"] = searchTime
 # DEBUG
