@@ -104,8 +104,7 @@ class Searcher(object):
             return query
 
 # DEBUG
-        print(raw_query)
-        # Filtering fields are not in the query
+        # print(raw_query)
 
         QUERY_BASE = '''
         {
@@ -607,14 +606,20 @@ def fetch(index, query, servers, size=200):
             body = query,
             size = size
         )
-    except elasticsearch.exceptions.NotFoundError:
-        print("'index_not_found_exception', 'no such index'")
-    except elasticsearch.exceptions.RequestError:
-        print(e)
+    except elasticsearch.exceptions.NotFoundError as e:
+# TODO: wrap the message into a function
+        errmsg = "ES_ERROR-{} STR-<{}> REPR-<{}>".format(datetime.datetime.now().isoformat(), str(e), repr(e))
+        print(errmsg)
+    except elasticsearch.exceptions.RequestError as e:
+        errmsg = "ES_ERROR-{} STR-<{}> REPR-<{}>".format(datetime.datetime.now().isoformat(), str(e), repr(e))
+        print(errmsg)
+    except elasticsearch.exceptions.TransportError as e:
+        errmsg = "ES_ERROR-{} STR-<{}> REPR-<{}>".format(datetime.datetime.now().isoformat(), str(e), repr(e))
+        print(errmsg)
     # except:
     #     pass
-    finally:
-        return response
+
+    return response
 
 
 @LecsecFilter.filterPittsburgh
