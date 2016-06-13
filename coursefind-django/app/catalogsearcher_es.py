@@ -66,7 +66,7 @@ class Searcher(object):
     ##
     ## @brief      init
     ##
-    ## @param      self        
+    ## @param      self
     ## @param      s           The query text
     ##
     def __init__(self, s=""):
@@ -82,7 +82,7 @@ class Searcher(object):
 
     ##
     ## @brief      Generate the query for the database.
-    ## 
+    ##
     ## @return     (dict) The query for querying the database.
     ##
     def generateQuery(self):
@@ -409,7 +409,7 @@ class Parser(object):
 ##             lists of (coursescotty.Lecturesection) courses.
 ##
 @LecsecFilter.filterMini(getCurrentMini())
-def getCurrentCourses(current_datetime=None, time_delta=60):
+def getCurrentCourses(current_datetime=None, time_delta=60, index=None):
     courseDict = dict()
     if current_datetime is None:
         current_datetime = datetime.datetime.now()
@@ -470,7 +470,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                         }
                                      }
                                   }
-                               
+
                             }
                          }
                       }
@@ -515,7 +515,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
                                         }
                                      }
                                   }
-                               
+
                             }
                          }
                       }
@@ -526,7 +526,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
        }
     }
     '''
-    
+
     queryString = QUERY_BASE % (currentTimeString, shiftedTimeString, currentTimeString, shiftedTimeString)
     query = json.loads(queryString)
 
@@ -544,7 +544,7 @@ def getCurrentCourses(current_datetime=None, time_delta=60):
          ["nested"]["query"]["bool"]["must"].append(
             {"match": {"sections.times.days": currentDay}})
 
-    response = queryCourse(query)
+    response = queryCourse(query, index=index)
 
     if "hits" in response:
         courseDict = parseResponse(response)
@@ -560,10 +560,10 @@ def presearch(search_text):
     return True, None
 
 
-def search(text):
+def search(text, index=None):
     searcher = Searcher(text)
     query = searcher.generateQuery()
-    response = queryCourse(query)
+    response = queryCourse(query, index=index)
 
     if "hits" in response:
         return parseResponse(response)
@@ -571,8 +571,9 @@ def search(text):
         return None
 
 
-def queryCourse(query):
-    index = getCurrentIndex()
+def queryCourse(query, index=None):
+    if index is None:
+        index = getCurrentIndex()
     servers = ["courseapi-scotty.rhcloud.com:80"]
     response = fetch(index, query, servers)
     return response
@@ -610,6 +611,8 @@ def fetch(index, query, servers, size=200):
         print("'index_not_found_exception', 'no such index'")
     except elasticsearch.exceptions.RequestError:
         print(e)
+    # except:
+    #     pass
     finally:
         return response
 
@@ -657,4 +660,3 @@ def filterWithInnerHits(events, innerhits_hits_hits):
         if event.lecsec in names:
             filteredEvents.append(event)
     return filteredEvents
-

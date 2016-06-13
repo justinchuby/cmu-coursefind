@@ -84,6 +84,7 @@ def home(request, **kwargs):
     search_tip = None
     catalog_semester = ""
     catalog_date = ""
+    searchIndex = kwargs.get("index")
 
     if request.method == "GET":
         data = dict(request.GET)
@@ -115,14 +116,14 @@ def home(request, **kwargs):
             if coursescotty.getSearchable(searchTextWithoutTime) == []:
 # TODO needs to change the displayMode according to search date
                 del displayMode["search"]
-                searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
+                searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime, index=searchIndex)
             else:
                 shouldSearch, mainpage_toast = catalogsearcher_es.presearch(searchTextWithoutTime)
                 if shouldSearch:
-                    searchResult = catalogsearcher_es.search(searchTextWithoutTime)
+                    searchResult = catalogsearcher_es.search(searchTextWithoutTime, index=searchIndex)
 
         else:
-            searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime)
+            searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime, index=searchIndex)
 
     # put courses into lectures and sections
     if isinstance(searchResult, dict):
@@ -164,7 +165,8 @@ def home(request, **kwargs):
                'search_tip': search_tip,
                'catalog_semester': catalog_semester,
                'catalog_date': catalog_date,
-               'coursereview_year': (currentDate.year - 1)}
+               'coursereview_year': (currentDate.year - 1),
+               'search_index': searchIndex}
 
     return render(request, 'app/index.html', context)
 

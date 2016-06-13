@@ -22,5 +22,6 @@ urlpatterns = [
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^about[/]?', app.views.about),
     url(r'^disclaimer[/]?', app.views.disclaimer),
+    url(r'^(?P<index>(f|s|m1|m2)\d{2})[/]?$', app.views.home),
     url(r'^', app.views.home),
 ]
