@@ -186,7 +186,8 @@ def home(request, **kwargs):
                'catalog_semester': catalog_semester,
                'catalog_date': catalog_date,
                'coursereview_year': (currentDate.year - 1),
-               'search_index': searchIndex}
+               'search_index': searchIndex,
+               'search_result': searchResult}
 
     return render(request, 'app/index.html', context)
 

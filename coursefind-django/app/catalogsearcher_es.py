@@ -572,9 +572,12 @@ def search(text=None, index=None):
         searcher = Searcher(text)
         query = searcher.generateQuery()
         response = queryCourse(query, index=index)
+        rawQuery = searcher.rawQuery
 
         if "hits" in response:
-            return parseResponse(response)
+            result = parseResponse(response)
+            result["raw_query"] = rawQuery
+            return result
 
 
 def queryCourse(query, index=None):
