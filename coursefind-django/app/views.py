@@ -24,10 +24,8 @@ def getText(display_mode, tab, event_list):
                     result = "Found one {}.".format(tab)
                 elif len(event_list) == 0:
                     result = "Found no {} that matches.".format(tab)
-
-                if "looseSearched" in display_mode:
-                    result += "\nBut no {}'s name satisfies the whole search text."\
-                        .format(tab)
+            if "time" in display_mode:
+                result += " (at {})".format(display_mode["time"].strftime("%I:%M%p"))
 
         elif "time" in display_mode:
             displayTime = display_mode["time"].strftime("%H:%M")
