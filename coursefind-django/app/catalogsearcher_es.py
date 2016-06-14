@@ -346,8 +346,12 @@ class Parser(object):
     ## @brief      Gets rid of the empty queries in the rawQuery.
     ##
     def cleanUpRawQuery(self):
-        d = copy.copy(self.rawQuery)
-        for key, value in d.items():
+        keys = list(self.rawQuery.keys())
+        for key in keys:
+            value = self.rawQuery[key]
+            if type(value) == list:
+                self.rawQuery[key] = [elem for elem in value if elem != ""]
+                value = self.rawQuery[key]
             if containsNone(value) or value == [] or value == "":
                 del self.rawQuery[key]
 
