@@ -132,7 +132,6 @@ def home(request, **kwargs):
                 searchTextWithoutTime = re.sub("(\d\d?:\d{2})([ap]m)?", " ", searchText)
 
             if coursescotty.getSearchable(searchTextWithoutTime) == []:
-# TODO: needs to change the displayMode according to search date
                 del displayMode["search"]
                 searchResult = catalogsearcher_es.getCurrentCourses(
                     current_datetime=searchDatetime,
