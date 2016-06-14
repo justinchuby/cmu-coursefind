@@ -46,7 +46,7 @@
               <span class="flow-text"><a class="amber-text text-accent-4" href="/?q={{ course.courseid }}">{{ course.courseid }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
               / &nbsp; {{ course.department }} &nbsp; / <br>
               {% for time in course.times %}
-                {{ time.days_text }} &nbsp; | {% if time.building_text %}<a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ course.building_text }}" target="_blank">
+                {{ time.days_text }} &nbsp; | {% if time.building_text %}<a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ time.building_text }}" target="_blank">
                  {{ time.building_text }} </a> {{ time.room }}{% endif %}<br>
                 {% if time.begin %}<span class="grey-text text-lighten-2">From</span> {{ time.begin }} <span class="grey-text text-lighten-2">to</span> {{ time.end }} <br><br>{% endif %}
               {% endfor %}
