@@ -273,11 +273,19 @@ class Parser(object):
 
         # Match building in forms of "BH136A"
         if field == "building_room":
-            match = re.search("^([a-zA-Z][a-zA-Z]+)(\d+\w*)", s)
+            match = re.search("^([a-zA-Z]{2})(\w?\d+\w?)", s)
+            # "BH136A", "HHA104"
             if match:
-                result["building"] = [match.group(1).upper()]
-                result["room"] = [match.group(2).upper()]
-            else:
+                if match.group(1) in cmu_info.CMU_BUILDINGS_ABBR:
+                    result["building"] = [match.group(1).upper()]
+                    result["room"] = [match.group(2).upper()]
+            # "GHC4102"
+                else:
+                    match = re.search("^([a-zA-Z]{3})(\w?\d+\w?)", s)
+                    if match:
+                        result["building"] = [match.group(1).upper()]
+                        result["room"] = [match.group(2).upper()]
+            if not match:
                 return None
 
         if field == "building":
@@ -390,6 +398,7 @@ class Parser(object):
                 self.rawQuery.concat(_building_room)
             else:
                 self.rawQuery["building"] = self.getFieldFromList(searchable, "building").get("building")
+                self.rawQuery["room"] = self.getFieldFromList(searchable, "room").get("room")
             self.rawQuery["courseid"] = self.getFieldFromList(searchable, "courseid").get("courseid")
             self.rawQuery["day"] = self.getFieldFromList(searchable, "day").get("day")
             self.rawQuery["rest"] = [" ".join(searchable)]
