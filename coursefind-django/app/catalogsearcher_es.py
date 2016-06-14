@@ -567,15 +567,14 @@ def presearch(search_text):
     return result
 
 
-def search(text, index=None):
-    searcher = Searcher(text)
-    query = searcher.generateQuery()
-    response = queryCourse(query, index=index)
+def search(text=None, index=None):
+    if text is not None:
+        searcher = Searcher(text)
+        query = searcher.generateQuery()
+        response = queryCourse(query, index=index)
 
-    if "hits" in response:
-        return parseResponse(response)
-    else:
-        return None
+        if "hits" in response:
+            return parseResponse(response)
 
 
 def queryCourse(query, index=None):

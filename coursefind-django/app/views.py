@@ -16,40 +16,49 @@ def getText(display_mode, tab, event_list):
     result = None
     try:
         if "search" in display_mode:
-            if "room" not in display_mode:
-                if tab == "lecture" or tab == "section":
-                    if len(event_list) > 1:
-                        result = "Found {} {}s.".format(len(event_list), tab)
-                    elif len(event_list) == 1:
-                        result = "Found one {}.".format(tab)
-                    elif len(event_list) == 0:
-                        result = "Found no {} that matches.".format(tab)
+            if ("room" not in display_mode and
+                (tab == "lecture" or tab == "section")):
+                if len(event_list) > 1:
+                    result = "Found {} {}s.".format(len(event_list), tab)
+                elif len(event_list) == 1:
+                    result = "Found one {}.".format(tab)
+                elif len(event_list) == 0:
+                    result = "Found no {} that matches.".format(tab)
 
-                    if "looseSearched" in display_mode:
-                        result += "\nBut no {}'s name satisfies the whole search text.".format(tab)
+                if "looseSearched" in display_mode:
+                    result += "\nBut no {}'s name satisfies the whole search text."\
+                        .format(tab)
 
         elif "time" in display_mode:
             displayTime = display_mode["time"].strftime("%H:%M")
             if tab == "lecture" or tab == "section":
                 if len(event_list.current) > 1:
-                    result = "There are {} {}s at {}.".format(len(event_list.current), tab, displayTime)
+                    result = "There are {} {}s at {}."\
+                        .format(len(event_list.current), tab, displayTime)
                 elif len(event_list.current) == 1:
-                    result = "One {} happening at {}.".format(tab, displayTime)
+                    result = "One {} happening at {}."\
+                        .format(tab, displayTime)
                 elif len(event_list.future) > 0:
-                    result = "There are {}s in an hour after {}.".format(tab, displayTime)
+                    result = "There are {}s in an hour after {}."\
+                        .format(tab, displayTime)
                 elif len(event_list) == 0:
-                    result = "No {} happening at {}. Take a break :)".format(tab, displayTime)
+                    result = "No {} happening at {}. Take a break :)"\
+                        .format(tab, displayTime)
 
         elif "current" in display_mode:
             if tab == "lecture" or tab == "section":
                 if len(event_list.current) > 1:
-                    result = "There are currently {} {}s happening.".format(len(event_list.current), tab)
+                    result = "There are currently {} {}s happening."\
+                        .format(len(event_list.current), tab)
                 elif len(event_list.current) == 1:
-                    result = "One {} happening at this time.".format(tab)
+                    result = "One {} happening at this time."\
+                        .format(tab)
                 elif len(event_list.future) > 0:
-                    result = "There are {}s happening in an hour.".format(tab)
+                    result = "There are {}s happening in an hour."\
+                        .format(tab)
                 elif len(event_list) == 0:
-                    result = "No {} happening at this time. Take a break :)".format(tab)
+                    result = "No {} happening at this time. Take a break :)"\
+                        .format(tab)
 
     except:
         pass
@@ -68,7 +77,6 @@ def home(request, **kwargs):
 
     searchResult = None
     searchText = ""
-    shouldSearch = True
 
     displayMode = {"current": None}
     courses_lec = coursescotty.CourseList()
@@ -86,7 +94,7 @@ def home(request, **kwargs):
     search_tip = None
     catalog_semester = ""
     catalog_date = ""
-    # get different time divisions
+    # Different time divisions
     TIME_FLAGS = [["current", "Now happening"],
                   ["future", "In an hour"],
                   ["laterToday", "Later today"],
@@ -133,30 +141,36 @@ def home(request, **kwargs):
             else:
                 presearchResult = catalogsearcher_es.presearch(searchTextWithoutTime)
                 mainpage_toast = presearchResult.get("mainpage_toast")
-                searchResult = catalogsearcher_es.search(searchTextWithoutTime,
-                                                         index=searchIndex)
+                searchResult = catalogsearcher_es.search(
+                    text=searchTextWithoutTime,
+                    index=searchIndex)
 
+        # Not searching. Display current courses.
         else:
-            searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime, index=searchIndex)
+            searchResult = catalogsearcher_es.getCurrentCourses(
+                current_datetime=searchDatetime,
+                index=searchIndex)
 
-    # put courses into lectures and sections
-    if isinstance(searchResult, dict):
-        try:
-            courses_lec += searchResult["lectures"]
-            courses_sec += searchResult["sections"]
+    # Put courses into lectures and sections
+    try:
+        courses_lec += searchResult["lectures"]
+        courses_sec += searchResult["sections"]
 
-            # dont forget to call ready
-            courses_lec.ready(current_datetime=searchDatetime)
-            courses_sec.ready(current_datetime=searchDatetime)
-        except KeyError as e:
-            print(formatErrMsg(e))
+        # Don't forget to call ready
+        courses_lec.ready(current_datetime=searchDatetime)
+        courses_sec.ready(current_datetime=searchDatetime)
+    except (KeyError, TypeError) as e:
+        print(formatErrMsg(e))
+    except:
+        pass
 
-    # generate the result prompt
+    # Generate the result prompt
     lecture_tab_text = getText(displayMode, "lecture", courses_lec)
     section_tab_text = getText(displayMode, "section", courses_sec)
     if len(courses_lec) == 0 and len(courses_sec) > 0:
         lecture_tab_text += " But sections are found."
 
+    # Get current semester and rundate from search results.
     catalog_semester = coursescotty.getCurrentSemester(searchResult)
     catalog_date = coursescotty.getCatalogDate(searchResult)
 
