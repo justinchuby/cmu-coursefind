@@ -7,6 +7,14 @@ try:
 except:
     from . import cmu_info
 
+
+def formatErrMsg(e, header=""):
+    if not header.endswith("_"):
+        header += "_"
+    errmsg = "{}ERROR-{} STR-<{}> REPR-<{}>".format(header, datetime.datetime.now().isoformat(), str(e), repr(e))
+    return errmsg
+
+
 SOC_TABLE_ORDER = {
     "number": 0,
     "name": 1,
@@ -246,7 +254,12 @@ def parseTime(time_string):
     try:
         return datetime.datetime.strptime(time_string, "%I:%M%p").time()
     except:
+        pass
+    try: 
+        return datetime.datetime.strptime(time_string, "%H:%M").time()
+    except:
         return None
+
 
 ##
 ## @brief      Get the current mini.
@@ -272,3 +285,12 @@ def getCurrentMini(current_date=None):
     elif datetime.date(year, 6, 25) < current_date <= datetime.date(year, 8, 20):
         return 6
     return 0
+
+
+class _Tests():
+    @staticmethod
+    def test_parseTime():
+        assert(datetime.time(8, 15) == parseTime("8:15am"))
+        assert(datetime.time(20, 15) == parseTime("8:15PM"))
+        assert(datetime.time(8, 0) == parseTime("8:00"))
+        assert(datetime.time(20, 0) == parseTime("20:00"))

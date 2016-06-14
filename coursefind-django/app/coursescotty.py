@@ -114,9 +114,9 @@ class LectureSection(object):
                 self.building = "TBA"
             if timeObj.room is None:
                 self.room = "TBA"
-            timeObj.days_text = getDaysText(timeObj.days) 
+            timeObj.days_text = getDaysText(timeObj.days)
             timeObj.building_text = getBuildingText(timeObj.building)
-# TODO: Delete later
+# TODO: Delete after the API supports full names
         # Get full names of instructors
         self.instructors = cmu_prof.getFullNames(self.instructors,
                                                  self.courseid[:2]+
@@ -254,13 +254,13 @@ class CourseList(list):
 
                     # ended event
                     if _latestEndTime < currentTime:
-                        event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                        event.diffText = _latestBeginTime.strftime("%-H:%M")
                         self.past.append(event)
 
                     # later today
                     elif not (_latestBeginTime > currentTime and
                               inMinutes(_latestBeginTime) < inMinutes(currentTime) + time_delta):
-                        event.diffText = "{}:{}".format(_latestBeginTime.hour, _latestBeginTime.minute)
+                        event.diffText = _latestBeginTime.strftime("%-H:%M")
                         self.laterToday.append(event)
 
                 # happening on other days

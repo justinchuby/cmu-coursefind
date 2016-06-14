@@ -105,7 +105,6 @@ class Searcher(object):
 
 # DEBUG
         print(raw_query)
-        # Filtering fields are not in the query
 
         QUERY_BASE = '''
         {
@@ -274,11 +273,19 @@ class Parser(object):
 
         # Match building in forms of "BH136A"
         if field == "building_room":
-            match = re.search("^([a-zA-Z][a-zA-Z]+)(\d+\w*)", s)
+            match = re.search("^([a-zA-Z]{2})(\w?\d+\w?)", s)
+            # "BH136A", "HHA104"
             if match:
-                result["building"] = [match.group(1).upper()]
-                result["room"] = [match.group(2).upper()]
-            else:
+                if match.group(1) in cmu_info.CMU_BUILDINGS_ABBR:
+                    result["building"] = [match.group(1).upper()]
+                    result["room"] = [match.group(2).upper()]
+            # "GHC4102"
+                else:
+                    match = re.search("^([a-zA-Z]{3})(\w?\d+\w?)", s)
+                    if match:
+                        result["building"] = [match.group(1).upper()]
+                        result["room"] = [match.group(2).upper()]
+            if not match:
                 return None
 
         if field == "building":
@@ -321,7 +328,7 @@ class Parser(object):
         # print("##s's:", searchable, field)
 
         # the fields below are not popped
-        dontPopFields = set()
+        dontPopFields = {"courseid"}
         founds = Listdict()
         i = 0
         while i < len(searchable):
@@ -339,8 +346,12 @@ class Parser(object):
     ## @brief      Gets rid of the empty queries in the rawQuery.
     ##
     def cleanUpRawQuery(self):
-        d = copy.copy(self.rawQuery)
-        for key, value in d.items():
+        keys = list(self.rawQuery.keys())
+        for key in keys:
+            value = self.rawQuery[key]
+            if type(value) == list:
+                self.rawQuery[key] = [elem for elem in value if elem != ""]
+                value = self.rawQuery[key]
             if containsNone(value) or value == [] or value == "":
                 del self.rawQuery[key]
 
@@ -391,7 +402,8 @@ class Parser(object):
                 self.rawQuery.concat(_building_room)
             else:
                 self.rawQuery["building"] = self.getFieldFromList(searchable, "building").get("building")
-
+                self.rawQuery["room"] = self.getFieldFromList(searchable, "room").get("room")
+            self.rawQuery["courseid"] = self.getFieldFromList(searchable, "courseid").get("courseid")
             self.rawQuery["day"] = self.getFieldFromList(searchable, "day").get("day")
             self.rawQuery["rest"] = [" ".join(searchable)]
 
@@ -552,29 +564,30 @@ def getCurrentCourses(current_datetime=None, time_delta=60, index=None):
 
 
 def presearch(search_text):
-    # returns shouldSearch, message
-
+    result = dict()
     match = re.search("15112|15-112|kosbie|koz", search_text)
     if match:
-        return True, random.choice(cmu_info.ONETWELVE)
-    return True, None
+        result["mainpage_toast"] = random.choice(cmu_info.ONETWELVE)
+    return result
 
 
-def search(text, index=None):
-    searcher = Searcher(text)
-    query = searcher.generateQuery()
-    response = queryCourse(query, index=index)
+def search(text=None, index=None):
+    if text is not None:
+        searcher = Searcher(text)
+        query = searcher.generateQuery()
+        response = queryCourse(query, index=index)
+        rawQuery = searcher.rawQuery
 
-    if "hits" in response:
-        return parseResponse(response)
-    else:
-        return None
+        if "hits" in response:
+            result = parseResponse(response)
+            result["raw_query"] = rawQuery
+            return result
 
 
 def queryCourse(query, index=None):
     if index is None:
         index = getCurrentIndex()
-    servers = ["courseapi-scotty.rhcloud.com:80"]
+    servers = ['courseapi-scotty.rhcloud.com:80']
     response = fetch(index, query, servers)
     return response
 
@@ -607,14 +620,16 @@ def fetch(index, query, servers, size=200):
             body = query,
             size = size
         )
-    except elasticsearch.exceptions.NotFoundError:
-        print("'index_not_found_exception', 'no such index'")
-    except elasticsearch.exceptions.RequestError:
-        print(e)
+    except elasticsearch.exceptions.NotFoundError as e:
+        print(formatErrMsg(e, "ES"))
+    except elasticsearch.exceptions.RequestError as e:
+        print(formatErrMsg(e, "ES"))
+    except elasticsearch.exceptions.TransportError as e:
+        print(formatErrMsg(e, "ES"))
     # except:
     #     pass
-    finally:
-        return response
+
+    return response
 
 
 @LecsecFilter.filterPittsburgh
