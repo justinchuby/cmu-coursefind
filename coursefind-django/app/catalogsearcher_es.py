@@ -560,12 +560,11 @@ def getCurrentCourses(current_datetime=None, time_delta=60, index=None):
 
 
 def presearch(search_text):
-    # returns shouldSearch, message
-
+    result = dict()
     match = re.search("15112|15-112|kosbie|koz", search_text)
     if match:
-        return True, random.choice(cmu_info.ONETWELVE)
-    return True, None
+        result["mainpage_toast"] = random.choice(cmu_info.ONETWELVE)
+    return result
 
 
 def search(text, index=None):

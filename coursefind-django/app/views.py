@@ -60,10 +60,10 @@ def home(request, **kwargs):
 # DEBUG
     # print(request.GET, request.POST)
     currentDatetime = datetime.datetime.now()
-    searchDatetime = currentDatetime
     currentDate = currentDatetime.date()
-    searchDate = currentDate
     currentTime = currentDatetime.time()
+    searchDatetime = currentDatetime
+    searchDate = currentDate
     searchTime = currentTime
 
     searchResult = None
@@ -86,43 +86,55 @@ def home(request, **kwargs):
     search_tip = None
     catalog_semester = ""
     catalog_date = ""
+    # get different time divisions
+    TIME_FLAGS = [["current", "Now happening"],
+                  ["future", "In an hour"],
+                  ["laterToday", "Later today"],
+                  ["past", "Ended"],
+                  ["rest", "On other days"]]
+
+    search_tip = "Try searching for " + random.choice(SEARCH_TIPS)
+
     searchIndex = kwargs.get("index")
 
     if request.method == "GET":
         data = dict(request.GET)
 
+        # Searching
         if "q" in data:
-            # searching
             displayMode["search"] = None
 
-            if isinstance(data["q"], list):
+            # Get the query text. Data["q"] should be a list.
+            try:
                 searchText = data["q"][0]
-            elif isinstance(data["q"], str):
-                searchText = data["q"]
+            except:
+                pass
             searchTextWithoutTime = searchText
-            # find time first
+
+            # Filter out the time first
             match = re.search("(\d\d?:\d{2})([ap]m)?", searchText)
             if match:
                 try:
-
                     searchTime = parseTime(match.group())
                     searchDatetime = datetime.datetime.combine(searchDate, searchTime)
                     displayMode["time"] = searchTime
-# DEBUG
-                    # print(searchDatetime)
                 except:
                     print("ERROR Fail to parse time: '{}'".format(match.group()))
-                # delete time from search text
+                # Delete time from search text
                 searchTextWithoutTime = re.sub("(\d\d?:\d{2})([ap]m)?", " ", searchText)
 
             if coursescotty.getSearchable(searchTextWithoutTime) == []:
-# TODO needs to change the displayMode according to search date
+# TODO: needs to change the displayMode according to search date
                 del displayMode["search"]
-                searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime, index=searchIndex)
+                searchResult = catalogsearcher_es.getCurrentCourses(
+                    current_datetime=searchDatetime,
+                    index=searchIndex)
+
             else:
-                shouldSearch, mainpage_toast = catalogsearcher_es.presearch(searchTextWithoutTime)
-                if shouldSearch:
-                    searchResult = catalogsearcher_es.search(searchTextWithoutTime, index=searchIndex)
+                presearchResult = catalogsearcher_es.presearch(searchTextWithoutTime)
+                mainpage_toast = presearchResult.get("mainpage_toast")
+                searchResult = catalogsearcher_es.search(searchTextWithoutTime,
+                                                         index=searchIndex)
 
         else:
             searchResult = catalogsearcher_es.getCurrentCourses(current_datetime=searchDatetime, index=searchIndex)
@@ -136,8 +148,8 @@ def home(request, **kwargs):
             # dont forget to call ready
             courses_lec.ready(current_datetime=searchDatetime)
             courses_sec.ready(current_datetime=searchDatetime)
-        except KeyError:
-            pass
+        except KeyError as e:
+            print(formatErrMsg(e))
 
     # generate the result prompt
     lecture_tab_text = getText(displayMode, "lecture", courses_lec)
@@ -145,14 +157,6 @@ def home(request, **kwargs):
     if len(courses_lec) == 0 and len(courses_sec) > 0:
         lecture_tab_text += " But sections are found."
 
-    # get different time divisions
-    time_flags = [["current", "Now happening"],
-                  ["future", "In an hour"],
-                  ["laterToday", "Later today"],
-                  ["past", "Ended"],
-                  ["rest", "On other days"]]
-
-    search_tip = "Try searching for " + random.choice(SEARCH_TIPS)
     catalog_semester = coursescotty.getCurrentSemester(searchResult)
     catalog_date = coursescotty.getCatalogDate(searchResult)
 
@@ -163,7 +167,7 @@ def home(request, **kwargs):
                'section_tab_text': section_tab_text,
                'mainpage_toast': mainpage_toast,
                'displayMode': displayMode,
-               'time_flags': time_flags,
+               'time_flags': TIME_FLAGS,
                'search_tip': search_tip,
                'catalog_semester': catalog_semester,
                'catalog_date': catalog_date,
