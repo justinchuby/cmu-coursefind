@@ -36,7 +36,7 @@
         <div id="sec" class="row">
             <div class="col s12">
                 {% if section_tab_text %}
-                <p class="flow-text grey-text text-darken-1">{{ section_tab_text }}</p>
+                <p class="flow-text grey-text text-darken-1">{{ section_tab_text|linebreaksbr }}</p>
                 {% endif %}
                 {% include "app/course_list.html" with events=courses_sec %}
             </div>

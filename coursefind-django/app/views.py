@@ -23,7 +23,7 @@ def getText(display_mode, tab, event_list):
                 elif len(event_list) == 1:
                     result = "Found one {}.".format(tab)
                 elif len(event_list) == 0:
-                    result = "Found no {} that matches.".format(tab)
+                    result = "Oops. Can't find any {}. Try something else!".format(tab)
             if "time" in display_mode:
                 result += " (at {})".format(display_mode["time"].strftime("%I:%M%p"))
 
@@ -40,7 +40,7 @@ def getText(display_mode, tab, event_list):
                     result = "There are {}s in an hour after {}."\
                         .format(tab, displayTime)
                 elif len(event_list) == 0:
-                    result = "No {} happening at {}. Take a break :)"\
+                    result = "No {} happening at {}. Take a break :D"\
                         .format(tab, displayTime)
 
         elif "current" in display_mode:
@@ -55,7 +55,7 @@ def getText(display_mode, tab, event_list):
                     result = "There are {}s happening in an hour."\
                         .format(tab)
                 elif len(event_list) == 0:
-                    result = "No {} happening at this time. Take a break :)"\
+                    result = "No {} happening at this time. Take a break :D"\
                         .format(tab)
 
     except:
