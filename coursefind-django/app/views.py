@@ -6,8 +6,10 @@ import random
 
 try:
     from . import catalogsearcher_es, coursescotty
+    from .utilities import *
 except:
     import catalogsearcher_es, coursescotty
+    from utilities import *
 
 
 def getText(display_mode, tab, event_list):
@@ -102,17 +104,16 @@ def home(request, **kwargs):
             match = re.search("(\d\d?:\d{2})([ap]m)?", searchText)
             if match:
                 try:
-                    # the 2015 1 1 has no meaning, just to construct a datetime instance
-                    searchTime = datetime.datetime.strptime("2015 1 1 %s" % match.group(), "%Y %m %d %H:%M").time()
-# TODO: clean here
+
+                    searchTime = parseTime(match.group())
                     searchDatetime = datetime.datetime.combine(searchDate, searchTime)
                     displayMode["time"] = searchTime
 # DEBUG
                     # print(searchDatetime)
                 except:
-                    print("fail to parse time")
+                    print("ERROR Fail to parse time: '{}'".format(match.group()))
                 # delete time from search text
-                searchTextWithoutTime = re.sub("\d\d?:\d\d", " ", searchText)
+                searchTextWithoutTime = re.sub("(\d\d?:\d{2})([ap]m)?", " ", searchText)
 
             if coursescotty.getSearchable(searchTextWithoutTime) == []:
 # TODO needs to change the displayMode according to search date
