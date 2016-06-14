@@ -582,7 +582,7 @@ def search(text, index=None):
 def queryCourse(query, index=None):
     if index is None:
         index = getCurrentIndex()
-    servers = ["courseapi-scotty.rhcloud.com:80"]
+    servers = ['courseapi-scotty.rhcloud.com:80']
     response = fetch(index, query, servers)
     return response
 
@@ -616,15 +616,11 @@ def fetch(index, query, servers, size=200):
             size = size
         )
     except elasticsearch.exceptions.NotFoundError as e:
-# TODO: wrap the message into a function
-        errmsg = "ES_ERROR-{} STR-<{}> REPR-<{}>".format(datetime.datetime.now().isoformat(), str(e), repr(e))
-        print(errmsg)
+        print(formatErrMsg(e, "ES"))
     except elasticsearch.exceptions.RequestError as e:
-        errmsg = "ES_ERROR-{} STR-<{}> REPR-<{}>".format(datetime.datetime.now().isoformat(), str(e), repr(e))
-        print(errmsg)
+        print(formatErrMsg(e, "ES"))
     except elasticsearch.exceptions.TransportError as e:
-        errmsg = "ES_ERROR-{} STR-<{}> REPR-<{}>".format(datetime.datetime.now().isoformat(), str(e), repr(e))
-        print(errmsg)
+        print(formatErrMsg(e, "ES"))
     # except:
     #     pass
 

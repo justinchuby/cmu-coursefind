@@ -7,6 +7,14 @@ try:
 except:
     from . import cmu_info
 
+
+def formatErrMsg(e, header=""):
+    if not header.endswith("_"):
+        header += "_"
+    errmsg = "{}ERROR-{} STR-<{}> REPR-<{}>".format(header, datetime.datetime.now().isoformat(), str(e), repr(e))
+    return errmsg
+
+
 SOC_TABLE_ORDER = {
     "number": 0,
     "name": 1,
