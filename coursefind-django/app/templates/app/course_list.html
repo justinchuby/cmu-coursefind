@@ -43,7 +43,7 @@
           </div>
           <div class="collapsible-body blue-grey darken-1" style="display: none;">
             <p class="grey-text text-lighten-5">
-              <span class="flow-text"><a class="amber-text text-accent-4" href="/?q={{ course.courseid }}">{{ course.courseid }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
+              <span class="flow-text"><a class="amber-text text-accent-4" href="/{{ search_index|default:'' }}?q={{ course.courseid }}">{{ course.courseid }}</a> &nbsp; {{ course.name }} &nbsp; {{ course.lecsec }} &nbsp; </span><br><br>
               / &nbsp; {{ course.department }} &nbsp; / <br>
               {% for time in course.times %}
                 {{ time.days_text }} &nbsp; | {% if time.building_text %}<a class="amber-text text-accent-4" href="https://www.google.com/maps/search/{{ time.building_text }}" target="_blank">
