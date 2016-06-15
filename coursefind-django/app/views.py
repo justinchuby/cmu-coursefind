@@ -37,7 +37,7 @@ def getText(display_mode, tab, event_list):
                     result = "One {} happening at {}."\
                         .format(tab, displayTime)
                 elif len(event_list.future) > 0:
-                    result = "There are {}s in an hour after {}."\
+                    result = "There are {}s in an hour from {}."\
                         .format(tab, displayTime)
                 elif len(event_list) == 0:
                     result = "No {} happening at {}. Take a break :D"\
@@ -83,12 +83,13 @@ def home(request, **kwargs):
     section_tab_text = ""
 
     mainpage_toast = None
-    SEARCH_TIPS = ("a course number",
+    SEARCH_TIPS = ("a course number '15-112'",
                    "name of an instructor",
                    "name of a course",
-                   "a room number",
-                   "a building",
-                   "a time")
+                   "a room 'DH2210'",
+                   "a building 'Doherty'",
+                   "a time '8:00am'",
+                   "a day 'Monday'")
     search_tip = None
     catalog_semester = ""
     catalog_date = ""
