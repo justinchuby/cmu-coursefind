@@ -1,0 +1,5 @@
+django<2
+gunicorn
+whitenoise==3.2
+elasticsearch
+django-htmlmin
