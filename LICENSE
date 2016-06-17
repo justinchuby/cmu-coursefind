@@ -19,3 +19,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+This project uses code from the following projects:
+
+Materialize CSS
+The MIT License, Copyright (c) 2014-2016 Materialize. https://github.com/Dogfalo/materialize/blob/master/LICENSE
+
+Stay Standalone
+The MIT License, Copyright (c) 2009–2011. https://gist.githubusercontent.com/irae/1042167/raw/fa0a67067c17de9a38f3dfade2284866b773524b/the_LICENSE
