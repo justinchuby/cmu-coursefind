@@ -70,7 +70,12 @@ class Searcher(object):
     ## @param      s           The query text
     ##
     def __init__(self, s=""):
-        self.text = s.strip()
+        s = s.strip()
+        if len(s) > 140:
+            self.text = s[:140]
+        else:
+            self.text = s
+
         self.rawQuery = dict()
         parser = Parser(s)
         self.searchable = parser.searchable
@@ -236,7 +241,10 @@ class Searcher(object):
 
 class Parser(object):
     def __init__(self, text):
-        self.text = text
+        if len(text) > 140:
+            self.text = text[:140]
+        else:
+            self.text = text
         self.rawQuery = Listdict()
         self.searchable = splitString(self.text.lower(), " ")
         self.length = len(self.searchable)
