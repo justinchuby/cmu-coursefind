@@ -174,7 +174,7 @@ class CourseList(list):
         if not isinstance(current_day, int):
             currentDay = current_datetime.isoweekday() % 7  # integer
         else:
-            currentDay = current_day
+            currentDay = current_day % 7
 
         for event in self:
             event.days_texts = getDaysTextsFromTimes(event.times)

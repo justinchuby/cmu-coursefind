@@ -3,7 +3,7 @@
 {% for time_attr, time_text in time_flags %}
   {% if events|get_attr:time_attr %}
   <div class="section">
-    <h5 class="blue-grey-text"> &nbsp; {{ time_text }} {%if search_result.raw_query.day%}(as on {{search_result.raw_query.day.0|day_of_week|default:""}}){%endif%}<br><br> </h5>
+    <h5 class="blue-grey-text"> &nbsp; {{ time_text }} {%if search_day%}(as on {{search_day|day_of_week}}){%endif%}<br><br> </h5>
     <ul class="collapsible collapsible-accordion" data-collapsible="accordion">
       {% for course in events|get_attr:time_attr %}
         <li class="">

@@ -157,7 +157,9 @@ def home(request, **kwargs):
         # Set searchDay if it exists in the raw query.
         try:
             _day = searchResult["raw_query"]["day"][0]
-            if _day != currentDate.isoweekday() % 7:
+            if _day == 0:
+                _day = 7  # iso format
+            if _day != currentDate.isoweekday():
                 searchDay = _day
         except: pass
 
@@ -192,7 +194,8 @@ def home(request, **kwargs):
                'catalog_date': catalog_date,
                'coursereview_year': (currentDate.year - 1),
                'search_index': searchIndex,
-               'search_result': searchResult}
+               'search_result': searchResult,
+               'search_day': searchDay}
 
     return render(request, 'app/index.html', context)
 
