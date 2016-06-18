@@ -155,7 +155,10 @@ def home(request, **kwargs):
         courses_lec += searchResult["lectures"]
         courses_sec += searchResult["sections"]
         # Set searchDay if it exists in the raw query.
-        try: searchDay = searchResult["raw_query"]["day"][0]
+        try:
+            _day = searchResult["raw_query"]["day"][0]
+            if _day != currentDate.isoweekday() % 7:
+                searchDay = _day
         except: pass
 
         # Don't forget to call ready
