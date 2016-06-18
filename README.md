@@ -30,22 +30,13 @@ $ python3 manage.py runserver
 ```
 ├── app
 │   ├── __init__.py
-│   ├── catalogsearcher.py
-│   ├── cmu_info.py
-│   ├── cmu_prof.py
-│   ├── coursecat.py
+│   ├── <Main python code>
 │   ├── models.py
 │   ├── static
 │   │   └── app ...
 │   ├── templates
 │   │   └── app
-│   │       ├── about.html
-│   │       ├── analytics.html
-│   │       ├── course_list.html
-│   │       ├── disclaimer.html
-│   │       ├── index.html
-│   │       ├── layout.html
-│   │       └── meta_search.html
+│   │       ├── <The templates>
 │   ├── templatetags
 │   │   ├── __init__.py
 │   │   └── template_filter.py
