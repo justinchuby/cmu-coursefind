@@ -113,6 +113,37 @@ def getSearchable(s):
 
 
 def getDaysText(days):
+    try:
+        result = convertDaysToTexts(days)
+        return ", ".join(result)
+    except:
+        return "TBA"
+
+
+def getDaysTextsFromTimes(times):
+    return convertDaysToTexts(getDaysFromTimes(times))
+
+
+def getDaysFromTimes(times):
+    days = set()
+    for time in times:
+        try:
+            for day in time.get("days"):
+                if type(day) == int:
+                    days.add(day % 7)
+        except:
+            pass
+    return sorted(days)
+
+
+##
+## @brief      Convert days to their text representation in a list.
+##
+## @param      days  (int)(list) The days
+##
+## @return     A list of strings.
+##
+def convertDaysToTexts(days):
     _DAYS = {1: "Mon",
              2: "Tue",
              3: "Wed",
@@ -125,30 +156,9 @@ def getDaysText(days):
         for day in days:
             if day in _DAYS:
                 result.append(_DAYS[day])
-        return ", ".join(result)
     except:
-        return "TBA"
-
-
-def getScottyDaysTexts(times):
-    _DAYS = {1: "Mon",
-             2: "Tue",
-             3: "Wed",
-             4: "Thu",
-             5: "Fri",
-             6: "Sat",
-             0: "Sun"}
-    days_texts = []
-    for time in times:
-        _days = []
-        try:
-            for day in time.get("days"):
-                if day in _DAYS:
-                    _days.append(_DAYS[day])
-            days_texts.append(", ".join(_days))
-        except:
-            pass
-    return days_texts
+        pass
+    return result
 
 
 ##

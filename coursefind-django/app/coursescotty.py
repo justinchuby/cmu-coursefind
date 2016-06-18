@@ -175,7 +175,7 @@ class CourseList(list):
 
         for event in self:
 
-            event.days_texts = getScottyDaysTexts(event.times)
+            event.days_texts = getDaysTextsFromTimes(event.times)
 
 # if today in days:
 #   if both/some:
@@ -232,7 +232,7 @@ class CourseList(list):
             # in one hour!
             if not isHappening:
 # DEGUG
-                # print("%s %s is not happening" % (event.name, event.lecsec))
+                print("%s %s is not happening" % (event.name, event.lecsec))
                 if inNearFutureTimeObj is not None:
                     event.matchedTime = inNearFutureTimeObj
                     _beginTime = inNearFutureTimeObj.begin
