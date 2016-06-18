@@ -234,7 +234,7 @@ class CourseList(list):
             # in one hour!
             if not isHappening:
 # DEGUG
-                print("%s %s is not happening" % (event.name, event.lecsec))
+                # print("%s %s is not happening" % (event.name, event.lecsec))
                 if inNearFutureTimeObj is not None:
                     event.matchedTime = inNearFutureTimeObj
                     _beginTime = inNearFutureTimeObj.begin
