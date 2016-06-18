@@ -72,6 +72,7 @@ def home(request, **kwargs):
     searchDatetime = currentDatetime
     searchDate = currentDate
     searchTime = currentTime
+    searchDay = None
 
     searchResult = None
     searchText = ""
@@ -153,10 +154,13 @@ def home(request, **kwargs):
     try:
         courses_lec += searchResult["lectures"]
         courses_sec += searchResult["sections"]
+        # Set searchDay if it exists in the raw query.
+        try: searchDay = searchResult["raw_query"]["day"][0]
+        except: pass
 
         # Don't forget to call ready
-        courses_lec.ready(current_datetime=searchDatetime)
-        courses_sec.ready(current_datetime=searchDatetime)
+        courses_lec.ready(current_datetime=searchDatetime, current_day=searchDay)
+        courses_sec.ready(current_datetime=searchDatetime, current_day=searchDay)
     except (KeyError, TypeError) as e:
         print(formatErrMsg(e))
     except:

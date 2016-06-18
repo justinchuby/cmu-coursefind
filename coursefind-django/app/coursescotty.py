@@ -159,7 +159,7 @@ class CourseList(list):
     ##
     ## @return     None
     ##
-    def ready(self, current_datetime=None, time_delta=60):
+    def ready(self, current_datetime=None, time_delta=60, current_day=None):
         self.len = self.__len__()
         self.past = []
         self.current = []
@@ -171,10 +171,12 @@ class CourseList(list):
         if not isinstance(current_datetime, datetime.datetime):
             current_datetime = datetime.datetime.now()  # datetime.datetime
         currentTime = current_datetime.time()  # datetime.time
-        currentDay = current_datetime.isoweekday() % 7  # integer
+        if not isinstance(current_day, int):
+            currentDay = current_datetime.isoweekday() % 7  # integer
+        else:
+            currentDay = current_day
 
         for event in self:
-
             event.days_texts = getDaysTextsFromTimes(event.times)
 
 # if today in days:
