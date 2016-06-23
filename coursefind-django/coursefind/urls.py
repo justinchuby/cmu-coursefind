@@ -13,8 +13,7 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf.urls import url
 import app.views
 
 
@@ -23,5 +22,6 @@ urlpatterns = [
     url(r'^about[/]?', app.views.about),
     url(r'^disclaimer[/]?', app.views.disclaimer),
     url(r'^(?P<index>(f|s|m1|m2)\d{2})[/]?$', app.views.home),
-    url(r'^', app.views.home),
+    url(r'^[/]?$', app.views.home),
+    url(r'^', app.views.redirect_to_home)
 ]

@@ -1,4 +1,5 @@
 ﻿from django.shortcuts import render
+from django.shortcuts import redirect
 
 import datetime
 import re
@@ -198,6 +199,10 @@ def home(request, **kwargs):
                'search_day': searchDay}
 
     return render(request, 'app/index.html', context)
+
+
+def redirect_to_home(request):
+    return redirect('/')
 
 
 def about(request):
