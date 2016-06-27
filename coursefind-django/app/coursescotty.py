@@ -116,11 +116,6 @@ class LectureSection(object):
                 self.room = "TBA"
             timeObj.days_text = getDaysText(timeObj.days)
             timeObj.building_text = getBuildingText(timeObj.building)
-# TODO: Delete after the API supports full names
-        # Get full names of instructors
-        self.instructors = cmu_prof.getFullNames(self.instructors,
-                                                 self.courseid[:2]+
-                                                 self.courseid[3:])
 
     def __repr__(self):
         s = "</LectureSection- {} />".format(self.__dict__)
