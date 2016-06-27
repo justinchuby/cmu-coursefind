@@ -210,7 +210,7 @@ class CourseList(list):
                     # this event is happening today
                     if currentDay in timeObj.days:
                         # and happening now
-                        if _beginTime < currentTime < _endTime:
+                        if _beginTime <= currentTime <= _endTime:
                             event.matchedTime = timeObj
                             _diff = getTimeDifference(_beginTime, _endTime, current_datetime, "current")
                             _time = _dateTime + _diff
