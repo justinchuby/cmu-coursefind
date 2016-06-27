@@ -62,7 +62,14 @@ class Course(object):
 class Meeting(object):
     def __init__(self, meeting_dict):
         # _PROPS = ["instructors", "name", "times"]
-        self.instructors = meeting_dict["instructors"]
+        self.instructors = []
+        for instructor in meeting_dict["instructors"]:
+            if instructor.find(',') != -1:
+                last_name = instructor[:instructor.find(',')].strip()
+                first_name = instructor[instructor.find(',')+1:].strip()
+                self.instructors.append(first_name + ' ' + last_name)
+            else:
+                self.instructors.append(instructor)
         self.name = meeting_dict["name"]
         self.times = [TimeObj(time) for time in meeting_dict["times"]]
 
