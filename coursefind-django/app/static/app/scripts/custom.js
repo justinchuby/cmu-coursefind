@@ -99,19 +99,19 @@ function getDetailPgaeColor(courseid) {
     if (level < 200) {
         color.darkness = "lighten";
         color.level = 3
-    } else if (200 <= level < 300) {
+    } else if (200 <= level && level < 300) {
         color.darkness = "lighten";
         color.level = 2
-    } else if (300 <= level < 400) {
+    } else if (300 <= level && level < 400) {
         color.darkness = "lighten";
         color.level = 1
-    } else if (300 <= level < 400) {
+    } else if (400 <= level && level < 500) {
         color.darkness = "";
         color.level = 0
-    } else if (400 <= level < 500) {
+    } else if (500 <= level && level < 600) {
         color.darkness = "darken";
         color.level = 1
-    } else if (500 <= level < 600) {
+    } else if (600 <= level && level < 700) {
         color.darkness = "darken";
         color.level = 2
     } else {
