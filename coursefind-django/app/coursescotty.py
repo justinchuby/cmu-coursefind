@@ -26,9 +26,12 @@ class Course(object):
         self.courseid = scotty_dict["id"]
         self.lectures = [Meeting(meeting) for meeting in self.scottyDict["lectures"]]
         self.sections = [Meeting(meeting) for meeting in self.scottyDict["sections"]]
-        self.instructors = set()
+        # Using a list for self.instructors to keep the order
+        self.instructors = []
         for lec in self.lectures:
-            self.instructors.update(lec.instructors)
+            for instructor in lec.instructors:
+                if instructor not in self.instructors:
+                    self.instructors.append(instructor)
                 
 
 

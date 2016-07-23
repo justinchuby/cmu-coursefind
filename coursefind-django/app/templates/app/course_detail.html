@@ -35,6 +35,7 @@
     jc-text-courseid
     jc-text-title
     jc-text-instructor
+    jc-text-accent
 
   -->
 
@@ -53,29 +54,30 @@
                   <br/>
                   <br/>
                   <br/>
+                  <br/>
+                  <br/>
                 </p>
               </div>
               <div class="col s12 m5 offset-m2">
-                Pre-requisites:
-                {% for prereq in course.prereqs %}
+                Pre-requisites: {{ course.prereqs|default:"None" }}
+                <!-- {% for prereq in course.prereqs %}
                 <div class="chip jc-chip jc-text-major purple darken-3 white-text">
                   {{ prereq }}
                 </div>
                 {% empty %}
                 None
-                {% endfor %}
-
+                {% endfor %} -->
                 <br/><br/>
               </div>
               <div class="col s12 m5">
-                Co-requisites:
-                {% for coreq in course.coreqs %}
+                Co-requisites: {{ course.coreqs|default:"None" }}
+                <!-- {% for coreq in course.coreqs %}
                 <div class="chip jc-chip jc-text-major purple darken-3 white-text">
                   {{ coreq }}
                 </div>
                 {% empty %}
                 None
-                {% endfor %}
+                {% endfor %} -->
                 <br/><br/>
               </div>
               <div class="col s10 m5 offset-m2">
@@ -91,7 +93,7 @@
           <h5 class="light jc-text-title purple-text text-darken-3">Instructor</h5>
           <br/>
           <p class="flow-text jc-text-instructor purple-text">
-            {{ course.instructors|join:"\n" }}
+            {{ course.instructors|join:"<br/>" }}
           </p>
         </div>
       </div>
@@ -120,14 +122,16 @@
           <div class="card-content white-text">
             <span class="card-title">{{ lecture.name }}</span>
             <p class="right-align">
-              {{ lecture.instructors|join:", " }} <br/>
               <span class="light">{{ lecture.times.0.location }}</span>
+            </p>
+            <p class="right-align">
+              {{ lecture.instructors|join:"<br/>" }} <br/>
             </p>
             {% for time in lecture.times %}
             <p class="light">
               <br/> {% for day in time.days %}{{ day|day_of_week }}, {% endfor %}
               {% if time.begin %} <br/><span class="grey-text text-lighten-2">From</span> {{ time.begin }} <span class="grey-text text-lighten-2">to</span> {{ time.end }}{% endif %}
-              {% if time.building %} <br/><a href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+              {% if time.building %} <br/><a class="jc-text-accent teal-text text-accent-2" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
                       {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
             </p>
             {% endfor %}
@@ -162,14 +166,14 @@
                 </div>
               </div>
             </div>
-            <div class="collapsible-body">
+            <div class="collapsible-body jc-major-color jc-text-major white-text purple lighten-1">
               <p>
                 <span class="flow-text">{{ section.instructors|join:", " }}</span>
                 {% for time in section.times %}
                 <br/>
                 <br/> {{ time.days|days_of_week|join:", " }}
                 <br/> {% if time.begin %} From {{ time.begin }} to {{ time.end }}{% endif %}
-                <br/> {% if time.building %}<a href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+                <br/> {% if time.building %}<a class="jc-text-accent teal-text text-accent-2" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
                         {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
                 {% endfor %}
               </p>
@@ -183,6 +187,7 @@
 </main>
 
 <script type="text/javascript">
+$(document).ready(function() {
   $('.readmore').readmore();
 </script>
 
