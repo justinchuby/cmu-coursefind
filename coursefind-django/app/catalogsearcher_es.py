@@ -21,14 +21,12 @@ import elasticsearch
 class LecsecFilter():
     def filterPittsburgh(func):
         def f(*args, **kwargs):
+            def filterFunc(event):
+                return event.times[0].get("location") == "Pittsburgh, Pennsylvania"
             d = func(*args, **kwargs)
             newDict = dict()
             for key, L in d.items():
-                newL = []
-                for event in L:
-                    if event.times[0].get("location") == "Pittsburgh, Pennsylvania":
-                        newL.append(event)
-                newDict[key] = newL
+                newDict[key] = list(filter(filterFunc, L))
             return newDict
         return f
 
@@ -590,6 +588,23 @@ def search(text=None, index=None):
             result = parseResponse(response)
             result["raw_query"] = rawQuery
             return result
+
+
+##
+## @brief      Get the course by courseid.
+##
+## @param      courseid  (str) The courseid
+## @param      index     (str) The elasticsearch index
+##
+## @return     A coursescotty.Course object containing the course info.
+##
+def getCourseByID(courseid, index=None):
+    searcher = Searcher(courseid)
+    query = searcher.generateQuery()
+    response = queryCourse(query, index=index)
+
+    if "hits" in response and response['hits']['hits'] != []:
+        return Course(response['hits']['hits'][0]['_source'])
 
 
 def queryCourse(query, index=None):
