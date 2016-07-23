@@ -1,4 +1,9 @@
 from django.template.defaulttags import register
+try:
+    import utilities
+except:
+    from . import utilities
+
 
 @register.filter
 def get_item(dictionary, key):
@@ -22,3 +27,11 @@ def day_of_week(n):
         return _DAYS[n]
     except:
         return None
+
+@register.filter
+def days_of_week(days):
+    return [day_of_week(day) for day in days]
+
+@register.filter
+def cmu_building(s):
+    return utilities.getBuildingText(s)

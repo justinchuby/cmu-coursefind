@@ -224,15 +224,15 @@ def disclaimer(request):
         }
     return render(request, 'app/disclaimer.html', context)
 
+
 def course_detail(request, **kwargs):
-    catalog_semester = coursescotty.getCurrentSemester()
     search_index = kwargs.get("index")
     courseid = kwargs.get("courseid")
     course = catalogsearcher_es.getCourseByID(courseid, search_index)
     context = {
         'page': 'course_detail',
-        'catalog_semester': catalog_semester,
+        'catalog_semester': course.semester_current,
+        'catalog_date': course.rundate,
         'course': course
     }
     return render(request, 'app/course_detail.html', context)
-    
