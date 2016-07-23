@@ -1,5 +1,6 @@
 ﻿from django.shortcuts import render
 from django.shortcuts import redirect
+from django.http import Http404
 
 import datetime
 import re
@@ -228,11 +229,15 @@ def disclaimer(request):
 def course_detail(request, **kwargs):
     search_index = kwargs.get("index")
     courseid = kwargs.get("courseid")
-    course = catalogsearcher_es.getCourseByID(courseid, search_index)
-    context = {
-        'page': 'course_detail',
-        'catalog_semester': course.semester_current,
-        'catalog_date': course.rundate,
-        'course': course
-    }
-    return render(request, 'app/course_detail.html', context)
+    try:
+        course = catalogsearcher_es.getCourseByID(courseid, search_index)
+        context = {
+            'page': 'course_detail',
+            'catalog_semester': course.semester_current,
+            'catalog_date': course.rundate,
+            'course': course
+        }
+        return render(request, 'app/course_detail.html', context)
+    except AttributeError:
+        pass
+    raise Http404("No info about {} in {}".format(courseid, search_index))
