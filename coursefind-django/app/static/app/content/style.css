@@ -22,11 +22,6 @@ main {
     padding-left: 190px;
 }
 
-/*
-.picker__input {
-    font-size:small
-}
-*/
 
 @media (max-width : 600px) {
     #search-box {
@@ -47,4 +42,9 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+}
+
+/*Fix nav display on Chrome*/
+nav .nav-wrapper form, nav .nav-wrapper form .input-field{
+    height: 100%;
 }

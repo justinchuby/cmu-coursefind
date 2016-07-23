@@ -9,9 +9,11 @@ except:
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+
 @register.filter
 def get_attr(obj, key):
     return obj.__dict__.get(key)
+
 
 @register.filter
 def day_of_week(n):
@@ -28,9 +30,11 @@ def day_of_week(n):
     except:
         return None
 
+
 @register.filter
 def days_of_week(days):
     return [day_of_week(day) for day in days]
+
 
 @register.filter
 def cmu_building(s):

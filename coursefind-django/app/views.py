@@ -227,12 +227,19 @@ def disclaimer(request):
 
 
 def course_detail(request, **kwargs):
-    search_index = kwargs.get("index")
+    course_index = kwargs.get("index")
     courseid = kwargs.get("courseid")
+    search_index = None
     try:
-        course = catalogsearcher_es.getCourseByID(courseid, search_index)
+        data = dict(request.GET)
+        search_index = data.get("search_index")[0]
+    except:
+        pass
+    try:
+        course = catalogsearcher_es.getCourseByID(courseid, course_index)
         context = {
             'page': 'course_detail',
+            'search_index': search_index,
             'catalog_semester': course.semester_current,
             'catalog_date': course.rundate,
             'course': course
@@ -240,4 +247,4 @@ def course_detail(request, **kwargs):
         return render(request, 'app/course_detail.html', context)
     except AttributeError:
         pass
-    raise Http404("No info about {} in {}".format(courseid, search_index))
+    raise Http404("No info about {} in {}".format(courseid, course_index))

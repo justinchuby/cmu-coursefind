@@ -29,13 +29,13 @@
   </nav> -->
 
   <!--
-    jc-major-color
-    jc-chip
-    jc-text-major
-    jc-text-courseid
-    jc-text-title
-    jc-text-instructor
-    jc-text-accent
+    jc-major-color: purple lighten-1
+    jc-chip: purple darken-3
+    jc-text-major: white-text
+    jc-text-courseid: purple-text text-darken-4
+    jc-text-title: purple-text text-darken-3
+    jc-text-instructor: purple-text
+    jc-text-accent: teal-text text-accent-2
 
   -->
 
@@ -90,7 +90,7 @@
     <div class="col s8 offset-s4 m3">
       <div class="card white">
         <div class="card-content right-align">
-          <h5 class="light jc-text-title purple-text text-darken-3">Instructor</h5>
+          <h4 class="light jc-text-title purple-text text-darken-3">Instructor</h4>
           <br/>
           <p class="flow-text jc-text-instructor purple-text">
             {{ course.instructors|join:"<br/>" }}
@@ -103,18 +103,20 @@
   <div class="section container">
     <div class="row">
       <div class="col s12 m10">
-        <h5 class="">Description</h5>
+        <h4 class="">Description</h4>
         <p class="light grey-text text-darken-3 {%if course.desc%}readmore {%endif%}">
-          {{ course.desc|default:"No description available." }}
+          <br/>{{ course.desc|default:"No description available." }}
         </p>
       </div>
       <div class="col s12 divider"></div>
     </div>
   </div>
+
+  {% if course.lectures %}
   <div class="section container">
     <div class="row">
       <div class="col s12">
-        <h5>Lectures</h5>
+        <h4>Lectures</h4><br/>
       </div>
       {% for lecture in course.lectures %}
       <div class="col s12 m6 l4">
@@ -129,10 +131,15 @@
             </p>
             {% for time in lecture.times %}
             <p class="light">
-              <br/> {% for day in time.days %}{{ day|day_of_week }}, {% endfor %}
-              {% if time.begin %} <br/><span class="grey-text text-lighten-2">From</span> {{ time.begin }} <span class="grey-text text-lighten-2">to</span> {{ time.end }}{% endif %}
-              {% if time.building %} <br/><a class="jc-text-accent teal-text text-accent-2" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
-                      {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
+              <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
+              {{ time.days|days_of_week|join:", " }}
+              {% if time.begin %} <br/><i class="material-icons tiny">access_time</i>&nbsp;&nbsp;
+                <span class="grey-text text-lighten-2">From</span> {{ time.begin }} <span class="grey-text text-lighten-2">to</span> {{ time.end }}
+              {% endif %}
+              {% if time.building %} <br/><i class="material-icons tiny">explore</i>&nbsp;&nbsp;
+              <a class="jc-text-accent teal-text text-accent-2" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+                  {{ time.building|cmu_building }} </a> {{ time.room }}
+              {% endif %}
             </p>
             {% endfor %}
           </div>
@@ -141,11 +148,13 @@
       {% endfor %}
     </div>
   </div>
+  {% endif %}
 
+  {% if course.sections %}
   <div class="section container">
     <div class="row">
       <div class="col s12">
-        <h5>Sections</h5>
+        <h4>Sections</h4><br/>
       </div>
       <div class="col s12">
         <ul class="collapsible popout" data-collapsible="accordion">
@@ -184,6 +193,26 @@
       </div>
     </div>
   </div>
+  {% endif %}
+
+  <div class="section container">
+    <div class="row">
+      <div class="col s12">
+        <h4>Ratings</h4>
+      </div>
+    </div>
+    <p>
+      <a class="waves-effect light grey-text text-darken-3" 
+         href="http://cmucoursereviews.me/course/{{ course.courseid }}/2015" target="_blank" rel="nofollow">
+         FCE ratings and reviews on
+         <span class="jc-text-title purple-text text-darken-3">
+         cmucoursereviews.me 
+         </span>&nbsp;<i class="tiny material-icons">launch</i>
+      </a>
+    </p>
+  </div>
+
+
 </main>
 
 <script type="text/javascript">
