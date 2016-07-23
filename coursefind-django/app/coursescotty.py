@@ -26,6 +26,11 @@ class Course(object):
         self.courseid = scotty_dict["id"]
         self.lectures = [Meeting(meeting) for meeting in self.scottyDict["lectures"]]
         self.sections = [Meeting(meeting) for meeting in self.scottyDict["sections"]]
+        self.instructors = set()
+        for lec in self.lectures:
+            self.instructors.update(lec.instructors)
+                
+
 
     def __repr__(self):
         s = "</Course- {} />".format(self.__dict__)

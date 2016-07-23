@@ -599,12 +599,14 @@ def search(text=None, index=None):
 ## @return     A coursescotty.Course object containing the course info.
 ##
 def getCourseByID(courseid, index=None):
-    searcher = Searcher(courseid)
-    query = searcher.generateQuery()
-    response = queryCourse(query, index=index)
+    if re.search("^\d\d-\d\d\d$", courseid):
+        searcher = Searcher(courseid)
+        query = searcher.generateQuery()
+        response = queryCourse(query, index=index)
 
-    if "hits" in response and response['hits']['hits'] != []:
-        return Course(response['hits']['hits'][0]['_source'])
+        if "hits" in response and response['hits']['hits'] != []:
+            return Course(response['hits']['hits'][0]['_source'])
+    return None
 
 
 def queryCourse(query, index=None):
