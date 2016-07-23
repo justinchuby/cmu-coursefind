@@ -10,24 +10,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
 
 <main>
-  <!-- <nav>
-    <div class="nav-wrapper grey lighten-3">
-      <div class="row">
-        <form class="col s8 m10 l11" id="search-box">
-          <div class="input-field">
-            <input type="search" name="q" class="field" required maxlength="100" placeholder="Search" id="search-text">
-            <label for="search-text"><i class="material-icons grey-text">search</i></label>
-            <i class="material-icons" href="#">close</i>
-          </div>
-        </form>
-      </div>
-    </div>
-    <ul id="slide-out" class="side-nav">
-      <li><a href="/" style="font-size:150%;">Course Find</a></li>
-      <li><a href="/about">About</a></li>
-    </ul>
-  </nav> -->
-
   <!--
     jc-major-color: purple lighten-1
     jc-chip: purple darken-3
@@ -39,8 +21,10 @@
 
   -->
 
+<a class="btn" onclick="window.history.back();">back</a>
+
   <div class="row">
-    <div class="col m9">
+    <div class="col s12 l9">
       <div class="card jc-major-color purple lighten-1">
          <div class="card-content jc-text-major white-text">
             <div class="row">
@@ -87,13 +71,19 @@
          </div>
       </div>
     </div>
-    <div class="col s8 offset-s4 m3">
+    <div class="col s8 offset-s4 m5 offset-m7 l3">
       <div class="card white">
         <div class="card-content right-align">
           <h4 class="light jc-text-title purple-text text-darken-3">Instructor</h4>
           <br/>
           <p class="flow-text jc-text-instructor purple-text">
-            {{ course.instructors|join:"<br/>" }}
+            {% for instructor in course.instructors %}
+            {{ instructor }}
+            <a class="waves-effect tooltipped jc-text-title purple-text text-darken-3" data-position="top" data-tooltip="ratemyprofessors.com" href="http://www.ratemyprofessors.com/search.jsp?query={{ instructor }}" target="_blank" rel="nofollow">
+              <i class="material-icons">launch</i>
+            </a>
+            <br/>
+            {% endfor %}
           </p>
         </div>
       </div>
@@ -131,8 +121,9 @@
             </p>
             {% for time in lecture.times %}
             <p class="light">
-              <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
-              {{ time.days|days_of_week|join:", " }}
+              {% if time.days %} <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
+                {{ time.days|days_of_week|join:", " }}
+              {% endif %}
               {% if time.begin %} <br/><i class="material-icons tiny">access_time</i>&nbsp;&nbsp;
                 <span class="grey-text text-lighten-2">From</span> {{ time.begin }} <span class="grey-text text-lighten-2">to</span> {{ time.end }}
               {% endif %}
@@ -202,11 +193,11 @@
       </div>
     </div>
     <p>
-      <a class="waves-effect light grey-text text-darken-3" 
+      <a class="waves-effect light grey-text text-darken-3"
          href="http://cmucoursereviews.me/course/{{ course.courseid }}/2015" target="_blank" rel="nofollow">
          FCE ratings and reviews on
          <span class="jc-text-title purple-text text-darken-3">
-         cmucoursereviews.me 
+         cmucoursereviews.me
          </span>&nbsp;<i class="tiny material-icons">launch</i>
       </a>
     </p>

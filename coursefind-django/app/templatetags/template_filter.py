@@ -33,7 +33,10 @@ def day_of_week(n):
 
 @register.filter
 def days_of_week(days):
-    return [day_of_week(day) for day in days]
+    try:
+        return [day_of_week(day) for day in days]
+    except:
+        return []
 
 
 @register.filter
