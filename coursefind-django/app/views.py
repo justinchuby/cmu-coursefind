@@ -248,3 +248,13 @@ def course_detail(request, **kwargs):
     except AttributeError:
         pass
     raise Http404("No info about {} in {}".format(courseid, course_index))
+
+
+def redirect_to_course_detail(request, **kwargs):
+    courseid = kwargs.get("courseid")
+    course_index = kwargs.get("index")
+    new_courseid = courseid[:2] + '-' + courseid[2:]
+    if course_index:
+        return redirect('/{}/{}'.format(course_index, new_courseid))
+    else:
+        return redirect('/courses/{}'.format(new_courseid))

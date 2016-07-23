@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^(?P<index>(f|s|m1|m2)\d{2})[/]?$', app.views.home),
     url(r'^(?P<index>(f|s|m1|m2)\d{2})/(?P<courseid>\d{2}-\d{3})[/]?$', app.views.course_detail),
     url(r'^courses/(?P<courseid>\d{2}-\d{3})[/]?$', app.views.course_detail),
+    url(r'^(?P<index>(f|s|m1|m2)\d{2})/(?P<courseid>\d{5})[/]?$', app.views.redirect_to_course_detail),
+    url(r'^courses/(?P<courseid>\d{5})[/]?$', app.views.redirect_to_course_detail),
     url(r'^[/]?$', app.views.home),
     url(r'^', app.views.redirect_to_home)
 ]
