@@ -1,5 +1,6 @@
 ﻿from django.shortcuts import render
 from django.shortcuts import redirect
+from django.http import Http404
 
 import datetime
 import re
@@ -182,7 +183,8 @@ def home(request, **kwargs):
     catalog_semester = coursescotty.getCurrentSemester(searchResult)
     catalog_date = coursescotty.getCatalogDate(searchResult)
 
-    context = {'searchText': searchText,
+    context = {'page': 'root',
+               'searchText': searchText,
                'courses_lec': courses_lec,
                'courses_sec': courses_sec,
                'lecture_tab_text': lecture_tab_text,
@@ -193,7 +195,8 @@ def home(request, **kwargs):
                'search_tip': search_tip,
                'catalog_semester': catalog_semester,
                'catalog_date': catalog_date,
-               'coursereview_year': (currentDate.year - 1),
+               # 'coursereview_year': (currentDate.year - 1),
+               'coursereview_year': 2015,
                'search_index': searchIndex,
                'search_result': searchResult,
                'search_day': searchDay}
@@ -207,11 +210,51 @@ def redirect_to_home(request):
 
 def about(request):
     catalog_semester = coursescotty.getCurrentSemester()
-    context = {'catalog_semester': catalog_semester}
+    context = {
+        'page': 'about',
+        'catalog_semester': catalog_semester
+        }
     return render(request, 'app/about.html', context)
 
 
 def disclaimer(request):
     catalog_semester = coursescotty.getCurrentSemester()
-    context = {'catalog_semester': catalog_semester}
+    context = {
+        'page': 'disclaimer',
+        'catalog_semester': catalog_semester
+        }
     return render(request, 'app/disclaimer.html', context)
+
+
+def course_detail(request, **kwargs):
+    course_index = kwargs.get("index")
+    courseid = kwargs.get("courseid")
+    search_index = None
+    try:
+        data = dict(request.GET)
+        search_index = data.get("search_index")[0]
+    except:
+        pass
+    try:
+        course = catalogsearcher_es.getCourseByID(courseid, course_index)
+        context = {
+            'page': 'course_detail',
+            'search_index': search_index,
+            'catalog_semester': course.semester_current,
+            'catalog_date': course.rundate,
+            'course': course
+        }
+        return render(request, 'app/course_detail.html', context)
+    except AttributeError:
+        pass
+    raise Http404("No info about {} in {}".format(courseid, course_index))
+
+
+def redirect_to_course_detail(request, **kwargs):
+    courseid = kwargs.get("courseid")
+    course_index = kwargs.get("index")
+    new_courseid = courseid[:2] + '-' + courseid[2:]
+    if course_index:
+        return redirect('/{}/{}'.format(course_index, new_courseid))
+    else:
+        return redirect('/courses/{}'.format(new_courseid))

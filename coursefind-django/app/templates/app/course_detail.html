@@ -1,0 +1,218 @@
+{% extends "app/layout.html" %}
+{% block content %}
+
+<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
+
+<main>
+  <!--
+    jc-major-color: purple lighten-1
+    jc-chip: purple darken-3
+    jc-text-major: white-text
+    jc-text-courseid: purple-text text-darken-4
+    jc-text-title: purple-text text-darken-3
+    jc-text-instructor: purple-text
+    jc-text-accent: teal-text text-accent-2
+  -->
+
+  <div class="fixed-action-btn hide-on-large" style="left: 10px;">
+    <a class="btn-floating btn-large waves-effect waves-light jc-nav" onclick="window.history.back();"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
+  </div>
+  <div class="row">
+    <div class="col s12 l9">
+      <div class="card jc-major-color">
+         <div class="card-content jc-text-major">
+            <div class="row">
+              <div class="col m9 offset-m2">
+                <h1 class="light jc-text-courseid">{{ course.courseid }}
+                  <span class="right flow-text">{{ course.semester_current }}</span>
+                </h1>
+                <h4 class="light jc-text-major">{{ course.name }}</h4>
+                <p>
+                  / {{ course.department }} /
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                </p>
+              </div>
+              <div class="col s12 m5 offset-m2">
+                Pre-requisites: {{ course.prereqs|default:"None" }}
+                <!-- {% for prereq in course.prereqs %}
+                <div class="chip jc-chip jc-text-major purple darken-3 white-text">
+                  {{ prereq }}
+                </div>
+                {% empty %}
+                None
+                {% endfor %} -->
+                <br/><br/>
+              </div>
+              <div class="col s12 m5">
+                Co-requisites: {{ course.coreqs|default:"None" }}
+                <!-- {% for coreq in course.coreqs %}
+                <div class="chip jc-chip jc-text-major purple darken-3 white-text">
+                  {{ coreq }}
+                </div>
+                {% empty %}
+                None
+                {% endfor %} -->
+                <br/><br/>
+              </div>
+              <div class="col s10 m5 offset-m2">
+                Units: {{ course.units|default:"Unknown" }}
+              </div>
+            </div>
+         </div>
+      </div>
+    </div>
+    <div class="col s8 offset-s4 m5 offset-m7 l3">
+      <div class="card white">
+        <div class="card-content right-align">
+          <h4 class="light jc-text-title">Instructor</h4>
+          <br/>
+          <p class="flow-text jc-text-instructor">
+            {% for instructor in course.instructors %}
+            {{ instructor }}
+            <a class="waves-effect tooltipped jc-text-title" data-position="top" data-tooltip="ratemyprofessors.com" href="http://www.ratemyprofessors.com/search.jsp?query={{ instructor }}" target="_blank" rel="nofollow">
+              <i class="material-icons">launch</i>
+            </a>
+            <br/>
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section container">
+    <div class="row">
+      <div class="col s12 m10">
+        <h4 class="">Description</h4>
+        <p class="light grey-text text-darken-3 {%if course.desc%}readmore {%endif%}">
+          <br/>{{ course.desc|default:"No description available." }}
+        </p>
+      </div>
+      <div class="col s12 divider"></div>
+    </div>
+  </div>
+
+  {% if course.lectures %}
+  <div class="section container">
+    <div class="row">
+      <div class="col s12">
+        <h4>Lectures</h4><br/>
+      </div>
+      {% for lecture in course.lectures %}
+      <div class="col s12 m6 l4">
+        <div class="card hoverable jc-major-color">
+          <div class="card-content jc-text-major">
+            <span class="card-title"><b>&nbsp;&nbsp;&nbsp;{{ lecture.name }}</b></span>
+            <p class="right-align">
+              <span class="light">{{ lecture.times.0.location }}</span>
+            </p>
+            <p class="right-align">
+              {{ lecture.instructors|join:"<br/>" }} <br/>
+            </p>
+            {% for time in lecture.times %}
+            <p class="light">
+              {% if time.days %} <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
+                {{ time.days|days_of_week|join:", " }}
+              {% endif %}
+              {% if time.begin %} <br/><i class="material-icons tiny">access_time</i>&nbsp;&nbsp;
+                From {{ time.begin }} to {{ time.end }}
+              {% endif %}
+              {% if time.building %} <br/><i class="material-icons tiny">explore</i>&nbsp;&nbsp;
+              <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+                  {{ time.building|cmu_building }} </a> {{ time.room }}
+              {% endif %}
+            </p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if course.sections %}
+  <div class="section container">
+    <div class="row">
+      <div class="col s12">
+        <h4>Sections</h4><br/>
+      </div>
+      <div class="col s12">
+        <ul class="collapsible popout" data-collapsible="accordion">
+          {% for section in course.sections %}
+          <li>
+            <div class="collapsible-header hoverable {%if forloop.first%} active {%endif%}">
+              <!-- <i class="material-icons">filter_drama</i>Section {{ section.name }}
+              <span class="light badge">{{ section.times.0.location }}</span> -->
+              <div class="row nomargin">
+                <div class="col s5">
+                  <i class="material-icons">filter_drama</i>
+                  <span>Section {{ section.name }}</span>
+                </div>
+                <div class="col s7">
+                  <p class="light right-align nomargin">
+                    {{ section.times.0.location }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="collapsible-body jc-major-color jc-text-major">
+              <p>
+                <span class="flow-text">{{ section.instructors|join:", " }}</span>
+                {% for time in section.times %}
+                <br/>
+                <br/> {{ time.days|days_of_week|join:", " }}
+                <br/> {% if time.begin %} From {{ time.begin }} to {{ time.end }}{% endif %}
+                <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+                        {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
+                {% endfor %}
+              </p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="section container">
+    <div class="row">
+      <div class="col s12">
+        <h4>Ratings</h4>
+      </div>
+    </div>
+    <p>
+      <a class="waves-effect light grey-text text-darken-3"
+         href="http://cmucoursereviews.me/course/{{ course.courseid }}/2015" target="_blank" rel="nofollow">
+         FCE ratings and reviews on
+         <span class="jc-text-title">
+         cmucoursereviews.me
+         </span>&nbsp;<i class="tiny material-icons">launch</i>
+      </a>
+    </p>
+  </div>
+  <div class="section container">
+  {% include "app/disqus.html" %}
+  </div>
+
+</main>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.readmore').readmore();
+    setDetailPgaeColor("{{course.courseid}}")
+  });
+</script>
+
+{% endblock %}

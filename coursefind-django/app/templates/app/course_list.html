@@ -51,8 +51,10 @@
                 {% if time.begin %}<span class="grey-text text-lighten-2">From</span> {{ time.begin }} <span class="grey-text text-lighten-2">to</span> {{ time.end }} <br><br>{% endif %}
               {% endfor %}
               <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructors|join:", "|title }}<br><br>
-              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://cmucoursereviews.me/course/{{ course.courseid }}/{{ coursereview_year }}" target="_blank" rel="nofollow">See course description and reviews on <span class="amber-text text-accent-4">cmucoursereviews.me</span>&nbsp;<i class="tiny material-icons">launch</i></a><br>
-              <a class="waves-effect waves-light grey-text text-lighten-5" href="http://www.ratemyprofessors.com/search.jsp?query={{ course.instructors.0 }}" target="_blank" rel="nofollow">Search for the instructor on <span class="amber-text text-accent-4">ratemyprofessors.com</span>&nbsp;<i class="tiny material-icons">launch</i></a>
+              <a class="waves-effect waves-light grey-text text-lighten-5"
+                 href="/{{ search_index|default:"courses" }}/{{ course.courseid }}{%if search_index%}?search_index={{search_index}}{%endif%}">
+                < More <span class="amber-text text-accent-4">Details</span> about this course >
+              </a>
             </p>
           </div>
         </li>

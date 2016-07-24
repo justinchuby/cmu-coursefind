@@ -4,8 +4,10 @@
   <head>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% if page == "root" %}
     <meta name="description" content="A better course finder for Carnegie Mellon University. See classes that are happening and discover new courses!">
     <meta name="keywords" content="CMU,cmucoursefind,cmu course finder,cmu catalog,soc,course finder,cmu course">
+    {% endif %}
 
     {% if searchText and searchText != "" %}
     <title>{{ searchText }} - CMU Course Find</title>
@@ -17,6 +19,8 @@
     <!--Import materialize.css-->
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!-- Customized CSS -->
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/style.css' %}" />
@@ -93,7 +97,6 @@
       </div>
     </footer>
     <!--Import jQuery before materialize.js-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <script src="{% static 'app/scripts/custom.js' %}"></script>
   </body>
