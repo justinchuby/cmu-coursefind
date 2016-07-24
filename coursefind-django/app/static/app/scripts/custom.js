@@ -96,7 +96,7 @@ function getDetailPageColor(courseid) {
         color.darkness = "lighten";
         color.level = 1
     } else if (400 <= level && level < 500) {
-        color.darkness = "";
+        color.darkness = "lighten";
         color.level = 0
     } else if (500 <= level && level < 600) {
         color.darkness = "darken";
@@ -115,7 +115,7 @@ function getDetailPageColor(courseid) {
         text_title: [color.majorColor.concat("-text"), "text".concat("-", color.darkness, "-3")].join(" "),
         text_instructor: color.majorColor.concat("-text"),
         text_accent: "",
-        nav_bar: [color.majorColor, color.darkness.concat("-", color.level-1)].join(" "),
+        nav_bar: [color.majorColor, color.darkness.concat("-", Math.abs(color.level-1))].join(" "),
     }
     if (color.darkness == "lighten" && color.level === 3) {
         pageColors.text_major = "grey-text text-darken-2"

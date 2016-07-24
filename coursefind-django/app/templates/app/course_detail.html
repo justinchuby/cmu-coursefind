@@ -24,9 +24,11 @@
          <div class="card-content jc-text-major">
             <div class="row">
               <div class="col m9 offset-m2">
-                <h1 class="light jc-text-courseid">{{ course.courseid }}
-                  <span class="right flow-text">{{ course.semester_current }}</span>
+                <h1 class="light jc-text-courseid">
+                  {{ course.courseid }}
+                    <span class="hide-on-small-only flow-text">{{ course.semester_current }}</span>
                 </h1>
+                <span class="hide-on-med-and-up flow-text jc-text-major">{{ course.semester_current }}</span>
                 <h4 class="light jc-text-major">{{ course.name }}</h4>
                 <p>
                   / {{ course.department }} /
@@ -90,7 +92,7 @@
     <div class="row">
       <div class="col s12 m10">
         <h4 class="">Description</h4>
-        <p class="light grey-text text-darken-3 {%if course.desc%}readmore {%endif%}">
+        <p class="grey-text text-darken-3 {%if course.desc%}readmore {%endif%}">
           <br/>{{ course.desc|default:"No description available." }}
         </p>
       </div>
@@ -169,10 +171,16 @@
                 <span class="flow-text">{{ section.instructors|join:", " }}</span>
                 {% for time in section.times %}
                 <br/>
-                <br/> {{ time.days|days_of_week|join:", " }}
-                <br/> {% if time.begin %} From {{ time.begin }} to {{ time.end }}{% endif %}
-                <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
-                      <b>{{ time.building|cmu_building }}</b></a> {{ time.room }}{% endif %}
+                {% if time.days %} <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
+                  {{ time.days|days_of_week|join:", " }}
+                {% endif %}
+                {% if time.begin %} <br/><i class="material-icons tiny">access_time</i>&nbsp;&nbsp;
+                  From {{ time.begin }} to {{ time.end }}
+                {% endif %}
+                {% if time.building %} <br/><i class="material-icons tiny">explore</i>&nbsp;&nbsp;
+                <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
+                    <b>{{ time.building|cmu_building }}</b></a> {{ time.room }}
+                {% endif %}
                 {% endfor %}
               </p>
             </div>
