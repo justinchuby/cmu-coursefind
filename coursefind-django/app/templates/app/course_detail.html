@@ -121,7 +121,7 @@
                 From {{ time.begin }} to {{ time.end }}
               {% endif %}
               {% if time.building %} <br/><i class="material-icons tiny">explore</i>&nbsp;&nbsp;
-              <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+              <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
                   {{ time.building|cmu_building }} </a> {{ time.room }}
               {% endif %}
             </p>
@@ -166,7 +166,7 @@
                 <br/>
                 <br/> {{ time.days|days_of_week|join:", " }}
                 <br/> {% if time.begin %} From {{ time.begin }} to {{ time.end }}{% endif %}
-                <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
+                <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
                         {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
                 {% endfor %}
               </p>
