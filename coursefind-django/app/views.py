@@ -199,7 +199,8 @@ def home(request, **kwargs):
                'coursereview_year': 2015,
                'search_index': searchIndex,
                'search_result': searchResult,
-               'search_day': searchDay}
+               'search_day': searchDay
+               }
 
     return render(request, 'app/index.html', context)
 
@@ -230,9 +231,14 @@ def course_detail(request, **kwargs):
     course_index = kwargs.get("index")
     courseid = kwargs.get("courseid")
     search_index = None
+    data = dict(request.GET)
     try:
-        data = dict(request.GET)
         search_index = data.get("search_index")[0]
+    except:
+        pass
+    previous_page = data.get("src")
+    try:
+        previous_page = previous_page[0]
     except:
         pass
     try:
@@ -242,7 +248,8 @@ def course_detail(request, **kwargs):
             'search_index': search_index,
             'catalog_semester': course.semester_current,
             'catalog_date': course.rundate,
-            'course': course
+            'course': course,
+            'previous_page': previous_page
         }
         return render(request, 'app/course_detail.html', context)
     except AttributeError:
@@ -258,3 +265,17 @@ def redirect_to_course_detail(request, **kwargs):
         return redirect('/{}/{}'.format(course_index, new_courseid))
     else:
         return redirect('/courses/{}'.format(new_courseid))
+
+
+def page_not_found(request, **kwargs):
+    data = dict(request.GET)
+    previous_page = data.get("src")
+    try:
+        previous_page = previous_page[0]
+    except:
+        pass
+    context = {
+        'page': '404',
+        'previous_page': previous_page
+        }
+    return render(request, 'app/404.html', context)

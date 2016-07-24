@@ -1,12 +1,6 @@
 {% extends "app/layout.html" %}
 {% block content %}
 
-<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.min.js"></script>
 
 <main>
@@ -19,10 +13,11 @@
     jc-text-instructor: purple-text
     jc-text-accent: teal-text text-accent-2
   -->
-
-  <div class="fixed-action-btn hide-on-large" style="left: 10px;">
-    <a class="btn-floating btn-large waves-effect waves-light jc-nav" onclick="window.history.back();"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
+  {% if previous_page %}
+  <div class="fixed-action-btn" style="left: 10px;">
+    <a class="btn-floating btn-large waves-effect waves-light jc-nav" href="{{ previous_page }}"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
   </div>
+  {% endif %}
   <div class="row">
     <div class="col s12 l9">
       <div class="card jc-major-color">
@@ -76,7 +71,7 @@
         <div class="card-content right-align">
           <h4 class="light jc-text-title">Instructor</h4>
           <br/>
-          <p class="flow-text jc-text-instructor">
+          <h5 class="jc-text-instructor">
             {% for instructor in course.instructors %}
             {{ instructor }}
             <a class="waves-effect tooltipped jc-text-title" data-position="top" data-tooltip="ratemyprofessors.com" href="http://www.ratemyprofessors.com/search.jsp?query={{ instructor }}" target="_blank" rel="nofollow">
@@ -84,7 +79,7 @@
             </a>
             <br/>
             {% endfor %}
-          </p>
+          </h5>
         </div>
       </div>
     </div>
@@ -117,10 +112,12 @@
               <span class="light">{{ lecture.times.0.location }}</span>
             </p>
             <p class="right-align">
+              <b>
               {{ lecture.instructors|join:"<br/>" }} <br/>
+              </b>
             </p>
             {% for time in lecture.times %}
-            <p class="light">
+            <p>
               {% if time.days %} <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
                 {{ time.days|days_of_week|join:", " }}
               {% endif %}
@@ -128,8 +125,8 @@
                 From {{ time.begin }} to {{ time.end }}
               {% endif %}
               {% if time.building %} <br/><i class="material-icons tiny">explore</i>&nbsp;&nbsp;
-              <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
-                  {{ time.building|cmu_building }} </a> {{ time.room }}
+              <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
+                  <b>{{ time.building|cmu_building }}</b></a> {{ time.room }}
               {% endif %}
             </p>
             {% endfor %}
@@ -156,11 +153,11 @@
               <span class="light badge">{{ section.times.0.location }}</span> -->
               <div class="row nomargin">
                 <div class="col s5">
-                  <i class="material-icons">filter_drama</i>
+                  <i class="material-icons hide-on-small-only">filter_drama</i>
                   <span>Section {{ section.name }}</span>
                 </div>
                 <div class="col s7">
-                  <p class="light right-align nomargin">
+                  <p class="light right-align truncate nomargin">
                     {{ section.times.0.location }}
                   </p>
                 </div>
@@ -173,8 +170,8 @@
                 <br/>
                 <br/> {{ time.days|days_of_week|join:", " }}
                 <br/> {% if time.begin %} From {{ time.begin }} to {{ time.end }}{% endif %}
-                <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank">
-                        {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
+                <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
+                      <b>{{ time.building|cmu_building }}</b></a> {{ time.room }}{% endif %}
                 {% endfor %}
               </p>
             </div>
@@ -193,7 +190,7 @@
       </div>
     </div>
     <p>
-      <a class="waves-effect light grey-text text-darken-3"
+      <a class="waves-effect grey-text text-darken-3"
          href="http://cmucoursereviews.me/course/{{ course.courseid }}/2015" target="_blank" rel="nofollow">
          FCE ratings and reviews on
          <span class="jc-text-title">
@@ -211,7 +208,7 @@
 <script type="text/javascript">
   $(document).ready(function() {
     $('.readmore').readmore();
-    setDetailPgaeColor("{{course.courseid}}")
+    setDetailPageColor("{{course.courseid}}")
   });
 </script>
 

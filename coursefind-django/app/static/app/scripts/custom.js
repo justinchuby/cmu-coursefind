@@ -1,13 +1,3 @@
-//$('.datepicker').pickadate({
-//    selectMonths: true, // Creates a dropdown to control month
-//    selectYears: true, // Creates a dropdown of 15 years to control year
-//    format: 'd mmm, yyyy',
-//  });
-//
-//$('.timepicker').pickatime({
-//      twelvehour: false
-//    });
-
 // Initialize collapse button
 $(".button-collapse").sideNav();
 // Initialize collapsible (uncomment the line below if you use the dropdown variation)
@@ -21,7 +11,7 @@ function clearForm()
     $('#search-text').focus();
 }
 
-function getDetailPgaeColor(courseid) {
+function getDetailPageColor(courseid) {
     var dept = courseid.slice(0,2);
     var level = parseInt(courseid.slice(3,6));
     var color = {
@@ -136,8 +126,8 @@ function getDetailPgaeColor(courseid) {
     return pageColors
 }
 
-function setDetailPgaeColor(courseid) {
-    pageColors = getDetailPgaeColor(courseid);
+function setDetailPageColor(courseid) {
+    pageColors = getDetailPageColor(courseid);
     $('.jc-major-color').addClass(pageColors.major_color);
     $('.jc-text-major').addClass(pageColors.text_major);
     $('.jc-text-courseid').addClass(pageColors.text_courseid);
