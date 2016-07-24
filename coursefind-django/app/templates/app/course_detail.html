@@ -20,10 +20,10 @@
     jc-text-accent: teal-text text-accent-2
   -->
 
+  <div class="fixed-action-btn hide-on-large" style="left: 10px;">
+    <a class="btn-floating btn-large waves-effect waves-light jc-nav" onclick="window.history.back();"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
+  </div>
   <div class="row">
-    <div class="col s12">
-      <a class="btn-floating btn-large waves-effect waves-light jc-nav" onclick="window.history.back();"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
-    </div>
     <div class="col s12 l9">
       <div class="card jc-major-color">
          <div class="card-content jc-text-major">
@@ -112,7 +112,7 @@
       <div class="col s12 m6 l4">
         <div class="card hoverable jc-major-color">
           <div class="card-content jc-text-major">
-            <span class="card-title">{{ lecture.name }}</span>
+            <span class="card-title"><b>{{ lecture.name }}</b></span>
             <p class="right-align">
               <span class="light">{{ lecture.times.0.location }}</span>
             </p>
