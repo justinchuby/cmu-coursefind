@@ -2,8 +2,8 @@
 
 <html>
   <head>
-    {% if page == course_detail %}
-    <title>{{ course.courseid }} - CMU Course Find</title>
+    {% if page == "course_detail" %}
+    <title>{{ course.courseid }} - {{ course.semester_current }} - CMU Course Find</title>
     {% elif searchText and searchText != "" %}
     <title>{{ searchText }} - CMU Course Find</title>
     {% else %}
