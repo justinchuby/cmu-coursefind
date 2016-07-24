@@ -13,9 +13,11 @@
     jc-text-instructor: purple-text
     jc-text-accent: teal-text text-accent-2
   -->
-  <div class="fixed-action-btn hide-on-large" style="left: 10px;">
-    <a class="btn-floating btn-large waves-effect waves-light jc-nav" onclick="window.history.back();"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
+  {% if previous_page %}
+  <div class="fixed-action-btn" style="left: 10px;">
+    <a class="btn-floating btn-large waves-effect waves-light jc-nav" href="{{ previous_page }}"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
   </div>
+  {% endif %}
   <div class="row">
     <div class="col s12 l9">
       <div class="card jc-major-color">
@@ -69,7 +71,7 @@
         <div class="card-content right-align">
           <h4 class="light jc-text-title">Instructor</h4>
           <br/>
-          <p class="flow-text jc-text-instructor">
+          <h6 class="jc-text-instructor">
             {% for instructor in course.instructors %}
             {{ instructor }}
             <a class="waves-effect tooltipped jc-text-title" data-position="top" data-tooltip="ratemyprofessors.com" href="http://www.ratemyprofessors.com/search.jsp?query={{ instructor }}" target="_blank" rel="nofollow">
@@ -77,7 +79,7 @@
             </a>
             <br/>
             {% endfor %}
-          </p>
+          </h6>
         </div>
       </div>
     </div>
@@ -110,10 +112,12 @@
               <span class="light">{{ lecture.times.0.location }}</span>
             </p>
             <p class="right-align">
+              <b>
               {{ lecture.instructors|join:"<br/>" }} <br/>
+              </b>
             </p>
             {% for time in lecture.times %}
-            <p class="light">
+            <p>
               {% if time.days %} <br/><i class="material-icons tiny">today</i>&nbsp;&nbsp;
                 {{ time.days|days_of_week|join:", " }}
               {% endif %}
@@ -122,7 +126,7 @@
               {% endif %}
               {% if time.building %} <br/><i class="material-icons tiny">explore</i>&nbsp;&nbsp;
               <a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
-                  {{ time.building|cmu_building }} </a> {{ time.room }}
+                  <b>{{ time.building|cmu_building }}</b></a> {{ time.room }}
               {% endif %}
             </p>
             {% endfor %}
@@ -167,7 +171,7 @@
                 <br/> {{ time.days|days_of_week|join:", " }}
                 <br/> {% if time.begin %} From {{ time.begin }} to {{ time.end }}{% endif %}
                 <br/> {% if time.building %}<a class="jc-text-accent" href="https://www.google.com/maps/search/{{ time.building|cmu_building }}" target="_blank" rel="nofollow">
-                        {{ time.building|cmu_building }} </a> {{ time.room }}{% endif %}
+                      <b>{{ time.building|cmu_building }}</b></a> {{ time.room }}{% endif %}
                 {% endfor %}
               </p>
             </div>
@@ -186,7 +190,7 @@
       </div>
     </div>
     <p>
-      <a class="waves-effect light grey-text text-darken-3"
+      <a class="waves-effect grey-text text-darken-3"
          href="http://cmucoursereviews.me/course/{{ course.courseid }}/2015" target="_blank" rel="nofollow">
          FCE ratings and reviews on
          <span class="jc-text-title">
@@ -204,7 +208,7 @@
 <script type="text/javascript">
   $(document).ready(function() {
     $('.readmore').readmore();
-    setDetailPgaeColor("{{course.courseid}}")
+    setDetailPageColor("{{course.courseid}}")
   });
 </script>
 
