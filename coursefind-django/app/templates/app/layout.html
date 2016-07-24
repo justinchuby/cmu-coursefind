@@ -2,6 +2,13 @@
 
 <html>
   <head>
+    {% if page == course_detail %}
+    <title>{{ course.courseid }} - CMU Course Find</title>
+    {% elif searchText and searchText != "" %}
+    <title>{{ searchText }} - CMU Course Find</title>
+    {% else %}
+    <title>CMU Course Find</title>
+    {% endif %}
     {% load static from staticfiles %}
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,11 +20,6 @@
     {% include "app/favicon.html" %}
     {% include "app/meta_search.html" %}
 
-    {% if searchText and searchText != "" %}
-    <title>{{ searchText }} - CMU Course Find</title>
-    {% else %}
-    <title>CMU Course Find</title>
-    {% endif %}
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -72,8 +74,7 @@
           </div>
           <div class="col m7 s12">
             <span class="grey-text text-lighten-4 light right">
-            Please <a class="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br>
-            </span>
+            Please <a class="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br>            </span>
           </div>
         </div>
       </div>
