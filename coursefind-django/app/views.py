@@ -280,4 +280,6 @@ def page_not_found(request, **kwargs):
 def sitemap(request, **kwargs):
     index = kwargs.get("index")
     output = CFsitemap.generateSitemap(index)
-    return HttpResponse(output, content_type="text/plain")
+    if output:
+        return HttpResponse(output, content_type="text/plain")
+    raise Http404("No sitemap for /{}".format(index))

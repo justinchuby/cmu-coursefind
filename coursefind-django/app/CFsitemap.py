@@ -5,6 +5,8 @@ except:
 
 
 def generateSitemap(index=None):
+    courseids = []
+    output = ""
     if index is None:
         index = catalogsearcher_es.getCurrentIndex()
     query = """{
@@ -17,7 +19,8 @@ def generateSitemap(index=None):
     response = catalogsearcher_es.fetch(index, query, servers, 3000)
     if "hits" in response and response['hits']['hits'] != []:
         courseids = [elem['_id'] for elem in response['hits']['hits']]
-    output = ""
+    else:
+        return False
     for courseid in courseids:
         output += "https://www.cmucoursefind.xyz/{}/{}\n".format(
             index.strip(), courseid.strip())
