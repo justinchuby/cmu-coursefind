@@ -43,3 +43,9 @@ def cmu_building(s):
 @register.filter
 def url_target_blank(text):
     return re.sub("<a([^>]+)(?<!target=)>", '<a target="_blank"\\1>', text)
+
+
+@register.filter
+def remove_script(text):
+    import django.utils.html
+    return django.utils.html.remove_tags(text, 'script')
