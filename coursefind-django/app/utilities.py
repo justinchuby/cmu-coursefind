@@ -55,6 +55,10 @@ class Empty(object):
         return False
 
 
+##
+## @brief      A dictionary whose values are lists, with a concat() method that
+##             concatenates two Listdict object's values.
+##
 class Listdict(dict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
