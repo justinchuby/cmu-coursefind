@@ -236,20 +236,15 @@ def course_detail(request, **kwargs):
         search_index = data.get("search_index")[0]
     except:
         pass
-    previous_page = data.get("src")
-    try:
-        previous_page = previous_page[0]
-    except:
-        pass
     try:
         course = catalogsearcher_es.getCourseByID(courseid, course_index)
         context = {
             'page': 'course_detail',
             'search_index': search_index,
+            'course_index': course_index,
             'catalog_semester': course.semester_current,
             'catalog_date': course.rundate,
-            'course': course,
-            'previous_page': previous_page
+            'course': course
         }
         return render(request, 'app/course_detail.html', context)
     except AttributeError:

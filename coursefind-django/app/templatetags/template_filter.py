@@ -1,4 +1,5 @@
 from django.template.defaulttags import register
+import re
 try:
     import utilities
 except:
@@ -9,11 +10,9 @@ except:
 def get_item(dictionary, key):
     return dictionary.get(key)
 
-
 @register.filter
 def get_attr(obj, key):
     return obj.__dict__.get(key)
-
 
 @register.filter
 def day_of_week(n):
@@ -30,7 +29,6 @@ def day_of_week(n):
     except:
         return None
 
-
 @register.filter
 def days_of_week(days):
     try:
@@ -38,7 +36,10 @@ def days_of_week(days):
     except:
         return []
 
-
 @register.filter
 def cmu_building(s):
     return utilities.getBuildingText(s)
+
+@register.filter
+def url_target_blank(text):
+    return re.sub("<a([^>]+)(?<!target=)>", '<a target="_blank"\\1>', text)

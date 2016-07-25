@@ -13,11 +13,7 @@
     jc-text-instructor: purple-text
     jc-text-accent: teal-text text-accent-2
   -->
-  {% if previous_page %}
-  <div class="fixed-action-btn" style="left: 10px;">
-    <a class="btn-floating btn-large waves-effect waves-light jc-nav" href="{{ previous_page }}"><i class="material-icons"><i class="material-icons">arrow_back</i></i></a>
-  </div>
-  {% endif %}
+
   <div class="row">
     <div class="col s12 l9">
       <div class="card jc-major-color">
@@ -93,7 +89,7 @@
       <div class="col s12 m10">
         <h4 class="">Description</h4>
         <p class="grey-text text-darken-3 {%if course.desc%}readmore {%endif%}">
-          <br/>{{ course.desc|default:"No description available." }}
+          <br/>{{ course.desc|default:"No description available."|urlize|url_target_blank|safe }}
         </p>
       </div>
       <div class="col s12 divider"></div>
@@ -115,9 +111,9 @@
               <span class="light">{{ lecture.times.0.location }}</span>
             </p>
             <p class="right-align">
-              <b>
-              {{ lecture.instructors|join:"<br/>" }} <br/>
-              </b>
+              {% for instructor in lecture.instructors %}
+              <a class="jc-text-major" href="/{{ course_index|default:'' }}?q={{ instructor }}"><b>{{ instructor }}</b></a><br/>
+              {% endfor %}
             </p>
             {% for time in lecture.times %}
             <p>
