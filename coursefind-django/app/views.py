@@ -1,16 +1,17 @@
 ﻿from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import Http404
+from django.http import HttpResponse
 
 import datetime
 import re
 import random
 
 try:
-    from . import catalogsearcher_es, coursescotty
+    from . import catalogsearcher_es, coursescotty, CFsitemap
     from .utilities import *
 except:
-    import catalogsearcher_es, coursescotty
+    import catalogsearcher_es, coursescotty, CFsitemap
     from utilities import *
 
 
@@ -274,3 +275,9 @@ def page_not_found(request, **kwargs):
         'previous_page': previous_page
         }
     return render(request, 'app/404.html', context)
+
+
+def sitemap(request, **kwargs):
+    index = kwargs.get("index")
+    output = CFsitemap.generateSitemap(index)
+    return HttpResponse(output, content_type="text/plain")
