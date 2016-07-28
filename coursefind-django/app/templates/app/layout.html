@@ -36,7 +36,7 @@
         <div class="nav-wrapper">
           <a href="#" data-activates="slide-out" class="button-collapse hide-on-med-and-up"><i class="material-icons">menu</i></a>
           <a href="/" class="brand-logo left hide-on-small-only light" id="brand-logo">&nbsp; Course Find</a>
-          <div class="row">
+          <div class="row" style="height: 100%;">
               <form method="GET" action="/{{ search_index|default:'' }}" class="col s8 m10 l11" id="search-box">
                 <div class="input-field">
                     <input type="search" name="q" class="field {% if search_tip %}tooltipped{% endif %}"
