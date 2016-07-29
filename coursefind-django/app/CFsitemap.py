@@ -1,14 +1,14 @@
 try:
-    import catalogsearcher_es
+    import catalogsearcher_es, utilities
 except:
-    from . import catalogsearcher_es
+    from . import catalogsearcher_es, utilities
 
 
 def generateSitemap(index=None):
     courseids = []
     output = ""
     if index is None:
-        index = catalogsearcher_es.getCurrentIndex()
+        index = utilities.getCurrentIndex()
     query = """{
                 "query" : {
                     "match_all" : {}

@@ -617,25 +617,6 @@ def queryCourse(query, index=None):
     return response
 
 
-def getCurrentIndex():
-    currentYear = datetime.date.today().year
-    currentMonth = datetime.date.today().month
-    return getIndex(currentYear, currentMonth)
-
-
-def getIndex(year, month):
-    if 1 <= month <= 4:
-        semester = "s"
-    elif 5 <= month <= 6:
-        semester = "m1"
-    elif month == 7:
-        semester = "m2"
-    else:
-        semester = "f"
-    index = semester + str(year)[2:]
-    return index
-
-
 def fetch(index, query, servers, size=200):
     es = Elasticsearch(servers)
     response = dict()

@@ -301,6 +301,25 @@ def getCurrentMini(current_date=None):
     return 0
 
 
+def getCurrentIndex():
+    currentYear = datetime.date.today().year
+    currentMonth = datetime.date.today().month
+    return getIndexFromDate(currentYear, currentMonth)
+
+
+def getIndexFromDate(year, month):
+    if 1 <= month <= 4:
+        semester = "s"
+    elif 5 <= month <= 6:
+        semester = "m1"
+    elif month == 7:
+        semester = "m2"
+    else:
+        semester = "f"
+    index = semester + str(year)[2:]
+    return index
+
+
 class _Tests():
     @staticmethod
     def test_parseTime():
