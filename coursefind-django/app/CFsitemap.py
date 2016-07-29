@@ -7,6 +7,9 @@ except:
 def generateSitemap(index=None):
     courseids = []
     output = ""
+    course_index = index
+    if index == "all_courses":
+        course_index = "courses"
     if index is None:
         index = utilities.getCurrentIndex()
     query = """{
@@ -16,12 +19,12 @@ def generateSitemap(index=None):
                 "fields": []
                 }"""
     servers = ['courseapi-scotty.rhcloud.com:80']
-    response = catalogsearcher_es.fetch(index, query, servers, 3000)
+    response = catalogsearcher_es.fetch(index, query, servers, 5000)
     if "hits" in response and response['hits']['hits'] != []:
         courseids = [elem['_id'] for elem in response['hits']['hits']]
     else:
         return False
     for courseid in courseids:
         output += "https://www.cmucoursefind.xyz/{}/{}\n".format(
-            index.strip(), courseid.strip())
+            course_index.strip(), courseid.strip())
     return output

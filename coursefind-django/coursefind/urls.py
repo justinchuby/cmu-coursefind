@@ -27,8 +27,7 @@ urlpatterns = [
     url(r'^courses/(?P<courseid>\d{2}-\d{3})[/]?$', app.views.course_detail),
     url(r'^(?P<index>(f|s|m1|m2)\d{2})/(?P<courseid>\d{5})[/]?$', app.views.redirect_to_course_detail),
     url(r'^courses/(?P<courseid>\d{5})[/]?$', app.views.redirect_to_course_detail),
-    url(r'^sitemaps/sitemap-(?P<index>(f|s|m1|m2)\d{2})\.txt$', app.views.sitemap),
-    url(r'^sitemaps/sitemap-current-courses\.txt$', app.views.sitemap),
+    url(r'^sitemaps/sitemap-(?P<index>((f|s|m1|m2)\d{2})|all_courses)\.txt$', app.views.sitemap),
     url(r'^[/]?$', app.views.home),
     url(r'^', app.views.redirect_to_home)
 ]
