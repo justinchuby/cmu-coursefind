@@ -18,6 +18,9 @@ from elasticsearch import Elasticsearch
 import elasticsearch
 
 
+ALL_COURSES_INDEX = "all_courses"
+
+
 class LecsecFilter():
     def filterPittsburgh(func):
         def f(*args, **kwargs):
@@ -599,6 +602,8 @@ def search(text=None, index=None):
 ## @return     A coursescotty.Course object containing the course info.
 ##
 def getCourseByID(courseid, index=None):
+    if index is None:
+        index = ALL_COURSES_INDEX
     if re.search("^\d\d-\d\d\d$", courseid):
         searcher = Searcher(courseid)
         query = searcher.generateQuery()

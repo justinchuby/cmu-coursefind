@@ -229,7 +229,7 @@ def disclaimer(request):
 
 
 def course_detail(request, **kwargs):
-    course_index = kwargs.get("index") or "all_courses"
+    course_index = kwargs.get("index")
     courseid = kwargs.get("courseid")
     search_index = None
     data = dict(request.GET)
