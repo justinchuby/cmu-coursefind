@@ -45,7 +45,14 @@ def url_target_blank(text):
     return re.sub("<a([^>]+)(?<!target=)>", '<a target="_blank"\\1>', text)
 
 
+# @register.filter
+# def remove_script(text):
+#     import django.utils.html
+#     return django.utils.html.remove_tags(text, 'script')
+
 @register.filter
-def remove_script(text):
-    import django.utils.html
-    return django.utils.html.remove_tags(text, 'script')
+def short_courseid(courseid):
+    try:
+        return courseid[:2] + courseid[3:]
+    except:
+        return courseid

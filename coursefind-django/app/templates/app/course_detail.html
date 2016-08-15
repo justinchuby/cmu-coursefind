@@ -22,7 +22,10 @@
                   {{ course.courseid }}
                     <span class="hide-on-small-only flow-text">{{ course.semester_current }}</span>
                 </h1>
-                <span class="hide-on-med-and-up flow-text jc-text-major">{{ course.semester_current }}</span>
+                <p class="hide-on-med-and-up flow-text jc-text-major">{{ course.semester_current }}</p>
+                {% if course_index %}
+                  <a href="/courses/{{course.courseid}}" class="jc-text-major"><u>To current semester</u></a>
+                {% endif %}
                 <h4 class="light jc-text-major">{{ course.name }}</h4>
                 <p>
                   / {{ course.department }} /
@@ -204,6 +207,10 @@
   </div>
   <div class="section container">
   {% include "app/disqus.html" %}
+  </div>
+
+  <div class="guanjianci" style="display:none">
+    <p>cmu {{ course.courseid|short_courseid }}</p>
   </div>
 
 </main>
