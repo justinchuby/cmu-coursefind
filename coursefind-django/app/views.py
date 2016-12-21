@@ -249,9 +249,11 @@ def course_detail(request, **kwargs):
         }
         return render(request, 'app/course_detail.html', context)
     except AttributeError:
-        pass
+        if course.get("status") == 404:
+            raise Http404("No info about {} in {}".format(courseid, course_index))
+    # TODO Add different error pages
     raise Http404("No info about {} in {}".format(courseid, course_index))
-
+    
 
 def redirect_to_course_detail(request, **kwargs):
     courseid = kwargs.get("courseid")

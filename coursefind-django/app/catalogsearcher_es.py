@@ -609,6 +609,8 @@ def getCourseByID(courseid, index=None):
         query = searcher.generateQuery()
         response = queryCourse(query, index=index)
 
+        if response.get("status") is not None:
+            return response
         if "hits" in response and response['hits']['hits'] != []:
             return Course(response['hits']['hits'][0]['_source'])
     return None
@@ -633,10 +635,14 @@ def fetch(index, query, servers, size=200):
         )
     except elasticsearch.exceptions.NotFoundError as e:
         print(formatErrMsg(e, "ES"))
+        response = e.info
     except elasticsearch.exceptions.RequestError as e:
         print(formatErrMsg(e, "ES"))
+        response = e.info
     except elasticsearch.exceptions.TransportError as e:
         print(formatErrMsg(e, "ES"))
+        response = e.info
+
     # except:
     #     pass
 
