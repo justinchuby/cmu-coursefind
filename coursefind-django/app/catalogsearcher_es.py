@@ -1,4 +1,4 @@
-﻿import datetime
+import datetime
 import re
 import copy
 import random
@@ -6,11 +6,11 @@ import json
 from functools import wraps
 
 try:
-    from . import cmu_info
+    from . import cmu_info, cmu_prof
     from .utilities import *
     from .coursescotty import *
 except:
-    import cmu_info
+    import cmu_info, cmu_prof
     from utilities import *
     from coursescotty import *
 
@@ -60,7 +60,7 @@ class LecsecFilter():
 
 
 ##
-## @brief      Defines a Searcher object.
+## @brief      The Searcher object that parses input and generates queries.
 ##
 class Searcher(object):
 
