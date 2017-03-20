@@ -1,5 +1,5 @@
 # @file coursescotty.py
-# @brief Contains the Event, Course etc. classes.
+# @brief The module for Course object and CourseList object.
 # @author Justin Chu (justinchuby@cmu.edu)
 
 
