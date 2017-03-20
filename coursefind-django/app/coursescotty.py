@@ -8,10 +8,8 @@ import copy
 
 try:
     from .utilities import *
-    from . import cmu_prof
 except:
     from utilities import *
-    import cmu_prof
 
 
 class Course(object):
