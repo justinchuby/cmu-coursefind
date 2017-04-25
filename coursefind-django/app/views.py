@@ -258,9 +258,12 @@ def course_detail(request, **kwargs):
 def redirect_to_course_detail(request, **kwargs):
     courseid = kwargs.get("courseid")
     course_index = kwargs.get("index")
-    new_courseid = courseid[:2] + '-' + courseid[2:]
+    if (len(courseid) == 5):
+        new_courseid = courseid[:2] + '-' + courseid[2:]
+    else:
+        new_courseid = courseid
     if course_index:
-        return redirect('/{}/{}'.format(course_index, new_courseid))
+        return redirect('/courses/{}/{}'.format(new_courseid, course_index))
     else:
         return redirect('/courses/{}'.format(new_courseid))
 

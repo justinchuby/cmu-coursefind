@@ -608,7 +608,6 @@ def getCourseByID(courseid, index=None):
         searcher = Searcher(courseid)
         query = searcher.generateQuery()
         response = queryCourse(query, index=index)
-
         if response.get("status") is not None:
             return response
         if "hits" in response and response['hits']['hits'] != []:
