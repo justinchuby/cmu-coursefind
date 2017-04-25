@@ -599,20 +599,27 @@ def search(text=None, index=None):
 ## @param      courseid  (str) The courseid
 ## @param      index     (str) The elasticsearch index
 ##
-## @return     A coursescotty.Course object containing the course info.
-##
+## @return     A dictionary
+#              {course: <coursescotty.Course object containing the course info>,
+#               response: <response from the server>
+#              }
+#
 def getCourseByID(courseid, index=None):
+    output = {'response': {},
+              'course': None}
     if index is None:
         index = ALL_COURSES_INDEX
     if re.search("^\d\d-\d\d\d$", courseid):
         searcher = Searcher(courseid)
         query = searcher.generateQuery()
         response = queryCourse(query, index=index)
+
+        output['response'] = response
         if response.get("status") is not None:
-            return response
+            return output
         if "hits" in response and response['hits']['hits'] != []:
-            return Course(response['hits']['hits'][0]['_source'])
-    return None
+            output['course'] = Course(response['hits']['hits'][0]['_source'])
+    return output
 
 
 def queryCourse(query, index=None):
