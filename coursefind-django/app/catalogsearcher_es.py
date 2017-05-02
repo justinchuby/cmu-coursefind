@@ -36,7 +36,7 @@ class LecsecFilter():
     def filterMini(mini=0):
         assert(isinstance(mini, int))
         if mini == 0:
-            mini = getCurrentMini()
+            mini = getMini()
 
         def filterMini_decorator(func):
             @wraps(func)
@@ -429,7 +429,7 @@ class Parser(object):
 ## @return     A dict with two fields: "lectures", "sections", under which are
 ##             lists of (coursescotty.Lecturesection) courses.
 ##
-@LecsecFilter.filterMini(getCurrentMini())
+@LecsecFilter.filterMini(getMini())
 def getCurrentCourses(current_datetime=None, time_delta=60, index=None):
     courseDict = dict()
     if current_datetime is None:

@@ -181,22 +181,6 @@ def getBuildingText(building):
     else:
         return building
 
-
-# def getScottyBuildingText(times):
-#     _CMU_BUILDINGS_FROM_ABBR = cmu_info.CMU_BUILDINGS_FROM_ABBR
-#     buildings = []
-#     for time in times:
-#         building = time.get("building")
-#         if building is not None:
-#             if building in _CMU_BUILDINGS_FROM_ABBR:
-#                 buildings.append(_CMU_BUILDINGS_FROM_ABBR[building])
-#             else:
-#                 buildings.append(building)
-#         else:
-#             buildings.append("")
-#     return buildings
-
-
 ##
 ## @brief      Gets the name of the department that offers the course.
 ##
@@ -216,21 +200,6 @@ def getCourseDepartment(number_searchable):
         return _CMU_NUMBER_DEPARTMENTS[num]
     else:
         return num
-
-# def DaysToBinary(s):
-#     # convert days into binary representation "MTWRFSU"
-#     try:
-#         _daysString = "MTWRFSU"
-#         if (isinstance(self.days, str) and
-#             self.days != "TBA" and self.days[0] in _daysString):
-#             days = 0
-#             for i in len(_daysString):
-
-#                 if _daysString[i] in self.days:
-
-#     except:
-#         print("failed to convert days")
-#         self.days = -1
 
 
 ##
@@ -276,11 +245,11 @@ def parseTime(time_string):
 
 
 ##
-## @brief      Get the current mini.
+## @brief      Get the mini term.
 ##
-## @return     (int) The current mini.
+## @return     (int) The current mini if no date is provided.
 ##
-def getCurrentMini(current_date=None):
+def getMini(current_date=None):
     if current_date is None:
         current_date = datetime.date.today()
     elif isinstance(current_date, datetime.datetime):
@@ -302,21 +271,20 @@ def getCurrentMini(current_date=None):
 
 
 def getCurrentIndex():
-    currentYear = datetime.date.today().year
-    currentMonth = datetime.date.today().month
-    return getIndexFromDate(currentYear, currentMonth)
+    return getIndexFromDate(datetime.date.today())
 
 
-def getIndexFromDate(year, month):
-    if 1 <= month <= 4:
-        semester = "s"
-    elif 5 <= month <= 6:
-        semester = "m1"
-    elif month == 7:
-        semester = "m2"
-    else:
+def getIndexFromDate(date):
+    mini = getMini(date)
+    if 1 <= mini <= 2:
         semester = "f"
-    index = semester + str(year)[2:]
+    elif 3 <= mini <= 4:
+        semester = "s"
+    elif mini == 5:
+        semester = "m1"
+    else:
+        semester = "m2"
+    index = semester + str(date.year)[2:]
     return index
 
 
