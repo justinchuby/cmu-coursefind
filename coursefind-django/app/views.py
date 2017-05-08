@@ -264,9 +264,10 @@ def redirect_to_course_detail(request, **kwargs):
     else:
         new_courseid = courseid
     if course_index:
-        return redirect('/courses/{}/{}'.format(new_courseid, course_index))
+        return redirect('/courses/{}/{}'.format(new_courseid, course_index),
+                        permanent=True)
     else:
-        return redirect('/courses/{}'.format(new_courseid))
+        return redirect('/courses/{}'.format(new_courseid), permanent=True)
 
 
 def page_not_found(request, **kwargs):
