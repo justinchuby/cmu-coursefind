@@ -20,7 +20,7 @@ def generateSitemap(index=None):
                 "fields": []
                 }"""
     servers = ['courseapi-scotty.rhcloud.com:80']
-    response = catalogsearcher_es.fetch(index, query, servers, 5000)
+    response = catalogsearcher_es.fetch(index, query, servers, 7000)
     if "hits" in response and response['hits']['hits'] != []:
         courseids = [elem['_id'] for elem in response['hits']['hits']]
     else:
