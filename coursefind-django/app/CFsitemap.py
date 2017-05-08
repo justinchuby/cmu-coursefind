@@ -9,9 +9,10 @@ def generateSitemap(index=None):
     output = ""
     course_index = index
     if index == "all_courses":
-        course_index = "courses"
+        course_index = ""
     if index is None:
-        index = utilities.getCurrentIndex()
+        return False
+
     query = """{
                 "query" : {
                     "match_all" : {}
@@ -25,6 +26,6 @@ def generateSitemap(index=None):
     else:
         return False
     for courseid in courseids:
-        output += "https://www.cmucoursefind.xyz/{}/{}\n".format(
-            course_index.strip(), courseid.strip())
+        output += "https://www.cmucoursefind.xyz/courses/{}/{}\n".format(
+            courseid.strip(), course_index.strip())
     return output
