@@ -2,19 +2,31 @@
 
 <html>
   <head>
+    {% if page == "course_detail" %}
     <title>{{ course.courseid }}: {{ course.name }} - {{ course.semester_current }} - CMU Course Find</title>
-
-    {% include "main/analytics.html" %}
+    {% elif searchText and searchText != "" %}
+    <title>{{ searchText }} - CMU Course Find</title>
+    {% else %}
+    <title>CMU Course Find</title>
+    {% endif %}
+    {% load static from staticfiles %}
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% if page == "root" %}
+    <meta name="description" content="A better course finder for Carnegie Mellon University. Course description, schedule, instructor info, etc. See classes that are happening and discover new courses!">
+    <meta name="keywords" content="CMU,cmucoursefind,cmu course finder,cmu catalog,soc,course finder,cmu course">
+    {% endif %}
+    {% include "app/analytics.html" %}
     <!--Favicon-->
-    {% include "main/favicon.html" %}
-    {% include "main/meta_search.html" %}
+    {% include "app/favicon.html" %}
+    {% include "app/meta_search.html" %}
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
     <!-- Customized CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'main/content/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/style.css' %}" />
   </head>
 
   <body>
@@ -91,7 +103,7 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-    <script src="{% static 'main/scripts/custom.js' %}"></script>
-    {% include "main/optional_scripts.html" %}
+    <script src="{% static 'app/scripts/custom.js' %}"></script>
+    {% include "app/optional_scripts.html" %}
   </body>
 </html>

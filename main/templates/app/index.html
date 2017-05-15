@@ -1,0 +1,55 @@
+{% extends "app/layout.html" %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="row">
+          <!-- The tabs -->
+          <div class="col s12 l11 hide-on-small-only">
+            <ul class="tabs">
+              <li class="tab col s3"><a href="#lec">Lectures</a></li>
+              <li class="tab col s3"><a href="#sec">Sections</a></li>
+              <li class="tab col s3 disabled"><a href="#excelsi">SI/EXCEL</a></li>
+              <li class="tab col s3 disabled"><a href="#oh">Office Hour</a></li>
+            </ul>
+          </div>
+          <div class="col s12 m10 offset-m0 l9 offset-l0 hide-on-med-and-up">
+            <ul class="tabs">
+              <li class="tab col s4 "><a href="#lec">Lectures</a></li>
+              <li class="tab col s4"><a href="#sec">Sections</a></li>
+              <li class="tab col s3 disabled"><a href="#excelsi">SI/EXCEL</a></li>
+              <li class="tab col s1 disabled"><a href="#oh">OH</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- The lecture tab -->
+        <div id="lec" class="row">
+            <div class="col s12">
+                {% if lecture_tab_text %}
+                <p class="flow-text grey-text text-darken-1">{{ lecture_tab_text|linebreaksbr }}</p>
+                {% endif %}
+                {% include "app/course_list.html" with events=courses_lec %}
+            </div>
+        </div>
+
+        <!-- The section tab -->
+        <div id="sec" class="row">
+            <div class="col s12">
+                {% if section_tab_text %}
+                <p class="flow-text grey-text text-darken-1">{{ section_tab_text|linebreaksbr }}</p>
+                {% endif %}
+                {% include "app/course_list.html" with events=courses_sec %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% if mainpage_toast %}
+<script async>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    Materialize.toast('{{ mainpage_toast }}', 4000);
+  });
+</script>
+{% endif %}
+
+{% endblock %}
