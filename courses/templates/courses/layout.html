@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>{{ course.courseid }}: {{ course.name }} - {{ course.semester_current }} - CMU Course Find</title>
+
+    {% include "main/analytics.html" %}
+    <!--Favicon-->
+    {% include "main/favicon.html" %}
+    {% include "main/meta_search.html" %}
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <!-- Customized CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main/content/style.css' %}" />
+  </head>
+
+  <body>
+  <!-- The navigation bar -->
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#" data-activates="slide-out" class="button-collapse hide-on-med-and-up"><i class="material-icons">menu</i></a>
+          <a href="/" class="brand-logo left hide-on-small-only light" id="brand-logo">&nbsp; Course Find</a>
+          <div class="row" style="height: 100%;">
+              <form method="GET" action="/{{ search_index|default:'' }}" class="col s8 m10 l11" id="search-box">
+                <div class="input-field">
+                    <input type="search" name="q" class="field {% if search_tip %}tooltipped{% endif %}"
+                    {% if search_tip %}
+                    data-position="bottom" data-delay="300" data-tooltip="{{ search_tip }}"
+                    {% endif %}
+                    required maxlength="100" value="{{ searchText }}" placeholder="Search" id="search-text">
+                    <label for="search-text"><i class="material-icons">search</i></label>
+                    <i class="material-icons" href="#" onclick="clearForm()">close</i>
+                </div>
+              </form>
+              <ul class="right">
+                <li><a href="#" onclick="$('#search-box').submit();"><i class="material-icons">send</i></a></li>
+              </ul>
+          </div>
+        </div>
+        <ul id="slide-out" class="side-nav">
+          <li><a href="/" style="font-size:150%;">Course Find</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/disclaimer">Disclaimer</a></li>
+          <li><a href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">Feedback</a></li>
+        </ul>
+      </nav>
+    </div>
+    {% block content %}{% endblock %}
+
+    <footer class="page-footer blue-grey darken-1">
+      <div class="container">
+        <div class="row">
+          <div class="col m5 s12">
+            <span class="grey-text text-lighten-4 light">
+              {{ catalog_semester }}{% if catalog_date %} / Catalog updated on {{ catalog_date }}{% endif %}
+            </span>
+          </div>
+          <div class="col m7 s12">
+            <span class="grey-text text-lighten-4 light right">
+            Please <a class="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+          <div class="row">
+            <div class="col s5">
+              <a class="light grey-text text-lighten-1" href="/"> CMU Course Find </a>
+            </div>
+            <div class="col s7">
+              <div class="right">
+                <a class="light grey-text text-lighten-3" href="/">Home</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="light grey-text text-lighten-3" href="/about">About</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="light grey-text text-lighten-3" href="/disclaimer">Disclaimer</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div class="guanjianci" style="display:none">
+      <p>course finder, cmu catalog</p>
+    </div>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    <script src="{% static 'app/scripts/custom.js' %}"></script>
+    {% include "app/optional_scripts.html" %}
+  </body>
+</html>
