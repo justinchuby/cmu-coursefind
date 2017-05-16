@@ -18,5 +18,6 @@ from django.conf.urls import include, url, handler404
 handler404 = 'main.views.page_not_found'
 
 urlpatterns = [
+	url(r'^$', include('main.urls')),
     url(r'^courses/', include('courses.urls'))
 ]

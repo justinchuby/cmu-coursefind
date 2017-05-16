@@ -1,6 +1,6 @@
 from django.template.defaulttags import register
 import re
-from ....shared import utilities
+from shared import utilities
 
 
 @register.filter

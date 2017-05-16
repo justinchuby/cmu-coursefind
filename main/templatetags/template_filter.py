@@ -1,9 +1,9 @@
 from django.template.defaulttags import register
 import re
-try:
-    import utilities
-except:
-    from . import utilities
+# try:
+#     import utilities
+# except:
+#     from . import utilities
 
 
 @register.filter
@@ -36,9 +36,9 @@ def days_of_week(days):
     except:
         return []
 
-@register.filter
-def cmu_building(s):
-    return utilities.getBuildingText(s)
+# @register.filter
+# def cmu_building(s):
+#     return utilities.getBuildingText(s)
 
 @register.filter
 def url_target_blank(text):
