@@ -4,7 +4,8 @@ from django.views import View
 import requests
 import json
 
-from ..shared.coursescotty import Course
+from shared.coursescotty import Course
+from shared.config import *
 
 
 class CourseDetailView(View):
@@ -12,7 +13,7 @@ class CourseDetailView(View):
     course_index = ''
 
     def get(self, request):
-        r = requests.get('http://localhost/course/v1/course/%s/%s' % self.courseid, self.course_index)
+        r = requests.get(COURSE_API_BASE + '%s/%s/' % self.courseid, self.course_index)
         # TODO error handling
         r_dict = json.loads(r.json())
         if 'error' not in r_dict:
