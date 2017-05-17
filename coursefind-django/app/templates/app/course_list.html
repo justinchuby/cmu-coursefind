@@ -52,7 +52,7 @@
               {% endfor %}
               <span class="grey-text text-lighten-2">Instructor:</span> &nbsp;{{ course.instructors|join:", "|title }}<br><br>
               <a class="waves-effect waves-light grey-text text-lighten-5"
-                 href="/{{ search_index|default:"courses" }}/{{ course.courseid }}{%if search_index%}?search_index={{search_index}}{%endif%}">
+                 href="/courses/{{ course.courseid }}/{{ search_index|default:'' }}{%if search_index%}?search_index={{search_index}}{%endif%}">
                 < More <span class="amber-text text-accent-4">details</span> about this course >
               </a>
             </p>

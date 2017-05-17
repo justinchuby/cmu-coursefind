@@ -238,7 +238,8 @@ def course_detail(request, **kwargs):
     except:
         pass
     try:
-        course = catalogsearcher_es.getCourseByID(courseid, course_index)
+        result = catalogsearcher_es.getCourseByID(courseid, course_index)
+        course = result.get('course')
         context = {
             'page': 'course_detail',
             'search_index': search_index,
@@ -249,20 +250,24 @@ def course_detail(request, **kwargs):
         }
         return render(request, 'app/course_detail.html', context)
     except AttributeError:
-        if course.get("status") == 404:
+        if result['response'].get("status") == 404:
             raise Http404("No info about {} in {}".format(courseid, course_index))
     # TODO Add different error pages
     raise Http404("No info about {} in {}".format(courseid, course_index))
-    
+
 
 def redirect_to_course_detail(request, **kwargs):
     courseid = kwargs.get("courseid")
     course_index = kwargs.get("index")
-    new_courseid = courseid[:2] + '-' + courseid[2:]
-    if course_index:
-        return redirect('/{}/{}'.format(course_index, new_courseid))
+    if (len(courseid) == 5):
+        new_courseid = courseid[:2] + '-' + courseid[2:]
     else:
-        return redirect('/courses/{}'.format(new_courseid))
+        new_courseid = courseid
+    if course_index:
+        return redirect('/courses/{}/{}'.format(new_courseid, course_index),
+                        permanent=True)
+    else:
+        return redirect('/courses/{}'.format(new_courseid), permanent=True)
 
 
 def page_not_found(request, **kwargs):
