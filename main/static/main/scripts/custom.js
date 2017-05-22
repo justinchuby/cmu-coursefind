@@ -128,12 +128,12 @@ function getDetailPageColor(courseid) {
 
 function setDetailPageColor(courseid) {
     pageColors = getDetailPageColor(courseid);
-    $('.jc-major-color').addClass(pageColors.major_color);
-    $('.jc-text-major').addClass(pageColors.text_major);
-    $('.jc-text-courseid').addClass(pageColors.text_courseid);
-    $('.jc-text-title').addClass(pageColors.text_title);
-    $('.jc-text-instructor').addClass(pageColors.text_instructor);
-    $('.jc-text-accent').addClass(pageColors.text_accent);
+    $('.cf-major-color').addClass(pageColors.major_color);
+    $('.cf-text-major').addClass(pageColors.text_major);
+    $('.cf-text-courseid').addClass(pageColors.text_courseid);
+    $('.cf-text-title').addClass(pageColors.text_title);
+    $('.cf-text-instructor').addClass(pageColors.text_instructor);
+    $('.cf-text-accent').addClass(pageColors.text_accent);
     $('.nav-wrapper').addClass(pageColors.nav_bar);
-    $('.jc-nav').addClass(pageColors.nav_bar);
+    $('.cf-nav').addClass(pageColors.nav_bar);
 }
