@@ -1,1 +1,1 @@
-COURSE_API_BASE = 'http://localhost:5000/course/v1/course/'
+COURSE_API_BASE = 'https://api.cmucoursefind.xyz/course/v1/'

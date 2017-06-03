@@ -2,16 +2,18 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponseServerError
 from django.views import View
 import requests
-import json
 
 from shared.coursescotty import Course
-from shared.config import *
+import shared.config as config
 
 
 class CourseDetailView(View):
 
-    def get(self, request, courseid, course_index=''):
-        req = COURSE_API_BASE + '{}/{}'.format(courseid, course_index)
+    def get(self, request, courseid, course_index=None):
+        if course_index is None:
+            req = config.COURSE_API_BASE + 'course/{}/'.format(courseid)
+        else:
+            req = config.COURSE_API_BASE + 'course/{}/term/{}/'.format(courseid, course_index)
         print(courseid)
         print(req)
         print()
