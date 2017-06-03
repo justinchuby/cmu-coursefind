@@ -1,6 +1,6 @@
 from django.template.defaulttags import register
 import re
-from shared import utilities
+from shared import utils
 
 
 @register.filter
@@ -35,7 +35,7 @@ def days_of_week(days):
 
 @register.filter
 def cmu_building(s):
-    return utilities.getBuildingText(s)
+    return utils.getBuildingText(s)
 
 @register.filter
 def url_target_blank(text):

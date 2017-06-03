@@ -233,7 +233,7 @@ def getTimeDifference(begin_time, end_time, current_datetime, typ):
         return diff
 
 
-def parseTime(time_string):
+def parse_time(time_string):
     try:
         return datetime.datetime.strptime(time_string, "%I:%M%p").time()
     except:
@@ -290,8 +290,8 @@ def getIndexFromDate(date):
 
 class _Tests():
     @staticmethod
-    def test_parseTime():
-        assert(datetime.time(8, 15) == parseTime("8:15am"))
-        assert(datetime.time(20, 15) == parseTime("8:15PM"))
-        assert(datetime.time(8, 0) == parseTime("8:00"))
-        assert(datetime.time(20, 0) == parseTime("20:00"))
+    def test_parse_time():
+        assert(datetime.time(8, 15) == parse_time("8:15am"))
+        assert(datetime.time(20, 15) == parse_time("8:15PM"))
+        assert(datetime.time(8, 0) == parse_time("8:00"))
+        assert(datetime.time(20, 0) == parse_time("20:00"))
