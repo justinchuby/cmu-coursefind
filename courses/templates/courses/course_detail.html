@@ -20,9 +20,9 @@
               <div class="col m9 offset-m2">
                 <h1 class="light jc-text-courseid">
                   {{ course.courseid }}
-                    <span class="hide-on-small-only flow-text">{{ course.semester_current }}</span>
+                    <span class="hide-on-small-only flow-text">{{ course.semester }}</span>
                 </h1>
-                <p class="hide-on-med-and-up flow-text jc-text-major">{{ course.semester_current }}</p>
+                <p class="hide-on-med-and-up flow-text jc-text-major">{{ course.semester }}</p>
                 {% if course_index %}
                   <a href="/courses/{{course.courseid}}" class="jc-text-major"><u>To current semester</u></a>
                 {% endif %}

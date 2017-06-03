@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponseServerError
 from django.views import View
 import requests
 
-from shared.coursescotty import Course
+from shared.cmu_course import Course
 import shared.config as config
 
 
@@ -27,7 +27,7 @@ class CourseDetailView(View):
                     'page': 'course_detail',
                     'search_index': None,
                     'course_index': course_index,
-                    'catalog_semester': course.semester_current,
+                    'catalog_semester': course.semester,
                     'catalog_date': course.rundate,
                     'course': course
                 }
