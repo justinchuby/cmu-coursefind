@@ -1,7 +1,7 @@
 # README #
 
 
-## Introduction ##
+## Introduction
 
 The project I am working on is a course finder, **CourseFind**.
 
@@ -10,8 +10,7 @@ I had the idea one day when I was wandering in Wean Hall at CMU. I saw students 
 With CourseFind, students can easily find out what’s going on in a class room. So they can explore what’s course is interests them. CourseFind is also great for finding the room for a class, or just browsing the catalog to find what’s interesting.
 
 
-## How do I get set up? ##
-
+## Configuration
 
 
 * Configuration
@@ -24,30 +23,6 @@ With CourseFind, students can easily find out what’s going on in a class room.
 $ python3 manage.py runserver
 ```
 
-## Project Structure ##
+## Current progress
 
-
-```
-├── app
-│   ├── __init__.py
-│   ├── <Main python code>
-│   ├── models.py
-│   ├── static
-│   │   └── app ...
-│   ├── templates
-│   │   └── app
-│   │       ├── <The templates>
-│   ├── templatetags
-│   │   ├── __init__.py
-│   │   └── template_filter.py
-│   ├── tests.py
-│   ├── utilities.py
-│   └── views.py
-├── coursefind
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── db.sqlite3
-└── manage.py
-```
+Currently, a new version is being developed.
