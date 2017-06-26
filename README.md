@@ -15,7 +15,7 @@ With CourseFind, students can easily find out what’s going on in a class room.
 
 * Configuration
 
-    This website uses Django as the backend framework. Follow the instruction on [https://www.djangoproject.com/download/](Link URL) to install Django.
+    This website uses Django as the backend framework. Follow the instruction on [https://www.djangoproject.com/download/](https://www.djangoproject.com/download/) to install Django.
 
     To run the site locally, cd into the coursefind-django folder, and run
 
