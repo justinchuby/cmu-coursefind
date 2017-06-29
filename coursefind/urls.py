@@ -14,10 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url, handler404
+import main.views
 
 handler404 = 'main.views.page_not_found'
 
 urlpatterns = [
-	url(r'^$', include('main.urls')),
+    url(r'^$', main.views.Home.as_view()),
+    url(r'^about[/]?', main.views.About.as_view()),
+    url(r'^disclaimer[/]?', main.views.Disclaimer.as_view()),
     url(r'^courses/', include('courses.urls'))
 ]
