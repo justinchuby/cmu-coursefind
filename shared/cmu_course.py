@@ -8,9 +8,9 @@ from shared import utils
 
 
 class Course(object):
-    _PROPS = ["name", "department", "units", "desc",
+    _PROPS = ("name", "department", "units", "desc",
               "prereqs", "prereqs_obj", "coreqs", "coreqs_obj",
-              "lectures", "sections", "courseid", "rundate", "semester"]
+              "lectures", "sections", "courseid", "rundate", "semester")
 
     def __init__(self, scotty_dict):
         self.scottyDict = copy.deepcopy(scotty_dict)
@@ -67,7 +67,7 @@ class Meeting(object):
 
 
 class TimeObj(object):
-    _PROPS = ["begin", "end", "days", "location", "building", "room"]
+    _PROPS = ("begin", "end", "days", "location", "building", "room")
 
     def __init__(self, time_dict):
         for key in self._PROPS:
