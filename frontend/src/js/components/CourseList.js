@@ -1,5 +1,6 @@
-import React, {Component } from 'react';
+import React, { Component } from 'react';
 import CollapsibleElement from './CollapsibleElement'
+import { daysToString, getFullBuildingName } from './helpers'
 
 
 function titleCase(str) {
@@ -22,9 +23,9 @@ class CourseList extends Component {
           time => {
             return (
               <span>
-                {time.daysText} &nbsp; | {time.buildingText &&
-                  `<a className="amber-text text-accent-4" href="https://www.google.com/maps/search/${time.buildingText}" target="_blank">
-                 ${time.buildingText} </a> ${time.room}`}
+                {daysToString(time.days)} &nbsp; | {getFullBuildingName(time.building) &&
+                  `<a className="amber-text text-accent-4" href="https://www.google.com/maps/search/${getFullBuildingName(time.building)}" target="_blank">
+                 ${getFullBuildingName(time.building)}</a> ${time.room}`}
                 <br/>
                 {time.begin &&
                   `<span className="grey-text text-lighten-2">From</span>
