@@ -30,32 +30,6 @@ SOC_TABLE_ORDER = {
 
 
 ##
-## @brief      Empty object
-##
-class Empty(object):
-    def __init__(self, s=" "):
-        self.string = s
-
-    def __eq__(self, other):
-        return isinstance(other, Empty) or str(self) == other
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __repr__(self):
-        return self.__class__.__name__ + "()"
-
-    def __str__(self):
-        return self.string
-
-    def __iter__(self):
-        return iter(str(self))
-
-    def isdigit(self):
-        return False
-
-
-##
 ## @brief      A dictionary whose values are lists, with a concat() method that
 ##             concatenates two Listdict object's values.
 ##
@@ -249,7 +223,7 @@ def parse_time(time_string):
 ##
 ## @return     (int) The current mini if no date is provided.
 ##
-def getMini(current_date=None):
+def get_mini(current_date=None):
     if current_date is None:
         current_date = datetime.date.today()
     elif isinstance(current_date, datetime.datetime):
@@ -270,12 +244,8 @@ def getMini(current_date=None):
     return 0
 
 
-def getCurrentIndex():
-    return getIndexFromDate(datetime.date.today())
-
-
-def getIndexFromDate(date):
-    mini = getMini(date)
+def get_semester_short_from_date(date):
+    mini = get_mini(date)
     if 1 <= mini <= 2:
         semester = "f"
     elif 3 <= mini <= 4:
@@ -284,14 +254,43 @@ def getIndexFromDate(date):
         semester = "m1"
     else:
         semester = "m2"
-    index = semester + str(date.year)[2:]
-    return index
+    semester = semester + str(date.year)[2:]
+    return semester
 
 
-class _Tests():
-    @staticmethod
-    def test_parse_time():
-        assert(datetime.time(8, 15) == parse_time("8:15am"))
-        assert(datetime.time(20, 15) == parse_time("8:15PM"))
-        assert(datetime.time(8, 0) == parse_time("8:00"))
-        assert(datetime.time(20, 0) == parse_time("20:00"))
+def get_semester_from_date(date):
+    mini = get_mini(date)
+    if 1 <= mini <= 2:
+        semester = "Fall"
+    elif 3 <= mini <= 4:
+        semester = "Spring"
+    elif mini == 5:
+        semester = "Summer-1"
+    else:
+        semester = "Summer-2"
+    return semester + ' ' + str(date.year)
+
+
+##
+## @brief      Limits the length of string arguments
+##
+def word_limit(f):
+    limit = 100
+
+    def g(*args, **kwargs):
+        new_args = []
+        new_kwargs = {}
+        for i in range(len(args)):
+            arg = args[i]
+            if type(arg) == str and len(arg) > limit:
+                new_args.append(arg[0:limit])
+            else:
+                new_args.append(arg)
+        for key in kwargs:
+            arg = kwargs[key]
+            if type(arg) == str and len(arg) > limit:
+                new_kwargs[key] = arg[0:limit]
+            else:
+                new_kwargs[key] = arg
+        return f(*new_args, **new_kwargs)
+    return g

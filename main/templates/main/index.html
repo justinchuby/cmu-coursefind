@@ -1,4 +1,4 @@
-{% extends "app/layout.html" %}
+{% extends "main/layout.html" %}
 {% block content %}
 <main>
     <div class="container">
@@ -28,7 +28,7 @@
                 {% if lecture_tab_text %}
                 <p class="flow-text grey-text text-darken-1">{{ lecture_tab_text|linebreaksbr }}</p>
                 {% endif %}
-                {% include "app/course_list.html" with events=courses_lec %}
+                {% include "main/course_list.html" with events=courses_lec %}
             </div>
         </div>
 
@@ -38,7 +38,7 @@
                 {% if section_tab_text %}
                 <p class="flow-text grey-text text-darken-1">{{ section_tab_text|linebreaksbr }}</p>
                 {% endif %}
-                {% include "app/course_list.html" with events=courses_sec %}
+                {% include "main/course_list.html" with events=courses_sec %}
             </div>
         </div>
     </div>
