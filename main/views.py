@@ -8,6 +8,7 @@ class Home(View):
     def get(self, request):
         return None
 
+
 class About(View):
     def get(self, request):
         current_semester = \
