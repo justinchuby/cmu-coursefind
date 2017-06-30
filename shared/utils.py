@@ -237,9 +237,9 @@ def get_mini(current_date=None):
         return 3
     elif datetime.date(year, 3, 15) < current_date <= datetime.date(year, 5, 15):
         return 4
-    elif datetime.date(year, 5, 15) < current_date <= datetime.date(year, 6, 25):
+    elif datetime.date(year, 5, 15) < current_date <= datetime.date(year, 7, 1):
         return 5
-    elif datetime.date(year, 6, 25) < current_date <= datetime.date(year, 8, 20):
+    elif datetime.date(year, 7, 1) < current_date <= datetime.date(year, 8, 20):
         return 6
     return 0
 
