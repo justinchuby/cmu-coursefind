@@ -1,6 +1,11 @@
 import React, {Component } from 'react';
 import CollapsibleElement from './CollapsibleElement'
 
+
+function titleCase(str) {
+  return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+}
+
 class CourseList extends Component {
   constructor(props) {
     super(props);
@@ -16,11 +21,18 @@ class CourseList extends Component {
         let courseMeeingText = course.times.map(
           time => {
             return (
-              // TODO: fix here
               <span>
-                {time.days_text} &nbsp; | {% if time.building_text %}<a className="amber-text text-accent-4" href="https://www.google.com/maps/search/{time.building_text}" target="_blank">
-                 {time.building_text} </a> {time.room}{% endif %}<br/>
-                {% if time.begin %}<span className="grey-text text-lighten-2">From</span> {time.begin} <span className="grey-text text-lighten-2">to</span> {time.end} <br/><br/>{% endif %}
+                {time.daysText} &nbsp; | {time.buildingText &&
+                  `<a className="amber-text text-accent-4" href="https://www.google.com/maps/search/${time.buildingText}" target="_blank">
+                 ${time.buildingText} </a> ${time.room}`}
+                <br/>
+                {time.begin &&
+                  `<span className="grey-text text-lighten-2">From</span>
+                  ${time.begin}
+                  <span className="grey-text text-lighten-2">to</span>
+                  ${time.end}
+                  <br/><br/>`
+                }
               </span>
             )
           }
@@ -49,7 +61,7 @@ class CourseList extends Component {
             bodyText:
               <p className="grey-text text-lighten-5">
                 <span className="flow-text">
-                  <a className="amber-text text-accent-4" href={"/?q=" + course.courseid}>
+                  <a className="amber-text text-accent-4" href={`/?q=${course.courseid}`}>
                     {course.courseid}
                   </a> &nbsp; 
                   {course.name} &nbsp; 
@@ -58,15 +70,18 @@ class CourseList extends Component {
                 <br/><br/>
                 / &nbsp; {course.department} &nbsp; / <br/>
                 {courseMeeingText}
-
+                {/* TODO */}
                 <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
-                {course.instructors|join:", "|title}
+                {titleCase(course.instructors.join(", "))}
                 <br/><br/>
                 <a className="waves-effect waves-light grey-text text-lighten-5"
-                  href={"/courses/" + course.courseid + "/"}>
-                  {"<"} More
-                  <span className="amber-text text-accent-4">details</span>
-                  about this course {">"}
+                  href={`/courses/${course.courseid}/`}>
+                  {"<"}
+                  {/* TODO: make this more like a button */}
+                  More
+                    <span className="amber-text text-accent-4">details</span>
+                  about this course 
+                  {">"}
                 </a>
               </p>
           }
