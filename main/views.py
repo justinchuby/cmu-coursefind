@@ -6,7 +6,8 @@ import shared.utils
 
 class Home(View):
     def get(self, request):
-        return None
+        context = {}
+        return render(request, 'main/base.html', context)
 
 
 class About(View):

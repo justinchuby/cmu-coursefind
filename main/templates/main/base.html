@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    {% load static from staticfiles %}
+    {% load render_bundle from webpack_loader %}
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% include "main/analytics.html" %}
+    <!--Favicon-->
+    {% include "main/favicon.html" %}
+    {% include "main/meta_search.html" %}
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <!-- React App -->
+    {% render_bundle 'main' 'css' %}
+  </head>
+
+  <body>
+  <!-- The navigation bar -->
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#" data-activates="slide-out" class="button-collapse hide-on-med-and-up"><i class="material-icons">menu</i></a>
+          <a href="/" class="brand-logo left hide-on-small-only light" id="brand-logo">&nbsp; Course Find</a>
+        </div>
+      </nav>
+    </div>
+    <div id="root"></div>
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    {% render_bundle 'main' 'js' %}
+  </body>
+</html>
