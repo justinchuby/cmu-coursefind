@@ -10,9 +10,24 @@ function titleCase(str) {
 class CourseList extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   courses = props.
-    // }
+    this.state = {
+      courses: props.courses,
+      // gets the lectures out from each course and reduce them from 2D
+      // array to 1D array
+      lectures: props.courses.map(
+        course => {
+          return course.lectures
+        }).reduce(function(a, b){
+          return a.concat(b);
+        }),
+      sections: props.courses.map(
+        course => {
+          return course.sections
+        }).reduce(function(a, b){
+          return a.concat(b);
+        })
+      // TODO: how should I manipulate the course list?
+    }
   }
 
   render() {
