@@ -1,5 +1,7 @@
 // Helper functions
 
+var moment = require('moment');
+
 export function daysToString(days) {
     return days.map(day => dayToString(day)).join(", ")
 }
@@ -133,4 +135,46 @@ let _CMU_NUMBER_DEPARTMENTS = {
 
 export function randomPick(myArray) {
     return myArray[Math.floor(Math.random() * myArray.length)];
+}
+
+export function getMini(date) {
+    if (date === null) {
+        date = moment()
+    } else {
+        date.year(moment().year())
+    }
+    if (date.isBetween(moment({month:8, day:20}), moment({month:10, day:15}))) {
+        return 1
+    } else if (date.isBetween(moment({month:10, day:15}), moment({month:12, day:31}))) {
+        return 2
+    } else if (date.isBetween(moment({month:1, day:1}), moment({month:3, day:15}))) {
+        return 3
+    } else if (date.isBetween(moment({month:3, day:15}), moment({month:5, day:15}))) {
+        return 4
+    } else if (date.isBetween(moment({month:5, day:15}), moment({month:7, day:1}))) {
+        return 5
+    } else if (date.isBetween(moment({month:7, day:1}), moment({month:8, day:20}))) {
+        return 6
+    }
+    return 0
+}
+
+export function getSemesterFromDate(date) {
+    if (date === null) {
+        date = moment()
+    }
+    let mini = getMini(date)
+    let semester
+    if (1 <= mini && mini <= 2) {
+        semester = "Fall"
+    } else if (3 <= mini && mini  <= 4) {
+        semester = "Spring"
+    } else if (mini === 5) {
+        semester = "Summer-1"
+    } else {
+        semester = "Summer-2"
+    }
+    console.log(semester)
+    console.log(mini)
+    return `${semester} ${date.year()}`
 }
