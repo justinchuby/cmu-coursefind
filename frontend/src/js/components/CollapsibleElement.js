@@ -29,7 +29,7 @@ class CollapsibleElement extends Component {
             </div>
           </div>
         </div>
-        <div className="collapsible-body blue-grey darken-1" style={{display: 'none'}}>
+        <div className="collapsible-body blue-grey darken-1">
           {this.props.bodyText}
         </div>
       </li>

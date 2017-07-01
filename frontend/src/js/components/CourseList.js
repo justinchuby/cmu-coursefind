@@ -125,12 +125,12 @@ class CourseList extends Component {
                 <br/><br/>
                 <a className="waves-effect waves-light grey-text text-lighten-5"
                   href={`/courses/${meeting.course.courseid}/`}>
-                  {"<"}
+                  {"< "}
                   {/* TODO: make this more like a button */}
                   More
                   <span className="amber-text text-accent-4"> details </span>
                   about this course 
-                  {">"}
+                  {" >"}
                 </a>
               </p>
           }

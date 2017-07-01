@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-var $ = window.jQuery = require('jquery');
+let $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
 
 class SideNav extends Component {

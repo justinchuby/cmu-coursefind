@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import CollapsibleElement from './CollapsibleElement'
 
+// var $ = window.jQuery = require('jquery');
+// require('materialize-css/dist/js/materialize');
+
 class Collapsible extends Component {
   // left text, right text
   constructor(props) {
     super(props);
   }
+
+  // componentDidMount() {
+  //   $('.collapsible').collapsible();
+  // }
 
   render() {
     let collapsibleElements = this.props.list.map(
@@ -22,7 +29,7 @@ class Collapsible extends Component {
       }
     )
     return (
-      <ul className="collapsible collapsible-accordion" data-collapsible="accordion">
+      <ul className="collapsible" data-collapsible="accordion">
         {collapsibleElements}
       </ul>
     );
