@@ -1,0 +1,31 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+.icon-block {
+  padding: 0 15px;
+}
+
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+#search-box {
+    padding-left: 190px;
+}
+
+@media (max-width : 600px) {
+    #search-box {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/*Fix nav display on Chrome*/
+nav .nav-wrapper form, nav .nav-wrapper form .input-field{
+    height: 100%;
+}

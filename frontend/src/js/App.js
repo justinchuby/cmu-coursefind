@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import CourseList from './components/CourseList'
+import Navbar from './components/Navbar'
+import SideNav from './components/SideNav'
 import { Course } from './cmu_course'
 
 class App extends Component {
@@ -23,7 +25,10 @@ class App extends Component {
 
   render() {
     return (
-      <CourseList courses={this.state.courses}/>
+      <div>
+        <Navbar />
+        <SideNav />
+      </div>
     )
   }
 }
