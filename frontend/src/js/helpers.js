@@ -130,3 +130,7 @@ let _CMU_NUMBER_DEPARTMENTS = {
     "45": "Tepper School of Business",
     "03": " Biological Sciences"
 }
+
+export function randomPick(myArray) {
+    return myArray[Math.floor(Math.random() * myArray.length)];
+}
