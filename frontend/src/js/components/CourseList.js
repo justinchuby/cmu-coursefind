@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import Collapsible from './Collapsible'
-import { daysToString, getFullBuildingName } from '../helpers'
+import { daysToString, getFullBuildingName, convertName } from '../helpers'
 
-
-function titleCase(str) {
-  return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
-}
 
 class CourseList extends Component {
   constructor(props) {
@@ -60,16 +56,26 @@ class CourseList extends Component {
           time => {
             return (
               <span>
-                {daysToString(time.days)} &nbsp; | {getFullBuildingName(time.building) &&
-                  `<a className="amber-text text-accent-4" href="https://www.google.com/maps/search/${getFullBuildingName(time.building)}" target="_blank">
-                 ${getFullBuildingName(time.building)}</a> ${time.room}`}
+                {daysToString(time.days)} &nbsp; |
+                &nbsp;
+                {getFullBuildingName(time.building) &&
+                  <span>
+                    <a className="amber-text text-accent-4" href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`} target="_blank">
+                    {getFullBuildingName(time.building)}
+                    </a>
+                    &nbsp;
+                    {time.room}
+                  </span>
+                }
                 <br/>
                 {time.begin &&
-                  `<span className="grey-text text-lighten-2">From</span>
-                  ${time.begin.format("HH:mmA")}
-                  <span className="grey-text text-lighten-2">to</span>
-                  ${time.end.format("HH:mmA")}
-                  <br/><br/>`
+                  <span>
+                    <span className="grey-text text-lighten-2"> From </span>
+                    {time.begin.format("HH:mmA")}
+                    <span className="grey-text text-lighten-2"> to </span>
+                    {time.end.format("HH:mmA")}
+                    <br/><br/>
+                  </span>
                 }
               </span>
             )
@@ -107,18 +113,22 @@ class CourseList extends Component {
                   {meeting.lecsec} &nbsp;
                 </span>
                 <br/><br/>
-                / &nbsp; {meeting.department} &nbsp; / <br/>
+                / &nbsp; {(meeting.course.department)} &nbsp; /
+                <br/>
                 {courseMeeingText}
-                {/* TODO */}
                 <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
-                {titleCase(meeting.instructors.join(", "))}
+                {meeting.instructors.map(instructor =>
+                  {
+                    return convertName(instructor)
+                  }).join(", ")
+                }
                 <br/><br/>
                 <a className="waves-effect waves-light grey-text text-lighten-5"
                   href={`/courses/${meeting.course.courseid}/`}>
                   {"<"}
                   {/* TODO: make this more like a button */}
                   More
-                    <span className="amber-text text-accent-4">details</span>
+                  <span className="amber-text text-accent-4"> details </span>
                   about this course 
                   {">"}
                 </a>

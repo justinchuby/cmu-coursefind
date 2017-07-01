@@ -6,6 +6,17 @@ moment.tz.add("America/New_York|EST EDT EWT EPT|50 40 40 40|01010101010101010101
 export class Course {
   constructor(courseDict) {
     this.courseid = courseDict["id"]
+    this.name = courseDict.name
+    this.department = courseDict.department
+    this.units = courseDict.units
+    this.desc = courseDict.desc
+    this.prereqs = courseDict.prereqs
+    this.prereqs_obj = courseDict.prereqs_obj
+    this.coreqs = courseDict.coreqs
+    this.coreqs_obj = courseDict.coreqs_obj
+    this.rundate = courseDict.rundate
+    this.semester = courseDict.semester
+
     this.lectures = courseDict.lectures.map(
       meeting => {
         return new Meeting(this, meeting)
