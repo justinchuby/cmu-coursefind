@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../css/App.css';
 import CourseList from './components/CourseList'
 import { Course } from './cmu_course'
 
