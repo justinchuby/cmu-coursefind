@@ -19,11 +19,12 @@ class App extends Component {
 
   componentWillMount() {
     // TODO: fix here
-    fetch('https://api.cmucoursefind.xyz/course/v1/course/21-259/')
+    // fetch('https://api.cmucoursefind.xyz/course/v1/building/dh/room/2315/')
+    fetch('https://api.cmucoursefind.xyz/course/v1/instructor/david%20kosbie/')
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         this.setState({
-          courses: [new Course(jsonResponse.course)]
+          courses: jsonResponse.courses.map(course => {return new Course(course)})
         })
       })
   }

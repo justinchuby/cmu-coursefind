@@ -174,7 +174,5 @@ export function getSemesterFromDate(date) {
     } else {
         semester = "Summer-2"
     }
-    console.log(semester)
-    console.log(mini)
     return `${semester} ${date.year()}`
 }

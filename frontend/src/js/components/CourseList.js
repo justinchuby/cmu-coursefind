@@ -53,9 +53,9 @@ class CourseList extends Component {
         // TODO: fix this
         let currentCourseTime = meeting.times[0]
         let courseMeeingText = meeting.times.map(
-          time => {
+          (time, index) => {
             return (
-              <span>
+              <span key={index}>
                 {daysToString(time.days)} &nbsp; |
                 &nbsp;
                 {getFullBuildingName(time.building) &&
@@ -109,8 +109,8 @@ class CourseList extends Component {
                   <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
                     {meeting.course.courseid}
                   </a> &nbsp; 
-                  {meeting.name} &nbsp; 
-                  {meeting.lecsec} &nbsp;
+                  {meeting.course.name} &nbsp; 
+                  {meeting.name} &nbsp;
                 </span>
                 <br/><br/>
                 / &nbsp; {(meeting.course.department)} &nbsp; /
