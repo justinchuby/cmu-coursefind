@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import CollapsibleElement from './CollapsibleElement'
 
-class Collapsible extends Component {
+class Footer extends Component {
   // left text, right text
   constructor(props) {
     super(props);
@@ -49,4 +48,4 @@ class Collapsible extends Component {
   }
 }
 
-export default Collapsible;
+export default Footer;
