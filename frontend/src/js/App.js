@@ -40,7 +40,7 @@ class App extends Component {
       "a day 'Monday'"
     ]
     return (
-      <div>
+      <div className="flexbox-wrapper">
         <Navbar searchTips={searchTips} />
         <SideNav />
         <main>
