@@ -170,9 +170,9 @@ export function getSemesterFromDate(date) {
     } else if (3 <= mini && mini  <= 4) {
         semester = "Spring"
     } else if (mini === 5) {
-        semester = "Summer-1"
+        semester = "Summer One"
     } else {
-        semester = "Summer-2"
+        semester = "Summer Two"
     }
     return `${semester} ${date.year()}`
 }

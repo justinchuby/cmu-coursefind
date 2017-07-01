@@ -43,7 +43,7 @@ class App extends Component {
       <div className="flexbox-wrapper">
         <Navbar searchTips={searchTips} />
         <SideNav />
-        <main>
+        <main className="container">
           <CourseList courses={this.state.courses} />
         </main>
         <Footer

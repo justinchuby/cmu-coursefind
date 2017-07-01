@@ -26,7 +26,7 @@ class Footer extends Component {
           </div>
           <div className="footer-copyright">
             <div className="container">
-              <div className="row">
+              <div className="row nomargin">
                 <div className="col s5">
                   <a className="light grey-text text-lighten-1" href="/"> CMU Course Find </a>
                 </div>
