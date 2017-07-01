@@ -14,13 +14,13 @@ class CourseList extends Component {
         course => {
           return course.lectures
         }).reduce(
-          (a, b) => a.concat(b), []
+        (a, b) => a.concat(b), []
         ),
       sections: props.courses.map(
         course => {
           return course.sections
         }).reduce(
-          (a, b) => a.concat(b), []
+        (a, b) => a.concat(b), []
         )
       // TODO: how should I manipulate the course list?
     }
@@ -35,13 +35,13 @@ class CourseList extends Component {
         course => {
           return course.lectures
         }).reduce(
-          (a, b) => a.concat(b), []
+        (a, b) => a.concat(b), []
         ),
       sections: nextProps.courses.map(
         course => {
           return course.sections
         }).reduce(
-          (a, b) => a.concat(b), []
+        (a, b) => a.concat(b), []
         )
     })
   }
@@ -60,21 +60,23 @@ class CourseList extends Component {
                 &nbsp;
                 {getFullBuildingName(time.building) &&
                   <span>
-                    <a className="amber-text text-accent-4" href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`} target="_blank">
-                    {getFullBuildingName(time.building)}
+                    <a className="amber-text text-accent-4"
+                      href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
+                      target="_blank">
+                      {getFullBuildingName(time.building)}
                     </a>
                     &nbsp;
                     {time.room}
                   </span>
                 }
-                <br/>
+                <br />
                 {time.begin &&
                   <span>
                     <span className="grey-text text-lighten-2"> From </span>
                     {time.begin.format("HH:mmA")}
                     <span className="grey-text text-lighten-2"> to </span>
                     {time.end.format("HH:mmA")}
-                    <br/><br/>
+                    <br /><br />
                   </span>
                 }
               </span>
@@ -85,60 +87,59 @@ class CourseList extends Component {
           {
             key: meeting.course.courseid + meeting.name,
             leftHeaderText:
-              <span>
-                {meeting.course.courseid} &nbsp;
+            <span>
+              {meeting.course.courseid} &nbsp;
                 {meeting.name !== "Lec" &&
-                  meeting.name
-                }
-                &nbsp;&nbsp;
+                meeting.name
+              }
+              &nbsp;&nbsp;
                 {meeting.course.name}
-              </span>,
+            </span>,
             rightHeaderText:
-              <span>
-                {currentCourseTime.building} {currentCourseTime.room} | 
+            <span>
+              {currentCourseTime.building} {currentCourseTime.room} |
                 {currentCourseTime.diffText}
-              </span>,
+            </span>,
             rightHeaderTextShort:
-              <span>
-                {currentCourseTime.building} {currentCourseTime.room} | 
+            <span>
+              {currentCourseTime.building} {currentCourseTime.room} |
                 {currentCourseTime.diffText}
-              </span>,
+            </span>,
             bodyText:
-              <p className="grey-text text-lighten-5">
-                <span className="flow-text">
-                  <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
-                    {meeting.course.courseid}
-                  </a> &nbsp; 
-                  {meeting.course.name} &nbsp; 
+            <p className="grey-text text-lighten-5">
+              <span className="flow-text">
+                <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
+                  {meeting.course.courseid}
+                </a> &nbsp;
+                  {meeting.course.name} &nbsp;
                   {meeting.name} &nbsp;
                 </span>
-                <br/><br/>
-                / &nbsp; {(meeting.course.department)} &nbsp; /
-                <br/>
-                {courseMeeingText}
-                <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
-                {meeting.instructors.map(instructor =>
-                  {
-                    return convertName(instructor)
-                  }).join(", ")
-                }
-                <br/><br/>
-                <a className="waves-effect waves-light grey-text text-lighten-5"
-                  href={`/courses/${meeting.course.courseid}/`}>
-                  {"< "}
-                  {/* TODO: make this more like a button */}
-                  More
+              <br /><br />
+              / &nbsp; {(meeting.course.department)} &nbsp; /
+                <br />
+              {courseMeeingText}
+              <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
+                {meeting.instructors.map(instructor => {
+                return convertName(instructor)
+              }).join(", ")
+              }
+              <br /><br />
+              <a className="waves-effect waves-light grey-text text-lighten-5"
+                href={`/courses/${meeting.course.courseid}/`}>
+                {"< "}
+                {/* TODO: make this more like a button */}
+                More
                   <span className="amber-text text-accent-4"> details </span>
-                  about this course 
+                about this course
                   {" >"}
-                </a>
-              </p>
+              </a>
+            </p>
           }
         )
       }
     )
     return (
-      <Collapsible list={meetingList}/>
+      <Collapsible list={meetingList} />
     )
   }
 }

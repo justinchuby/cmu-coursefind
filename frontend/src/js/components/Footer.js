@@ -14,12 +14,12 @@ class Footer extends Component {
             <div className="row">
               <div className="col m5 s12">
                 <span className="grey-text text-lighten-4 light">
-                  { this.props.leftFooterText }
+                  {this.props.leftFooterText}
                 </span>
               </div>
               <div className="col m7 s12">
                 <span className="grey-text text-lighten-4 light right">
-                  { this.props.rightFooterText }
+                  {this.props.rightFooterText}
                 </span>
               </div>
             </div>

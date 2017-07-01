@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class CollapsibleElement extends Component {
-    constructor(props) {
+  constructor(props) {
     super(props);
   }
 
