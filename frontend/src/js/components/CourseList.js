@@ -56,8 +56,7 @@ class CourseList extends Component {
           (time, index) => {
             return (
               <span key={index}>
-                {daysToString(time.days)} &nbsp; |
-                &nbsp;
+                {daysToString(time.days)} &nbsp; | &nbsp;
                 {getFullBuildingName(time.building) &&
                   <span>
                     <a className="amber-text text-accent-4"
@@ -89,7 +88,7 @@ class CourseList extends Component {
             leftHeaderText:
             <span>
               {meeting.course.courseid} &nbsp;
-                {meeting.name !== "Lec" &&
+              {meeting.name !== "Lec" &&
                 meeting.name
               }
               &nbsp;&nbsp;

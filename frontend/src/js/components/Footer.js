@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import {
+  Route,
+  Link
+} from 'react-router-dom'
 
 class Footer extends Component {
-  // left text, right text
   constructor(props) {
     super(props);
   }
@@ -32,11 +35,11 @@ class Footer extends Component {
                 </div>
                 <div className="col s7">
                   <div className="right">
-                    <a className="light grey-text text-lighten-3" href="/">Home</a>
+                    <Link to="/" className="light grey-text text-lighten-3">Home</Link>
                     &nbsp;&nbsp;&nbsp;
-                    <a className="light grey-text text-lighten-3" href="/about">About</a>
+                    <Link to="/about" className="light grey-text text-lighten-3">About</Link>
                     &nbsp;&nbsp;&nbsp;
-                    <a className="light grey-text text-lighten-3" href="/disclaimer">Disclaimer</a>
+                    <Link to="/disclaimer" className="light grey-text text-lighten-3">Disclaimer</Link>
                   </div>
                 </div>
               </div>

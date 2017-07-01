@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import CollapsibleElement from './CollapsibleElement'
 
-// var $ = window.jQuery = require('jquery');
-// require('materialize-css/dist/js/materialize');
+var $ = window.jQuery = require('jquery');
+require('materialize-css/dist/js/materialize');
 
 class Collapsible extends Component {
   // left text, right text
@@ -10,9 +10,9 @@ class Collapsible extends Component {
     super(props);
   }
 
-  // componentDidMount() {
-  //   $('.collapsible').collapsible();
-  // }
+  componentDidMount() {
+    $('.collapsible').collapsible();
+  }
 
   render() {
     let collapsibleElements = this.props.list.map(
