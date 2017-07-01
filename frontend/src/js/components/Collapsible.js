@@ -10,10 +10,9 @@ class Collapsible extends Component {
   render() {
     let collapsibleElements = this.props.list.map(
       element => {
-        console.log(element)
         return (
           <CollapsibleElement
-            key={element.course.courseid + element.name}
+            key={element.key}
             leftHeaderText={element.leftHeaderText}
             rightHeaderText={element.rightHeaderText}
             rightHeaderTextShort={element.rightHeaderTextShort}

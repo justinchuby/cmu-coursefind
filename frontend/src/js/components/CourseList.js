@@ -10,7 +10,6 @@ function titleCase(str) {
 class CourseList extends Component {
   constructor(props) {
     super(props);
-    console.log(props.courses)
     this.state = {
       courses: props.courses,
       // get the lectures out from each course and reduce them from 2D
@@ -29,6 +28,26 @@ class CourseList extends Component {
         )
       // TODO: how should I manipulate the course list?
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      courses: nextProps.courses,
+      // get the lectures out from each course and reduce them from 2D
+      // array to 1D array
+      lectures: nextProps.courses.map(
+        course => {
+          return course.lectures
+        }).reduce(
+          (a, b) => a.concat(b), []
+        ),
+      sections: nextProps.courses.map(
+        course => {
+          return course.sections
+        }).reduce(
+          (a, b) => a.concat(b), []
+        )
+    })
   }
 
   render() {
@@ -58,6 +77,7 @@ class CourseList extends Component {
         )
         return (
           {
+            key: meeting.course.courseid + meeting.name,
             leftHeaderText:
               <span>
                 {meeting.course.courseid} &nbsp;
@@ -107,7 +127,6 @@ class CourseList extends Component {
         )
       }
     )
-    console.log(meetingList)
     return (
       <Collapsible list={meetingList}/>
     )
