@@ -1,18 +1,30 @@
 import React, { Component } from 'react';
-import logo from '../img/logo.svg';
 import '../css/App.css';
-import Collapsible from './components/Collapsible'
+import CourseList from './components/CourseList'
+import { Course } from './cmu_course'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      courses: []
+    }
+  }
+
+  componentWillMount() {
+    // TODO: fix here
+    fetch('https://api.cmucoursefind.xyz/course/v1/course/21-259/')
+      .then((response) => { return response.json() })
+      .then((jsonResponse) => {
+        this.setState({
+          courses: [new Course(jsonResponse.course)]
+        })
+      })
+  }
+
   render() {
-    let list = [{
-      leftHeaderText: "left",
-      rightHeaderText: "right",
-      rightHeaderTextShort: "short",
-      bodyText: "bodyyyy"
-    }]
     return (
-      <Collapsible list={list}/>
+      <CourseList courses={this.state.courses}/>
     )
   }
 }

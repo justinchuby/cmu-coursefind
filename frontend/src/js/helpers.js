@@ -5,7 +5,7 @@ export function daysToString(days) {
 }
 
 
-_DAYS = {
+let _DAYS = {
     1: "Mon",
     2: "Tue",
     3: "Wed",
@@ -20,7 +20,7 @@ export function dayToString(day) {
 }
 
 
-_CMU_BUILDINGS_FROM_ABBR = {
+let _CMU_BUILDINGS_FROM_ABBR = {
     "BH": "Baker Hall",
     "CYH": "Cyert Hall",
     "DH": "Doherty Hall",

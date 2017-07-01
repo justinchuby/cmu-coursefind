@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import CollapsibleElement from './CollapsibleElement'
-import { daysToString, getFullBuildingName } from './helpers'
+import Collapsible from './Collapsible'
+import { daysToString, getFullBuildingName } from '../helpers'
 
 
 function titleCase(str) {
@@ -10,31 +10,34 @@ function titleCase(str) {
 class CourseList extends Component {
   constructor(props) {
     super(props);
+    console.log(props.courses)
     this.state = {
       courses: props.courses,
-      // gets the lectures out from each course and reduce them from 2D
+      // get the lectures out from each course and reduce them from 2D
       // array to 1D array
       lectures: props.courses.map(
         course => {
           return course.lectures
-        }).reduce(function(a, b){
-          return a.concat(b);
-        }),
+        }).reduce(
+          (a, b) => a.concat(b), []
+        ),
       sections: props.courses.map(
         course => {
           return course.sections
-        }).reduce(function(a, b){
-          return a.concat(b);
-        })
+        }).reduce(
+          (a, b) => a.concat(b), []
+        )
       // TODO: how should I manipulate the course list?
     }
   }
 
   render() {
-    let courseList = this.props.courses.map(
-      course => {
-        let currentCourseTime = course.current
-        let courseMeeingText = course.times.map(
+    // TODO: fix this
+    let meetingList = this.state.lectures.map(
+      meeting => {
+        // TODO: fix this
+        let currentCourseTime = meeting.times[0]
+        let courseMeeingText = meeting.times.map(
           time => {
             return (
               <span>
@@ -44,9 +47,9 @@ class CourseList extends Component {
                 <br/>
                 {time.begin &&
                   `<span className="grey-text text-lighten-2">From</span>
-                  ${time.begin}
+                  ${time.begin.format("HH:mmA")}
                   <span className="grey-text text-lighten-2">to</span>
-                  ${time.end}
+                  ${time.end.format("HH:mmA")}
                   <br/><br/>`
                 }
               </span>
@@ -57,12 +60,12 @@ class CourseList extends Component {
           {
             leftHeaderText:
               <span>
-                {course.courseid} &nbsp;
-                {course.lecsec != "Lec" &&
-                  course.lecsec
+                {meeting.course.courseid} &nbsp;
+                {meeting.name !== "Lec" &&
+                  meeting.name
                 }
                 &nbsp;&nbsp;
-                {course.name}
+                {meeting.course.name}
               </span>,
             rightHeaderText:
               <span>
@@ -77,21 +80,21 @@ class CourseList extends Component {
             bodyText:
               <p className="grey-text text-lighten-5">
                 <span className="flow-text">
-                  <a className="amber-text text-accent-4" href={`/?q=${course.courseid}`}>
-                    {course.courseid}
+                  <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
+                    {meeting.course.courseid}
                   </a> &nbsp; 
-                  {course.name} &nbsp; 
-                  {course.lecsec} &nbsp;
+                  {meeting.name} &nbsp; 
+                  {meeting.lecsec} &nbsp;
                 </span>
                 <br/><br/>
-                / &nbsp; {course.department} &nbsp; / <br/>
+                / &nbsp; {meeting.department} &nbsp; / <br/>
                 {courseMeeingText}
                 {/* TODO */}
                 <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
-                {titleCase(course.instructors.join(", "))}
+                {titleCase(meeting.instructors.join(", "))}
                 <br/><br/>
                 <a className="waves-effect waves-light grey-text text-lighten-5"
-                  href={`/courses/${course.courseid}/`}>
+                  href={`/courses/${meeting.course.courseid}/`}>
                   {"<"}
                   {/* TODO: make this more like a button */}
                   More
@@ -104,8 +107,9 @@ class CourseList extends Component {
         )
       }
     )
+    console.log(meetingList)
     return (
-      <Collapsible list={list}/>
+      <Collapsible list={meetingList}/>
     )
   }
 }
