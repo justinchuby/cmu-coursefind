@@ -3,67 +3,67 @@
 var moment = require('moment');
 
 export function daysToString(days) {
-    return days.map(day => dayToString(day)).join(", ")
+  return days.map(day => dayToString(day)).join(", ")
 }
 
 
 let _DAYS = {
-    1: "Mon",
-    2: "Tue",
-    3: "Wed",
-    4: "Thu",
-    5: "Fri",
-    6: "Sat",
-    0: "Sun"
+  1: "Mon",
+  2: "Tue",
+  3: "Wed",
+  4: "Thu",
+  5: "Fri",
+  6: "Sat",
+  0: "Sun"
 }
 
 export function dayToString(day) {
-    return _DAYS[day % 7]
+  return _DAYS[day % 7]
 }
 
 
 let _CMU_BUILDINGS_FROM_ABBR = {
-    "BH": "Baker Hall",
-    "CYH": "Cyert Hall",
-    "DH": "Doherty Hall",
-    "EDS": "Elliot Dunlap Smith Hall",
-    "GES": "Gesling Stadium",
-    "GHC": "Gates and Hillman Centers",
-    "HBH": "Hamburg Hall",
-    "HH": "Hamerschlag Hall",
-    "HL": "Hunt Library",
-    "POS": "Posner Hall",
-    "IA": "GSIA (Tepper School of Business)",
-    "MI": "Mellon Institute",
-    "NSH": "Newell-Simon Hall",
-    "PCA": "Purnell Center for the Arts",
-    "PH": "Porter Hall",
-    "REH": "Roberts Engineering Hall",
-    "SH": "Scaife Hall",
-    "WH": "Warner Hall",
-    "WEH": "Wean Hall",
-    "SCR": "300 South Craig Street",
-    "SEI": "Software Engineering Institute",
-    "PTC": "Pittsburgh Technology Center - 2nd Avenue",
-    "INI": "4616 Henry Street",
-    "MM": "Margaret Morrison Carnegie Hall",
-    "CIC": "Collaborative Innovation Center",
-    "CFA": "College of Fine Arts"
+  "BH": "Baker Hall",
+  "CYH": "Cyert Hall",
+  "DH": "Doherty Hall",
+  "EDS": "Elliot Dunlap Smith Hall",
+  "GES": "Gesling Stadium",
+  "GHC": "Gates and Hillman Centers",
+  "HBH": "Hamburg Hall",
+  "HH": "Hamerschlag Hall",
+  "HL": "Hunt Library",
+  "POS": "Posner Hall",
+  "IA": "GSIA (Tepper School of Business)",
+  "MI": "Mellon Institute",
+  "NSH": "Newell-Simon Hall",
+  "PCA": "Purnell Center for the Arts",
+  "PH": "Porter Hall",
+  "REH": "Roberts Engineering Hall",
+  "SH": "Scaife Hall",
+  "WH": "Warner Hall",
+  "WEH": "Wean Hall",
+  "SCR": "300 South Craig Street",
+  "SEI": "Software Engineering Institute",
+  "PTC": "Pittsburgh Technology Center - 2nd Avenue",
+  "INI": "4616 Henry Street",
+  "MM": "Margaret Morrison Carnegie Hall",
+  "CIC": "Collaborative Innovation Center",
+  "CFA": "College of Fine Arts"
 }
 
 export function getFullBuildingName(name) {
-    // TODO check here
-    return _CMU_BUILDINGS_FROM_ABBR[name]
-    // Return null if not exist
+  // TODO check here
+  return _CMU_BUILDINGS_FROM_ABBR[name]
+  // Return null if not exist
 }
 
 export function titleCase(str) {
-    return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+  return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
 }
 
 export function convertName(str) {
-    let name = str.split(", ")
-    return `${name[1]} ${name[0]}`
+  let name = str.split(", ")
+  return `${name[1]} ${name[0]}`
 }
 
 
@@ -134,45 +134,55 @@ export function convertName(str) {
 // }
 
 export function randomPick(myArray) {
-    return myArray[Math.floor(Math.random() * myArray.length)];
+  return myArray[Math.floor(Math.random() * myArray.length)];
 }
 
 export function getMini(date) {
-    if (date === null) {
-        date = moment()
-    } else {
-        date.year(moment().year())
-    }
-    if (date.isBetween(moment({ month: 8, day: 20 }), moment({ month: 10, day: 15 }))) {
-        return 1
-    } else if (date.isBetween(moment({ month: 10, day: 15 }), moment({ month: 12, day: 31 }))) {
-        return 2
-    } else if (date.isBetween(moment({ month: 1, day: 1 }), moment({ month: 3, day: 15 }))) {
-        return 3
-    } else if (date.isBetween(moment({ month: 3, day: 15 }), moment({ month: 5, day: 15 }))) {
-        return 4
-    } else if (date.isBetween(moment({ month: 5, day: 15 }), moment({ month: 7, day: 1 }))) {
-        return 5
-    } else if (date.isBetween(moment({ month: 7, day: 1 }), moment({ month: 8, day: 20 }))) {
-        return 6
-    }
-    return 0
+  if (date === null) {
+    date = moment()
+  } else {
+    date.year(moment().year())
+  }
+  if (date.isBetween(moment({ month: 8, day: 20 }), moment({ month: 10, day: 15 }))) {
+    return 1
+  } else if (date.isBetween(moment({ month: 10, day: 15 }), moment({ month: 12, day: 31 }))) {
+    return 2
+  } else if (date.isBetween(moment({ month: 1, day: 1 }), moment({ month: 3, day: 15 }))) {
+    return 3
+  } else if (date.isBetween(moment({ month: 3, day: 15 }), moment({ month: 5, day: 15 }))) {
+    return 4
+  } else if (date.isBetween(moment({ month: 5, day: 15 }), moment({ month: 7, day: 1 }))) {
+    return 5
+  } else if (date.isBetween(moment({ month: 7, day: 1 }), moment({ month: 8, day: 20 }))) {
+    return 6
+  }
+  return 0
 }
 
 export function getSemesterFromDate(date) {
-    if (date === null) {
-        date = moment()
-    }
-    let mini = getMini(date)
-    let semester
-    if (1 <= mini && mini <= 2) {
-        semester = "Fall"
-    } else if (3 <= mini && mini <= 4) {
-        semester = "Spring"
-    } else if (mini === 5) {
-        semester = "Summer One"
-    } else {
-        semester = "Summer Two"
-    }
-    return `${semester} ${date.year()}`
+  if (date === null) {
+    date = moment()
+  }
+  let mini = getMini(date)
+  let semester
+  if (1 <= mini && mini <= 2) {
+    semester = "Fall"
+  } else if (3 <= mini && mini <= 4) {
+    semester = "Spring"
+  } else if (mini === 5) {
+    semester = "Summer One"
+  } else {
+    semester = "Summer Two"
+  }
+  return `${semester} ${date.year()}`
 }
+
+export var searchTips = [
+  "a course number '15-112'",
+  "name of an instructor",
+  "name of a course",
+  "a room 'DH2210'",
+  "a building 'Doherty'",
+  "a time '8:00am'",
+  "a day 'Monday'"
+]

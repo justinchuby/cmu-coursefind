@@ -25,7 +25,7 @@ class Navbar extends Component {
 
   render() {
     return (
-      <div className="navbar-fixed">
+      <div className="navbar-fixed" style={{height: '100px'}}>
         <nav>
           <div className="nav-wrapper">
             <a data-activates="slide-out" className="button-collapse hide-on-med-and-up"><i className="material-icons">menu</i></a>

@@ -5,11 +5,6 @@ var $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
 
 class Collapsible extends Component {
-  // left text, right text
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     $('.collapsible').collapsible();
   }
