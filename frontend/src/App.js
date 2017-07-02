@@ -5,6 +5,8 @@ import {
   Route
 } from 'react-router-dom'
 
+import './styles/style.css';
+
 import Home from './home'
 import About from './about'
 import Disclaimer from './disclaimer'

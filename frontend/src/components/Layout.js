@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Navbar from './Navbar'
 import SideNav from './SideNav'
 import Footer from './Footer'
-import '../styles/style.css';
 
 
 class App extends Component {
