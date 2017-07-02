@@ -4,79 +4,44 @@ import { daysToString, getFullBuildingName, convertName } from '../helpers'
 
 
 class CourseList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      courses: props.courses,
-      // get the lectures out from each course and reduce them from 2D
-      // array to 1D array
-      lectures: props.courses.map(
-        course => {
-          return course.lectures
-        }).reduce(
-        (a, b) => a.concat(b), []
-        ),
-      sections: props.courses.map(
-        course => {
-          return course.sections
-        }).reduce(
-        (a, b) => a.concat(b), []
-        )
-      // TODO: how should I manipulate the course list?
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      courses: nextProps.courses,
-      // get the lectures out from each course and reduce them from 2D
-      // array to 1D array
-      lectures: nextProps.courses.map(
-        course => {
-          return course.lectures
-        }).reduce(
-        (a, b) => a.concat(b), []
-        ),
-      sections: nextProps.courses.map(
-        course => {
-          return course.sections
-        }).reduce(
-        (a, b) => a.concat(b), []
-        )
-    })
-  }
+  // props: sections
 
   render() {
-    // TODO: fix this
-    let meetingList = this.state.lectures.map(
+    let meetingList = this.props.sections.map(
       meeting => {
-        // TODO: fix this
-        let currentCourseTime = meeting.times[0]
         let courseMeeingText = meeting.times.map(
           (time, index) => {
             return (
               <span key={index}>
-                {daysToString(time.days)} &nbsp; | &nbsp;
-                {/* TODO: check the DNM case */}
-                {getFullBuildingName(time.building) &&
+                {time.days &&
                   <span>
-                    <a className="amber-text text-accent-4"
-                      href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
-                      target="_blank" rel="nofollow">
-                      {getFullBuildingName(time.building)}
-                    </a>
-                    &nbsp;
-                    {time.room}
+                    <br/><i className="material-icons tiny">today</i>&nbsp;&nbsp;
+                    {time.days.join(", ")}
                   </span>
                 }
-                <br />
                 {time.begin &&
                   <span>
-                    <span className="grey-text text-lighten-2"> From </span>
-                    {time.begin.format("HH:mmA")}
-                    <span className="grey-text text-lighten-2"> to </span>
-                    {time.end.format("HH:mmA")}
-                    <br /><br />
+                    <br/><i className="material-icons tiny">access_time</i>&nbsp;&nbsp;
+                    From { time.begin } to { time.end }
+                  </span>
+                }
+                {time.building &&
+                  <span>
+                    <br/><i className="material-icons tiny">explore</i>&nbsp;&nbsp;
+                    {/* Add a google maps link to the building name if it is an
+                        actual building */}
+                    
+                    {getFullBuildingName(time.building) ? (
+                      <a href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
+                        target="_blank"
+                        rel="nofollow noopener">
+                        <b>{getFullBuildingName(time.building)}</b>
+                      </a>
+                    ) : (
+                      <b>time.building</b>
+                    )
+                    }
+                    {time.room}
                   </span>
                 }
               </span>
@@ -114,9 +79,7 @@ class CourseList extends Component {
             bodyText: (
               <p className="grey-text text-lighten-5">
                 <span className="flow-text">
-                  <a className="amber-text text-accent-4"
-                    href={`/search?q=${meeting.course.courseid}`}
-                    rel="nofollow">
+                  <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
                     {meeting.course.courseid}
                   </a> &nbsp;
                   {meeting.course.name} &nbsp;
@@ -148,7 +111,7 @@ class CourseList extends Component {
       }
     )
     return (
-      <Collapsible list={meetingList} />
+      <Collapsible list={meetingList} extraClassName="popout"/>
     )
   }
 }
