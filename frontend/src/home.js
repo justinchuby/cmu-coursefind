@@ -6,6 +6,11 @@ import { getSemesterFromDate, searchTips } from './helpers'
 
 var moment = require('moment');
 
+// import 'url-search-params-polyfill';
+// const search = props.location.search; // could be '?foo=bar'
+// const params = new URLSearchParams(search);
+// const foo = params.get('foo'); // bar
+
 class Home extends Component {
   constructor(props) {
     super(props);
