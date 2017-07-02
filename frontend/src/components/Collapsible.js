@@ -6,6 +6,7 @@ require('materialize-css/dist/js/materialize');
 
 class Collapsible extends Component {
   componentDidMount() {
+    // This would initialize all collapsibles but whatever
     $('.collapsible').collapsible();
   }
 
@@ -25,7 +26,8 @@ class Collapsible extends Component {
       }
     )
     return (
-      <ul className="collapsible" data-collapsible="accordion">
+      <ul className={"collapsible " + this.props.extraClass.join(" ")}
+        data-collapsible="accordion">
         {collapsibleElements}
       </ul>
     );
