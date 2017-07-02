@@ -6,7 +6,7 @@ var moment = require('moment');
 
 class About extends Component {
   render() {
-    let mainText = (
+    const mainText = (
       <div className="row">
         <div className="col s11">
         <h2 className="light">Hi !</h2>
