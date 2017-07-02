@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class CollapsibleElement extends Component {
+class CourseCollapsibleElement extends Component {
   render() {
     return (
       <li>
@@ -27,4 +27,4 @@ class CollapsibleElement extends Component {
   }
 }
 
-export default CollapsibleElement;
+export default CourseCollapsibleElement;

@@ -4,7 +4,7 @@ import CollapsibleElement from './CollapsibleElement'
 var $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
 
-class Collapsible extends Component {
+class CoursesCollapsible extends Component {
   componentDidMount() {
     // This would initialize all collapsibles but whatever
     $('.collapsible').collapsible();
@@ -34,4 +34,4 @@ class Collapsible extends Component {
   }
 }
 
-export default Collapsible;
+export default CoursesCollapsible;
