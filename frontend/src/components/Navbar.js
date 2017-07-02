@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { randomPick } from '../helpers';
-import '../../css/Navbar.css';
+import '../styles/Navbar.css';
 
 
 class Navbar extends Component {
