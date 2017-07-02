@@ -32,7 +32,7 @@ class CourseMeetingInfo extends Component {
 
                 {getFullBuildingName(time.building) ? (
                   <a href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
-                    className={this.props.textAccentColor}
+                    className={this.props.colors.textAccentColor}
                     target="_blank"
                     rel="nofollow noopener">
                     <b>{getFullBuildingName(time.building)}</b>
