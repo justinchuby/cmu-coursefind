@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CoursesCollapsible from './CoursesCollapsible'
-import CourseMeetingInfo from './CourseMeetingInfo'
+import CoursesMeetingInfo from './CoursesMeetingInfo'
 import { getFullBuildingName, convertName } from '../helpers'
 
 
@@ -8,7 +8,7 @@ class CourseSectionList extends Component {
   // props: meetings, colors
 
   render() {
-    let meetingList = this.props.meetings.map(
+    const meetingList = this.props.meetings.map(
       meeting => {
         return (
           {
@@ -32,7 +32,7 @@ class CourseSectionList extends Component {
                   }).join(", ")
                   }
                 </span>
-                <CourseMeetingInfo
+                <CoursesMeetingInfo
                   meetings={this.props.meetings}
                   colors={this.props.colors}/>
               </p>

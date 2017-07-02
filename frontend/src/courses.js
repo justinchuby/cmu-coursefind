@@ -1,28 +1,32 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
-import CourseList from './components/CourseList'
+import CoursesCard from './components/CoursesCard'
 import { Course } from './cmu_course'
 import { getSemesterFromDate, searchTips } from './helpers'
+import parseURL from './utils/parseURL'
 
 var moment = require('moment');
 
-class Home extends Component {
+class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: []
+      courseid: ,
+      course: {}
     }
   }
 
   componentWillMount() {
-    // TODO: fix here
-    // fetch('https://api.cmucoursefind.xyz/course/v1/building/dh/room/2315/')
-    fetch('https://api.cmucoursefind.xyz/course/v1/instructor/david%20kosbie/')
+    fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.params.courseid}/`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
-        this.setState({
-          courses: jsonResponse.courses.map(course => {return new Course(course)})
-        })
+        if (jsonResponse.course !== null) {
+          this.setState({
+            course: new Course(jsonResponse.course)
+          })
+        }
+        // TODO: deal with the case when there's a server error
+        // TODO: deal with 404's
       })
   }
 
@@ -32,9 +36,11 @@ class Home extends Component {
         navbarProps={{
           searchTips: searchTips
         }}
-        mainContent={}
+        mainContent={
+          <CoursesCard course={this.state.course} />
+        }
         footerProps={{
-          leftFooterText: getSemesterFromDate(moment()),
+          leftFooterText: this.state.course.semester,
           rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
         }}
       />
@@ -42,4 +48,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Courses;

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Card from './Card'
-import CourseMeetingInfo from './CourseMeetingInfo'
+import CoursesMeetingInfo from './CoursesMeetingInfo'
 import convertNames from '../helpers'
 
 class CoursesCard extends Component {
   // props: course, colors:{majorColor, textMajorColor, courseidColor, textAccentColor}
   // TODO: consider store the colors into a sigle object
   cardContent() {
-    let course = this.props.course
+    const course = this.props.course
     return (
       <div className="row">
         <div className="col m9 offset-m2">
@@ -49,7 +49,7 @@ class CoursesCard extends Component {
                   cardColor={this.props.colors.majorColor}
                   extraClassName="hoverable"
                   textColor={this.props.colors.textMajorColor}
-                  content={cardContent()}
+                  content={this.cardContent()}
                 />
     );
   }

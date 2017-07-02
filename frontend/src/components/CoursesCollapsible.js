@@ -11,7 +11,7 @@ class CoursesCollapsible extends Component {
   }
 
   render() {
-    let collapsibleElements = this.props.list.map(
+    const collapsibleElements = this.props.list.map(
       (element, index) => {
         return (
           <CollapsibleElement

@@ -3,11 +3,11 @@ import CoursesCollapsible from './CoursesCollapsible'
 import { getFullBuildingName, convertName } from '../helpers'
 
 
-class CourseMeetingInfo extends Component {
+class CoursesMeetingInfo extends Component {
   // props: meetings
 
   render() {
-    let meetingInfo = meeting.times.map(
+    const meetingInfo = this.props.meeting.times.map(
       (time, index) => {
         return (
           <span key={index}>
@@ -54,4 +54,4 @@ class CourseMeetingInfo extends Component {
   }
 }
 
-export default CourseMeetingInfo;
+export default CoursesMeetingInfo;

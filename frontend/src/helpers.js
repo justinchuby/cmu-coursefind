@@ -7,7 +7,7 @@ export function daysToString(days) {
 }
 
 
-let _DAYS = {
+const _DAYS = {
   1: "Mon",
   2: "Tue",
   3: "Wed",
@@ -22,7 +22,7 @@ export function dayToString(day) {
 }
 
 
-let _CMU_BUILDINGS_FROM_ABBR = {
+const _CMU_BUILDINGS_FROM_ABBR = {
   "BH": "Baker Hall",
   "CYH": "Cyert Hall",
   "DH": "Doherty Hall",
@@ -62,7 +62,7 @@ export function titleCase(str) {
 }
 
 export function convertName(str) {
-  let name = str.split(", ")
+  const name = str.split(", ")
   return `${name[1]} ${name[0]}`
 }
 
@@ -163,7 +163,7 @@ export function getSemesterFromDate(date) {
   if (date === null) {
     date = moment()
   }
-  let mini = getMini(date)
+  const mini = getMini(date)
   let semester
   if (1 <= mini && mini <= 2) {
     semester = "Fall"

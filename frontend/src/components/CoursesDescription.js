@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReadMore from 'react-readmore';
 
-let sanitizeHtml = require('sanitize-html')
+const sanitizeHtml = require('sanitize-html')
 
 class CoursesDescription extends Component {
   // props: content

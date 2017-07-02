@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Card from './Card'
-import CourseMeetingInfo from './CourseMeetingInfo'
+import CoursesMeetingInfo from './CoursesMeetingInfo'
 import convertNames from '../helpers'
 
 class CoursesLectureCards extends Component {
@@ -22,7 +22,7 @@ class CoursesLectureCards extends Component {
           )}
         </p>
         <p>
-          <CourseMeetingInfo
+          <CoursesMeetingInfo
             meetings={this.props.meetings}
             colors={this.props.colors}/>
         </p>

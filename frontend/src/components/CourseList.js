@@ -48,11 +48,11 @@ class CourseList extends Component {
 
   render() {
     // TODO: fix this
-    let meetingList = this.state.lectures.map(
+    const meetingList = this.state.lectures.map(
       meeting => {
         // TODO: fix this
-        let currentCourseTime = meeting.times[0]
-        let courseMeeingText = meeting.times.map(
+        const currentCourseTime = meeting.times[0]
+        const courseMeeingText = meeting.times.map(
           (time, index) => {
             return (
               <span key={index}>
