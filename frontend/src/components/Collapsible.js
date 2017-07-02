@@ -26,7 +26,7 @@ class Collapsible extends Component {
       }
     )
     return (
-      <ul className={`collapsible ${this.props.extraClass.join(" ")}`}
+      <ul className={`collapsible ${this.props.extraClass}`}
         data-collapsible="accordion">
         {collapsibleElements}
       </ul>
