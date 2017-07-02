@@ -85,54 +85,61 @@ class CourseList extends Component {
         return (
           {
             key: meeting.course.courseid + meeting.name,
-            leftHeaderText:
-            <span>
-              {meeting.course.courseid} &nbsp;
+            leftHeaderIcon: (
+              <i className="material-icons hide-on-small-only">class</i>
+            ),
+            leftHeaderText: (
+              <span>
+                {meeting.course.courseid} &nbsp;
               {meeting.name !== "Lec" &&
-                meeting.name
-              }
-              &nbsp;&nbsp;
+                  meeting.name
+                }
+                &nbsp;&nbsp;
                 {meeting.course.name}
-            </span>,
-            rightHeaderText:
-            <span>
-              {currentCourseTime.building} {currentCourseTime.room} |
+              </span>
+            ),
+            rightHeaderText: (
+              <span>
+                {currentCourseTime.building} {currentCourseTime.room} |
                 {currentCourseTime.diffText}
-            </span>,
-            rightHeaderTextShort:
-            <span>
-              {currentCourseTime.building} {currentCourseTime.room} |
+              </span>
+            ),
+            rightHeaderTextShort: (
+              <span>
+                {currentCourseTime.building} {currentCourseTime.room} |
                 {currentCourseTime.diffText}
-            </span>,
-            bodyText:
-            <p className="grey-text text-lighten-5">
-              <span className="flow-text">
-                <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
-                  {meeting.course.courseid}
-                </a> &nbsp;
+              </span>
+            ),
+            bodyText: (
+              <p className="grey-text text-lighten-5">
+                <span className="flow-text">
+                  <a className="amber-text text-accent-4" href={`/?q=${meeting.course.courseid}`}>
+                    {meeting.course.courseid}
+                  </a> &nbsp;
                   {meeting.course.name} &nbsp;
                   {meeting.name} &nbsp;
                 </span>
-              <br /><br />
-              / &nbsp; {(meeting.course.department)} &nbsp; /
+                <br /><br />
+                / &nbsp; {(meeting.course.department)} &nbsp; /
                 <br />
-              {courseMeeingText}
-              <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
+                {courseMeeingText}
+                <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
                 {meeting.instructors.map(instructor => {
-                return convertName(instructor)
-              }).join(", ")
-              }
-              <br /><br />
-              <a className="waves-effect waves-light grey-text text-lighten-5"
-                href={`/courses/${meeting.course.courseid}/`}>
-                {"< "}
-                {/* TODO: make this more like a button */}
-                More
+                  return convertName(instructor)
+                }).join(", ")
+                }
+                <br /><br />
+                <a className="waves-effect waves-light grey-text text-lighten-5"
+                  href={`/courses/${meeting.course.courseid}/`}>
+                  {"< "}
+                  {/* TODO: make this more like a button */}
+                  More
                   <span className="amber-text text-accent-4"> details </span>
-                about this course
+                  about this course
                   {" >"}
-              </a>
-            </p>
+                </a>
+              </p>
+            )
           }
         )
       }

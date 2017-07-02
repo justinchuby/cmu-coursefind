@@ -15,6 +15,7 @@ class Collapsible extends Component {
         return (
           <CollapsibleElement
             key={element.key}
+            leftHeaderIcon={element.leftHeaderIcon}
             leftHeaderText={element.leftHeaderText}
             rightHeaderText={element.rightHeaderText}
             rightHeaderTextShort={element.rightHeaderTextShort}

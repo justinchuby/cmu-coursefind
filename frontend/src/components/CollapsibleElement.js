@@ -8,7 +8,7 @@ class CollapsibleElement extends Component {
           {/* TODO: class options */}
           <div className="row nomargin">
             <div className="col s12 m8 l8 truncate">
-              <i className="material-icons hide-on-small-only">class</i>
+              {this.props.leftHeaderIcon}
               <span>
                 {this.props.leftHeaderText}
               </span>
