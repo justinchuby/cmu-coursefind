@@ -5,10 +5,10 @@ import { getFullBuildingName, convertName } from '../helpers'
 
 
 class CourseSectionList extends Component {
-  // props: sections
+  // props: meetings
 
   render() {
-    let meetingList = this.props.sections.map(
+    let meetingList = this.props.meetings.map(
       meeting => {
         return (
           {
