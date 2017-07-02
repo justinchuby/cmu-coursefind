@@ -5,7 +5,7 @@ import { getFullBuildingName, convertName } from '../helpers'
 
 
 class CourseSectionList extends Component {
-  // props: meetings
+  // props: meetings, colors
 
   render() {
     let meetingList = this.props.meetings.map(
@@ -32,7 +32,9 @@ class CourseSectionList extends Component {
                   }).join(", ")
                   }
                 </span>
-                <CourseMeetingInfo />
+                <CourseMeetingInfo
+                  meetings={this.props.meetings}
+                  colors={this.props.colors}/>
               </p>
             )
           }
@@ -40,7 +42,10 @@ class CourseSectionList extends Component {
       }
     )
     return (
-      <CoursesCollapsible list={meetingList} extraClass="popout"/>
+      <CoursesCollapsible
+        list={meetingList}
+        extraClass="popout"
+        colors={this.props.colors}/>
     )
   }
 }

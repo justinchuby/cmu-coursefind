@@ -19,7 +19,7 @@ class CourseCollapsibleElement extends Component {
             </div>
           </div>
         </div>
-        <div className={`collapsible-body ${this.props.colors}.join(" ")`}>
+        <div className={`collapsible-body ${this.props.colorClass}`}>
           {this.props.bodyText}
         </div>
       </li>

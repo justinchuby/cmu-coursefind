@@ -12,7 +12,7 @@ class CoursesCollapsible extends Component {
 
   render() {
     let collapsibleElements = this.props.list.map(
-      element => {
+      (element, index) => {
         return (
           <CollapsibleElement
             key={element.key}
@@ -21,6 +21,8 @@ class CoursesCollapsible extends Component {
             rightHeaderText={element.rightHeaderText}
             rightHeaderTextShort={element.rightHeaderTextShort}
             bodyText={element.bodyText}
+            first={index == 1}
+            colorClass={`${this.props.colors.majorColor} ${this.props.colors.textMajorColor}`}
           />
         )
       }
