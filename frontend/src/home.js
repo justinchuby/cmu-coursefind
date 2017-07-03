@@ -38,9 +38,13 @@ class Home extends Component {
           searchTips: searchTips
         }}
         mainContent={
-          <div className="container">
-            <CourseList courses={this.state.courses} />
-          </div>
+          (this.state.courses) ? (
+            <div className="container">
+              <CourseList courses={this.state.courses} />
+            </div>
+          ) : (
+            null
+          )
         }
         footerProps={{
           leftFooterText: getSemesterFromDate(moment()),

@@ -10,7 +10,7 @@ class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: {}
+      course: null
     }
   }
 
@@ -19,7 +19,8 @@ class Courses extends Component {
     fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
-        if (jsonResponse.course !== null) {
+        console.log(jsonResponse.course)
+        if (jsonResponse.course) {
           this.setState({
             course: new Course(jsonResponse.course)
           })
@@ -43,13 +44,18 @@ class Courses extends Component {
           searchTips: searchTips
         }}
         mainContent={
-          <CoursesCard
-            course={this.state.course}
-            colors={colors}
-          />
+          (this.state.course) ? (
+            /* course loaded */
+            <CoursesCard
+              course={this.state.course}
+              colors={colors}
+            />
+          ) : (
+            null
+          )
         }
         footerProps={{
-          leftFooterText: this.state.course.semester,
+          leftFooterText: this.state.course ? this.state.course.semester : '',
           rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
         }}
       />

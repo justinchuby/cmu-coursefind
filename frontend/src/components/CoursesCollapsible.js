@@ -21,7 +21,7 @@ class CoursesCollapsible extends Component {
             rightHeaderText={element.rightHeaderText}
             rightHeaderTextShort={element.rightHeaderTextShort}
             bodyText={element.bodyText}
-            first={index == 1}
+            first={index === 1}
             colorClass={`${this.props.colors.majorColor} ${this.props.colors.textMajorColor}`}
           />
         )
