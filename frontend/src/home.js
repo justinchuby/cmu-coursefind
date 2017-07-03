@@ -37,7 +37,11 @@ class Home extends Component {
         navbarProps={{
           searchTips: searchTips
         }}
-        mainContent={<CourseList courses={this.state.courses}/>}
+        mainContent={
+          <div className="container">
+            <CourseList courses={this.state.courses} />
+          </div>
+        }
         footerProps={{
           leftFooterText: getSemesterFromDate(moment()),
           rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>

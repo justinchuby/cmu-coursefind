@@ -10,7 +10,7 @@ class App extends Component {
       <div className="flexbox-wrapper">
         <Navbar {...this.props.navbarProps} />
         <SideNav />
-        <main className="container">
+        <main>
           {this.props.mainContent}
         </main>
         <Footer {...this.props.footerProps}/>
