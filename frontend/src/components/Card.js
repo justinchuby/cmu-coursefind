@@ -4,10 +4,10 @@ class Card extends Component {
   // props: cardColor, extraClass, textColor, title, content
   render() {
     return (
-      <div class={`card ${this.props.cardColor} ${this.props.extraClass}`}>
-        <div class={`card-content ${this.props.textColor}`}>
+      <div className={`card ${this.props.cardColor} ${this.props.extraClass}`}>
+        <div className={`card-content ${this.props.textColor}`}>
           {this.props.title &&
-            <span class="card-title">{this.props.title}</span>
+            <span className="card-title">{this.props.title}</span>
           }
           {this.props.content}
         </div>

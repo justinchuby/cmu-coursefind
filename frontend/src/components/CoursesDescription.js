@@ -14,13 +14,13 @@ class CoursesDescription extends Component {
     return (
       content ? (
         <ReadMore>
-          <p class="grey-text text-darken-3 readmore"
+          <p className="grey-text text-darken-3 readmore"
             dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.content)}}>
             {/* TODO: add target_blank to the urls */}
           </p>
         </ReadMore>
       ) : (
-        <p class="grey-text text-darken-3">
+        <p className="grey-text text-darken-3">
           No description available.
         </p>
       )

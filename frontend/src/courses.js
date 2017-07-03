@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import Layout from './components/Layout'
 import CoursesCard from './components/CoursesCard'
 import { Course } from './cmu_course'
-import { getSemesterFromDate, searchTips } from './helpers'
-import parseURL from './utils/parseURL'
+import { searchTips } from './helpers'
 
 var moment = require('moment');
 
@@ -11,13 +10,13 @@ class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courseid: ,
       course: {}
     }
   }
 
   componentWillMount() {
-    fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.params.courseid}/`)
+    console.log(this.props.params)
+    fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         if (jsonResponse.course !== null) {
@@ -31,13 +30,23 @@ class Courses extends Component {
   }
 
   render() {
+    const colors = {
+      majorColor: 'purple lighten-1',
+      textMajorColor: 'white-text',
+      courseidColor: 'purple-text text-darken-4',
+      titleColor: 'purple-text text-darken-3',
+      textAccentcolor: 'teal-text text-accent-2'
+    }
     return (
       <Layout
         navbarProps={{
           searchTips: searchTips
         }}
         mainContent={
-          <CoursesCard course={this.state.course} />
+          <CoursesCard
+            course={this.state.course}
+            colors={colors}
+          />
         }
         footerProps={{
           leftFooterText: this.state.course.semester,

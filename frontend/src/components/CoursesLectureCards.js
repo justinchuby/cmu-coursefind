@@ -9,14 +9,14 @@ class CoursesLectureCards extends Component {
   cardContent() {
     return (
       <span>
-        <p class="right-align">
-          <span class="light">{meeting.times[0].location}</span>
+        <p className="right-align">
+          <span className="light">{meeting.times[0].location}</span>
         </p>
-        <p class="right-align">
+        <p className="right-align">
           {meeting.instructors.map(
             instructor => {
               return (
-                <a class={this.props.colors.textColor}><b>{convertName(instructor)}</b><br /></a>
+                <a className={this.props.colors.textColor}><b>{convertName(instructor)}</b><br /></a>
               )
             }
           )}

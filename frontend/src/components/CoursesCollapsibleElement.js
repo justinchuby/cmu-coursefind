@@ -13,7 +13,7 @@ class CourseCollapsibleElement extends Component {
               </span>
             </div>
             <div className="col s7">
-              <p class="light right-align truncate nomargin">
+              <p className="light right-align truncate nomargin">
                 {this.props.rightHeaderText}
               </p>
             </div>
