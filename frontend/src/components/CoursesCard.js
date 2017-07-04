@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Card from './Card'
-import CoursesMeetingInfo from './CoursesMeetingInfo'
-import convertNames from '../helpers'
 
 class CoursesCard extends Component {
   // props: course, colors:{majorColor, textMajorColor, courseidColor, textAccentColor}

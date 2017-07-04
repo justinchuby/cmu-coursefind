@@ -1,18 +1,13 @@
 import React, { Component } from 'react'
-import ReadMore from 'react-readmore';
+import ReadMore from '../dependencies/react-readmore/index';
 
 const sanitizeHtml = require('sanitize-html')
 
 class CoursesDescription extends Component {
   // props: content
-  componentDidMount() {
-    // This would initialize all collapsibles but whatever
-    $('.collapsible').collapsible();
-  }
-
   render() {
     return (
-      content ? (
+      this.props.content ? (
         <ReadMore>
           <p className="grey-text text-darken-3 readmore"
             dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.content)}}>

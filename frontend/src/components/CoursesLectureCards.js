@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Card from './Card'
 import CoursesMeetingInfo from './CoursesMeetingInfo'
-import convertNames from '../helpers'
+import { convertName } from '../helpers'
 
 class CoursesLectureCards extends Component {
-  // props: meetings, cardColor, textColor, textAccentColor
+  // props: meetings, colors
 
-  cardContent() {
+  cardContent(meeting) {
     return (
       <span>
         <p className="right-align">
@@ -16,14 +16,18 @@ class CoursesLectureCards extends Component {
           {meeting.instructors.map(
             instructor => {
               return (
-                <a className={this.props.colors.textColor}><b>{convertName(instructor)}</b><br /></a>
+                <a 
+                  key={instructor}
+                  className={this.props.colors.textMajorColor}>
+                  <b>{convertName(instructor)}</b><br />
+                </a>
               )
             }
           )}
         </p>
         <p>
           <CoursesMeetingInfo
-            meetings={this.props.meetings}
+            times={meeting.times}
             colors={this.props.colors}/>
         </p>
       </span>
@@ -36,13 +40,13 @@ class CoursesLectureCards extends Component {
         {this.props.meetings.map(
           meeting => {
             return (
-              <div className="col s12 m6 l4">
+              <div key={meeting.name} className="col s12 m6 l4">
                 <Card
-                  cardColor={this.props.colors.cardColor}
+                  cardColor={this.props.colors.majorColor}
                   extraClass="hoverable"
-                  textColor={this.props.colors.textColor}
+                  textColor={this.props.colors.textMajorColor}
                   title={<b>&nbsp;&nbsp;&nbsp;{meeting.name}</b>}
-                  content={cardContent()}
+                  content={this.cardContent(meeting)}
                 />
               </div>
             )

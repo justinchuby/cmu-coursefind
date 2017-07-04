@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
 import CoursesCard from './components/CoursesCard'
+import CoursesDescription from './components/CoursesDescription'
+import CoursesLectureCards from './components/CoursesLectureCards'
+import CoursesSectionList from './components/CoursesSectionList'
 import { Course } from './cmu_course'
 import { searchTips } from './helpers'
 
@@ -10,7 +13,14 @@ class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: null
+      course: null,
+      colors: {
+        majorColor: 'purple lighten-1',
+        textMajorColor: 'white-text',
+        courseidColor: 'purple-text text-darken-4',
+        titleColor: 'purple-text text-darken-3',
+        textAccentcolor: 'teal-text text-accent-2'
+      }
     }
   }
 
@@ -19,7 +29,6 @@ class Courses extends Component {
     fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
-        console.log(jsonResponse.course)
         if (jsonResponse.course) {
           this.setState({
             course: new Course(jsonResponse.course)
@@ -31,13 +40,7 @@ class Courses extends Component {
   }
 
   render() {
-    const colors = {
-      majorColor: 'purple lighten-1',
-      textMajorColor: 'white-text',
-      courseidColor: 'purple-text text-darken-4',
-      titleColor: 'purple-text text-darken-3',
-      textAccentcolor: 'teal-text text-accent-2'
-    }
+    console.log(this.state.course)
     return (
       <Layout
         navbarProps={{
@@ -45,11 +48,38 @@ class Courses extends Component {
         }}
         mainContent={
           (this.state.course) ? (
-            /* course loaded */
-            <CoursesCard
-              course={this.state.course}
-              colors={colors}
-            />
+            <div>
+              {/* course loaded */}
+              <div className="row">
+                <div className="col s12 l9">
+                  <CoursesCard
+                    course={this.state.course}
+                    colors={this.state.colors}
+                  />
+                </div>
+              </div>
+              <div className="container">
+                <div className="section">
+                  <CoursesDescription content={this.state.course.description}/>
+                </div>
+                {this.state.course.lectures &&
+                  <div className="section">
+                    <CoursesLectureCards 
+                      meetings={this.state.course.lectures}
+                      colors={this.state.colors}
+                    />
+                  </div>
+                }
+                {this.state.course.sections &&
+                  <div className="section">
+                    <CoursesSectionList 
+                      meetings={this.state.course.sections}
+                      colors={this.state.colors}
+                    />
+                  </div>
+                }
+              </div>
+            </div>
           ) : (
             null
           )

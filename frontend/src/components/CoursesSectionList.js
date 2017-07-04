@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import CoursesCollapsible from './CoursesCollapsible'
 import CoursesMeetingInfo from './CoursesMeetingInfo'
-import { getFullBuildingName, convertName } from '../helpers'
+import { convertName } from '../helpers'
 
 
-class CourseSectionList extends Component {
+class CoursesSectionList extends Component {
   // props: meetings, colors
 
   render() {
@@ -33,7 +33,7 @@ class CourseSectionList extends Component {
                   }
                 </span>
                 <CoursesMeetingInfo
-                  meetings={this.props.meetings}
+                  times={meeting.times}
                   colors={this.props.colors}/>
               </p>
             )
@@ -50,4 +50,4 @@ class CourseSectionList extends Component {
   }
 }
 
-export default CourseSectionList;
+export default CoursesSectionList;
