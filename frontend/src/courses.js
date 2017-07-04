@@ -7,7 +7,6 @@ import CoursesSectionList from './components/CoursesSectionList'
 import { Course } from './utils/cmu_course'
 import { searchTips } from './helpers'
 
-var moment = require('moment');
 
 class Courses extends Component {
   constructor(props) {
@@ -40,7 +39,6 @@ class Courses extends Component {
   }
 
   render() {
-    console.log(this.state.course)
     return (
       <Layout
         navbarProps={{
@@ -60,32 +58,40 @@ class Courses extends Component {
               </div>
               <div className="container">
                 <div className="section">
-                  <h4 class="">Description</h4>
+                  <h4>Description</h4>
                   <br />
                   <CoursesDescription content={this.state.course.desc}/>
                 </div>
-                {this.state.course.lectures &&
-                  <div className="section">
-                    <h4 class="">Lectures</h4>
-                    <br />
-                    <CoursesLectureCards 
-                      meetings={this.state.course.lectures}
-                      colors={this.state.colors}
-                    />
-                  </div>
+                {
+                  (this.state.course.lectures.length !== 0) ? (
+                    <div className="section">
+                      <h4>Lectures</h4>
+                      <br />
+                      <CoursesLectureCards 
+                        meetings={this.state.course.lectures}
+                        colors={this.state.colors}
+                      />
+                    </div>
+                  ) : (
+                    null
+                  )
                 }
-                {this.state.course.sections &&
-                  <div className="section">
-                    <h4 class="">Sections</h4>
-                    <br />
-                    <CoursesSectionList 
-                      meetings={this.state.course.sections}
-                      colors={this.state.colors}
-                    />
-                  </div>
+                {
+                  (this.state.course.sections.length !== 0) ? (
+                    <div className="section">
+                      <h4>Sections</h4>
+                      <br />
+                      <CoursesSectionList 
+                        meetings={this.state.course.sections}
+                        colors={this.state.colors}
+                      />
+                    </div>
+                  ) : (
+                    null
+                  )
                 }
                 <div className="section">
-                  <h4 class="">Ratings</h4>
+                  <h4>Ratings</h4>
                   <br />
                 </div>
               </div>
