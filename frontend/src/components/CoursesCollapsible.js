@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CollapsibleElement from './CollapsibleElement'
+import CoursesCollapsibleElement from './CoursesCollapsibleElement'
 
 var $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
@@ -14,14 +14,14 @@ class CoursesCollapsible extends Component {
     const collapsibleElements = this.props.list.map(
       (element, index) => {
         return (
-          <CollapsibleElement
+          <CoursesCollapsibleElement
             key={element.key}
             leftHeaderIcon={element.leftHeaderIcon}
             leftHeaderText={element.leftHeaderText}
             rightHeaderText={element.rightHeaderText}
             rightHeaderTextShort={element.rightHeaderTextShort}
             bodyText={element.bodyText}
-            first={index === 1}
+            first={index === 0}
             colorClass={`${this.props.colors.majorColor} ${this.props.colors.textMajorColor}`}
           />
         )
