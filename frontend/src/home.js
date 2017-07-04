@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
 import CourseList from './components/CourseList'
-import { Course } from './cmu_course'
+import { Course } from './utils/cmu_course'
 import { getSemesterFromDate, searchTips } from './helpers'
 
 var moment = require('moment');

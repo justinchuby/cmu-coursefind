@@ -4,7 +4,7 @@ import CoursesCard from './components/CoursesCard'
 import CoursesDescription from './components/CoursesDescription'
 import CoursesLectureCards from './components/CoursesLectureCards'
 import CoursesSectionList from './components/CoursesSectionList'
-import { Course } from './cmu_course'
+import { Course } from './utils/cmu_course'
 import { searchTips } from './helpers'
 
 var moment = require('moment');
