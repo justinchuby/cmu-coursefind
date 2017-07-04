@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import Collapsible from './Collapsible'
 import { daysToString, getFullBuildingName, convertName } from '../helpers'
 
@@ -132,15 +133,16 @@ class CourseList extends Component {
                 }).join(", ")
                 }
                 <br /><br />
-                <a className="waves-effect waves-light grey-text text-lighten-5"
-                  href={`/courses/${meeting.course.courseid}/`}>
+                <Link 
+                  to={`/courses/${meeting.course.courseid}/`}
+                  className="waves-effect waves-light grey-text text-lighten-5">
                   {"< "}
                   {/* TODO: make this more like a button */}
                   More
                   <span className="amber-text text-accent-4"> details </span>
                   about this course
                   {" >"}
-                </a>
+                </Link>
               </p>
             )
           }

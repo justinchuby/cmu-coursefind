@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
-import ReadMore from '../dependencies/react-readmore/index';
+import Linkify from 'linkifyjs/react';
 
-const sanitizeHtml = require('sanitize-html')
+// const sanitizeHtml = require('sanitize-html')
+var $ = require('jquery');
+const readmore = require('../utils/readmore')
 
 class CoursesDescription extends Component {
   // props: content
+  componentDidMount() {
+    $('.readmore').readmore();
+  }
+
   render() {
     return (
       this.props.content ? (
-        <ReadMore>
-          <p className="grey-text text-darken-3 readmore"
-            dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.content)}}>
-            {/* TODO: add target_blank to the urls */}
-          </p>
-        </ReadMore>
+        // <p className="grey-text text-darken-3 readmore"
+        //   dangerouslySetInnerHTML={{__html: this.props.content}}>
+        <p className="grey-text text-darken-3 readmore">
+          <Linkify>
+            {this.props.content}
+          </Linkify>
+        </p>
       ) : (
         <p className="grey-text text-darken-3">
           No description available.

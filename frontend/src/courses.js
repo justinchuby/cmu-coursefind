@@ -60,7 +60,7 @@ class Courses extends Component {
               </div>
               <div className="container">
                 <div className="section">
-                  <CoursesDescription content={this.state.course.description}/>
+                  <CoursesDescription content={this.state.course.desc}/>
                 </div>
                 {this.state.course.lectures &&
                   <div className="section">
