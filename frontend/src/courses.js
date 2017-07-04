@@ -19,7 +19,7 @@ class Courses extends Component {
         textMajorColor: 'white-text',
         courseidColor: 'purple-text text-darken-4',
         titleColor: 'purple-text text-darken-3',
-        textAccentcolor: 'teal-text text-accent-2'
+        textAccentColor: 'teal-text text-accent-2'
       }
     }
   }
@@ -48,8 +48,8 @@ class Courses extends Component {
         }}
         mainContent={
           (this.state.course) ? (
+            /* course loaded */
             <div>
-              {/* course loaded */}
               <div className="row">
                 <div className="col s12 l9">
                   <CoursesCard
@@ -60,10 +60,14 @@ class Courses extends Component {
               </div>
               <div className="container">
                 <div className="section">
+                  <h4 class="">Description</h4>
+                  <br />
                   <CoursesDescription content={this.state.course.desc}/>
                 </div>
                 {this.state.course.lectures &&
                   <div className="section">
+                    <h4 class="">Lectures</h4>
+                    <br />
                     <CoursesLectureCards 
                       meetings={this.state.course.lectures}
                       colors={this.state.colors}
@@ -72,12 +76,18 @@ class Courses extends Component {
                 }
                 {this.state.course.sections &&
                   <div className="section">
+                    <h4 class="">Sections</h4>
+                    <br />
                     <CoursesSectionList 
                       meetings={this.state.course.sections}
                       colors={this.state.colors}
                     />
                   </div>
                 }
+                <div className="section">
+                  <h4 class="">Ratings</h4>
+                  <br />
+                </div>
               </div>
             </div>
           ) : (

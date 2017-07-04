@@ -3,7 +3,7 @@ import Linkify from 'linkifyjs/react';
 
 // const sanitizeHtml = require('sanitize-html')
 var $ = require('jquery');
-const readmore = require('../utils/readmore')
+require('../utils/readmore')
 
 class CoursesDescription extends Component {
   // props: content

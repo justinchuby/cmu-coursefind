@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getFullBuildingName } from '../helpers'
+import { getFullBuildingName, dayToString } from '../helpers'
 
 
 class CoursesMeetingInfo extends Component {
@@ -17,13 +17,17 @@ class CoursesMeetingInfo extends Component {
                 {time.days &&
                   <span>
                     <br /><i className="material-icons tiny">today</i>&nbsp;&nbsp;
-                        {time.days.join(", ")}
+                        {
+                          time.days.map(day=>{
+                            return dayToString(day)
+                          }).join(", ")
+                        }
                   </span>
                 }
                 {time.begin &&
                   <span>
                     <br /><i className="material-icons tiny">access_time</i>&nbsp;&nbsp;
-                    From {time.begin} to {time.end}
+                    From {time.begin.format('hh:mmA')} to {time.end.format('hh:mmA')}
                   </span>
                 }
                 {time.building &&
@@ -42,8 +46,7 @@ class CoursesMeetingInfo extends Component {
                     ) : (
                         <b>{time.building}</b>
                       )
-                    }
-                    {time.room}
+                    } {time.room}
                   </span>
                 }
               </span>
