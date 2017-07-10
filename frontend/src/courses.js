@@ -6,6 +6,7 @@ import CoursesLectureCards from './components/CoursesLectureCards'
 import CoursesSectionList from './components/CoursesSectionList'
 import { Course } from './utils/cmu_course'
 import { searchTips } from './helpers'
+import { getDetailPageColor } from './utils/detailsPageColor'
 
 
 class Courses extends Component {
@@ -18,9 +19,18 @@ class Courses extends Component {
         textMajorColor: 'white-text',
         courseidColor: 'purple-text text-darken-4',
         titleColor: 'purple-text text-darken-3',
-        textAccentColor: 'teal-text text-accent-2'
+        textAccentColor: 'teal-text text-accent-2',
+        NavbarColor: ''
       }
     }
+  }
+
+  loadCourse(course) {
+    let courseObj = new Course(course)
+    this.setState({
+      course: courseObj,
+      colors: getDetailPageColor(courseObj.courseid)
+    })
   }
 
   componentWillMount() {
@@ -29,9 +39,7 @@ class Courses extends Component {
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         if (jsonResponse.course) {
-          this.setState({
-            course: new Course(jsonResponse.course)
-          })
+          this.loadCourse(jsonResponse.course)
         }
         // TODO: deal with the case when there's a server error
         // TODO: deal with 404's
@@ -42,7 +50,8 @@ class Courses extends Component {
     return (
       <Layout
         navbarProps={{
-          searchTips: searchTips
+          searchTips: searchTips,
+          color: this.state.colors.NavbarColor
         }}
         mainContent={
           (this.state.course) ? (
