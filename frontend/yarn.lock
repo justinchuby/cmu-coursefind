@@ -5016,10 +5016,6 @@ react-error-overlay@^1.0.9:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
-react-readmore@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-readmore/-/react-readmore-1.0.2.tgz#b2ff5927fd1e77303375ccbedbb725d363ad8bb9"
-
 react-router-dom@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-4.1.1.tgz#3021ade1f2c160af97cf94e25594c5f294583025"
