@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { randomPick } from '../helpers';
 import './Navbar.css';
 
@@ -9,8 +9,14 @@ class Navbar extends Component {
     super(props);
     this.state = {
       searchPrompt: "Search",
-      searchValue: ""
+      searchValue: "",
+      searchSubmitted: false
     }
+  }
+
+  clearSearchBar(event) {
+    this.setState({searchValue: ""})
+    event.target.blur()
   }
 
   handleChange(event) {
@@ -19,6 +25,7 @@ class Navbar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
+    this.setState({searchSubmitted: true})
     alert('A name was submitted: ' + this.state.searchValue)
   }
 
@@ -35,47 +42,62 @@ class Navbar extends Component {
   }
 
   render() {
-    return (
-      <div className="navbar-fixed" style={{height: '100px'}}>
-        <nav className={this.props.color}>
-          <div className="nav-wrapper">
-            <a data-activates="slide-out"
-              className="button-collapse hide-on-med-and-up">
-                <i className="material-icons">menu</i>
-            </a>
-            <Link to="/"
-              className="brand-logo left hide-on-small-only light"
-              id="brand-logo">
-              &nbsp; Course Find
-            </Link>
-            <div className="row" style={{ height: '100%' }}>
-              <form
-                className="col s8 m10 l11"
-                id="search-box"
-                onSubmit={this.handleSubmit.bind(this)}>
-                <div className="input-field">
-                  <input type="search" name="q" className="field"
-                    required maxLength="100"
-                    value={this.state.searchValue}
-                    placeholder={this.state.searchPrompt}
-                    id="search-text" 
-                    onFocus={this.handleFocus.bind(this)}
-                    onBlur={this.handleBlur.bind(this)}
-                    onChange={this.handleChange.bind(this)}></input>
-                  <label className="label-icon" htmlFor="search-text">
-                    <i className="material-icons">search</i>
-                  </label>
-                  <i className="material-icons">close</i>
-                </div>
-              </form>
-              <ul className="right">
-                <li><a><i className="material-icons">send</i></a></li>
-              </ul>
+    if (this.state.searchSubmitted) {
+      this.setState({searchSubmitted: false})
+      return <Redirect push to={{
+          pathname: '/search',
+          search: `?q=${this.state.searchValue}`
+        }}/>
+    } else {
+      return (
+        <div className="navbar-fixed" style={{height: '100px'}}>
+          <nav className={this.props.color}>
+            <div className="nav-wrapper">
+              <a data-activates="slide-out"
+                className="button-collapse hide-on-med-and-up">
+                  <i className="material-icons">menu</i>
+              </a>
+              <Link to="/"
+                className="brand-logo left hide-on-small-only light"
+                id="brand-logo">
+                &nbsp; Course Find
+              </Link>
+              <div className="row" style={{ height: '100%' }}>
+                <form
+                  className="col s8 m10 l11"
+                  id="search-box"
+                  onSubmit={this.handleSubmit.bind(this)}>
+                  <div className="input-field">
+                    <input type="search" name="q" className="field"
+                      required maxLength="100"
+                      value={this.state.searchValue}
+                      placeholder={this.state.searchPrompt}
+                      id="search-text" 
+                      onFocus={this.handleFocus.bind(this)}
+                      onBlur={this.handleBlur.bind(this)}
+                      onChange={this.handleChange.bind(this)}></input>
+                    <label className="label-icon" htmlFor="search-text">
+                      <i className="material-icons">search</i>
+                    </label>
+                    <i className="material-icons"
+                      onClick={this.clearSearchBar.bind(this)}>
+                      close
+                    </i>
+                  </div>
+                </form>
+                <ul className="right">
+                  <li>
+                    <a onClick={this.handleSubmit.bind(this)}>
+                      <i className="material-icons">send</i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-        </nav>
-      </div>
-    );
+          </nav>
+        </div>
+      );
+    }
   }
 }
 
