@@ -41,9 +41,14 @@ class Navbar extends Component {
     })  
   }
 
-  render() {
+  componentDidUpdate() {
     if (this.state.searchSubmitted) {
       this.setState({searchSubmitted: false})
+    }
+  }
+
+  render() {
+    if (this.state.searchSubmitted) {
       return <Redirect push to={{
           pathname: '/search',
           search: `?q=${this.state.searchValue}`
