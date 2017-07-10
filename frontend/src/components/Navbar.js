@@ -8,8 +8,18 @@ class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchPrompt: "Search"
+      searchPrompt: "Search",
+      searchValue: ""
     }
+  }
+
+  handleChange(event) {
+    this.setState({searchValue: event.target.value})
+  }
+
+  handleSubmit(e) {
+    e.preventDefault()
+    alert('A name was submitted: ' + this.state.searchValue)
   }
 
   handleFocus(e) {
@@ -39,17 +49,19 @@ class Navbar extends Component {
               &nbsp; Course Find
             </Link>
             <div className="row" style={{ height: '100%' }}>
-              <form method="GET"
-                action="/"
+              <form
                 className="col s8 m10 l11"
-                id="search-box">
+                id="search-box"
+                onSubmit={this.handleSubmit.bind(this)}>
                 <div className="input-field">
                   <input type="search" name="q" className="field"
                     required maxLength="100"
+                    value={this.state.searchValue}
                     placeholder={this.state.searchPrompt}
                     id="search-text" 
                     onFocus={this.handleFocus.bind(this)}
-                    onBlur={this.handleBlur.bind(this)}></input>
+                    onBlur={this.handleBlur.bind(this)}
+                    onChange={this.handleChange.bind(this)}></input>
                   <label className="label-icon" htmlFor="search-text">
                     <i className="material-icons">search</i>
                   </label>
