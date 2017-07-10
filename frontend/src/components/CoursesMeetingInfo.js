@@ -27,7 +27,7 @@ class CoursesMeetingInfo extends Component {
                 {time.begin &&
                   <span>
                     <br /><i className="material-icons tiny">access_time</i>&nbsp;&nbsp;
-                    From {time.begin.format('hh:mmA')} to {time.end.format('hh:mmA')}
+                    {`From ${time.begin.format('hh:mmA')} to ${time.end.format('hh:mmA')}`}
                   </span>
                 }
                 {time.building &&
