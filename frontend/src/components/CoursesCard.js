@@ -11,7 +11,7 @@ class CoursesCard extends Component {
         <div className="col m9 offset-m2">
           <h1 className={`light ${this.props.colors.courseidColor}`}>
             {course.courseid}
-            <span className="hide-on-small-only flow-text">{course.semester}</span>
+            <span className="hide-on-small-only flow-text"> {course.semester}</span>
           </h1>
           <p className={`hide-on-med-and-up flow-text ${this.props.colors.textMajorColor}`}>
             {course.semester}
