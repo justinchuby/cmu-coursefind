@@ -69,7 +69,11 @@ class Courses extends Component {
                 <div className="section">
                   <h4>Description</h4>
                   <br />
-                  <CoursesDescription content={this.state.course.desc}/>
+                  <div className="row">
+                    <div className="col s12 m10">
+                      <CoursesDescription content={this.state.course.desc}/>
+                    </div>
+                  </div>
                 </div>
                 {
                   (this.state.course.lectures.length !== 0) ? (
