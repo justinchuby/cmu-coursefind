@@ -65,14 +65,16 @@ class MeetingList extends Component {
             ),
             rightHeaderText: (
               <span>
-                {currentCourseTime.building} {currentCourseTime.room} |
-                {currentCourseTime.diffText}
+                {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+                {/* TODO: Fix here */}
+                {currentCourseTime.begin.fromNow()}
               </span>
             ),
             rightHeaderTextShort: (
               <span>
-                {currentCourseTime.building} {currentCourseTime.room} |
-                {currentCourseTime.diffText}
+                {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+                {/* TODO: Fix here */}
+                {currentCourseTime.begin.fromNow()}
               </span>
             ),
             bodyText: (

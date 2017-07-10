@@ -13,7 +13,7 @@ class CollapsibleElement extends Component {
                 {this.props.leftHeaderText}
               </span>
             </div>
-            <div className="col hide-on-small-only">
+            <div className="col m4 l4 hide-on-small-only">
               <span className="right badge">
                 {this.props.rightHeaderText}
               </span>
