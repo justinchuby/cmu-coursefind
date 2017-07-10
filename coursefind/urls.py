@@ -20,7 +20,8 @@ handler404 = 'main.views.page_not_found'
 
 urlpatterns = [
     url(r'^$', main.views.Home.as_view()),
-    url(r'^about[/]?', main.views.About.as_view()),
-    url(r'^disclaimer[/]?', main.views.Disclaimer.as_view()),
-    url(r'^courses/', include('courses.urls'))
+    url(r'^search[/]?', main.views.Home.as_view()),
+    url(r'^about[/]?', main.views.Home.as_view()),
+    url(r'^disclaimer[/]?', main.views.Home.as_view()),
+    url(r'^courses/', main.views.Home.as_view())
 ]

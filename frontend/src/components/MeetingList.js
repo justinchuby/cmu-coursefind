@@ -4,52 +4,15 @@ import Collapsible from './Collapsible'
 import { daysToString, getFullBuildingName, convertName } from '../helpers'
 
 
-class CourseList extends Component {
+class MeetingList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      courses: props.courses,
-      // get the lectures out from each course and reduce them from 2D
-      // array to 1D array
-      lectures: props.courses.map(
-        course => {
-          return course.lectures
-        }).reduce(
-        (a, b) => a.concat(b), []
-        ),
-      sections: props.courses.map(
-        course => {
-          return course.sections
-        }).reduce(
-        (a, b) => a.concat(b), []
-        )
-      // TODO: how should I manipulate the course list?
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      courses: nextProps.courses,
-      // get the lectures out from each course and reduce them from 2D
-      // array to 1D array
-      lectures: nextProps.courses.map(
-        course => {
-          return course.lectures
-        }).reduce(
-        (a, b) => a.concat(b), []
-        ),
-      sections: nextProps.courses.map(
-        course => {
-          return course.sections
-        }).reduce(
-        (a, b) => a.concat(b), []
-        )
-    })
+    //   // TODO: how should I manipulate the course list?
   }
 
   render() {
     // TODO: fix this
-    const meetingList = this.state.lectures.map(
+    const meetingList = this.props.meetings.map(
       meeting => {
         // TODO: fix this
         const currentCourseTime = meeting.times[0]
@@ -155,4 +118,4 @@ class CourseList extends Component {
   }
 }
 
-export default CourseList;
+export default MeetingList;

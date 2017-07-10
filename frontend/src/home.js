@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
-import CourseList from './components/CourseList'
+import MeetingList from './components/MeetingList'
 import { Course } from './utils/cmu_course'
 import { getSemesterFromDate, searchTips } from './helpers'
 
 var moment = require('moment');
+let $ = window.jQuery = require('jquery');
+require('materialize-css/dist/js/materialize');
 
 // import 'url-search-params-polyfill';
 // const search = props.location.search; // could be '?foo=bar'
@@ -15,18 +17,38 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: []
+      courses: [],
+      lectures: [],
+      sections: []
     }
+  }
+
+  componentDidMount() {
+    $('ul.tabs').tabs();
   }
 
   componentWillMount() {
     // TODO: fix here
-    // fetch('https://api.cmucoursefind.xyz/course/v1/building/dh/room/2315/')
     fetch('https://api.cmucoursefind.xyz/course/v1/instructor/david%20kosbie/')
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
+        let courses = jsonResponse.courses.map(course => {return new Course(course)})
         this.setState({
-          courses: jsonResponse.courses.map(course => {return new Course(course)})
+          courses: courses,
+          // get the lectures out from each course and reduce them from 2D
+          // array to 1D array
+          lectures: courses.map(
+            course => {
+              return course.lectures
+            }).reduce(
+            (a, b) => a.concat(b), []
+            ),
+          sections: courses.map(
+            course => {
+              return course.sections
+            }).reduce(
+            (a, b) => a.concat(b), []
+            )
         })
       })
   }
@@ -40,7 +62,22 @@ class Home extends Component {
         mainContent={
           (this.state.courses) ? (
             <div className="container">
-              <CourseList courses={this.state.courses} />
+              <div className="row">
+                <div className="col s12">
+                  <ul className="tabs">
+                    <li className="tab col s3"><a href="#lec">Lectures</a></li>
+                    <li className="tab col s3"><a href="#sec">Sections</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="lec" className="row">
+                <MeetingList meetings={this.state.lectures} />
+              </div>
+              <div id="sec" className="row">
+                <MeetingList meetings={this.state.sections} />
+              </div>
+
             </div>
           ) : (
             null

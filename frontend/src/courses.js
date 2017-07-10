@@ -25,7 +25,7 @@ class Courses extends Component {
     }
   }
 
-  loadCourse(course) {
+  displayCourse(course) {
     let courseObj = new Course(course)
     this.setState({
       course: courseObj,
@@ -34,12 +34,11 @@ class Courses extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.params)
     fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         if (jsonResponse.course) {
-          this.loadCourse(jsonResponse.course)
+          this.displayCourse(jsonResponse.course)
         }
         // TODO: deal with the case when there's a server error
         // TODO: deal with 404's
