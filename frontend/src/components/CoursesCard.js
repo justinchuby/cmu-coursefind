@@ -35,7 +35,7 @@ class CoursesCard extends Component {
           <br/><br/>
         </div>
         <div className="col s10 m5 offset-m2">
-          Units: {course.units ? course.units : "Unknown"}
+          Units: {course.units ? course.units.toFixed(1) : "Unknown"}
         </div>
       </div>
     )
