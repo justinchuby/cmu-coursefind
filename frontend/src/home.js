@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Layout from './components/Layout'
 import MeetingList from './components/MeetingList'
 import { Course } from './utils/cmu_course'
-import { getSemesterFromDate, searchTips } from './helpers'
+import { getSemesterFromDate, searchTips, currentISOTime } from './helpers'
 
 var moment = require('moment');
 let $ = window.jQuery = require('jquery');
@@ -28,8 +28,7 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    // TODO: fix here
-    fetch('https://api.cmucoursefind.xyz/course/v1/instructor/david%20kosbie/')
+    fetch('https://api.cmucoursefind.xyz/course/v1/datetime/now/timespan/60/')
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         let courses = jsonResponse.courses.map(course => {return new Course(course)})
@@ -37,6 +36,11 @@ class Home extends Component {
           courses: courses,
           // get the lectures out from each course and reduce them from 2D
           // array to 1D array
+
+          // TODO: write functions to filter and sort the sections before
+          // display
+          // make the sorting function flexible
+
           lectures: courses.map(
             course => {
               return course.lectures

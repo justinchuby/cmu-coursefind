@@ -24,6 +24,8 @@ class App extends Component {
           <Route exact path="/disclaimer" component={Disclaimer}/>
           <Route exact path="/courses/:courseid(\d{2}-\d{3})" component={Courses}/>
           <Route exact path="/courses/:courseid(\d{2}-\d{3})/:term" component={Courses}/>
+          {/* TODO: display the search query text on search box when access from url  */}
+          <Route exact path="/search" component={Home}/>
         </Switch>
       </Router>
     )

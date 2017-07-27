@@ -50,7 +50,8 @@ class Meeting {
   }
 
   isHappeningOn(day) {
-    for (let timeObj in this.times) {
+    // day is an integer in [0...6]
+    for (const timeObj of this.times) {
       if (timeObj.isHappeningOn(day)) {
         return true
       }
@@ -59,7 +60,7 @@ class Meeting {
   }
 
   isHappeningAt(date_time) {
-    for (let timeObj in this.times) {
+    for (const timeObj of this.times) {
       if (timeObj.isHappeningAt(date_time)) {
         return true
       }
@@ -67,8 +68,18 @@ class Meeting {
     return false
   }
 
-  // nextTime() {
+  isHappeningNow() {
+    return this.isHappeningAt(moment())
+  }
 
+  // nextTime() {
+  //   next = null
+  //   for (const timeObj of this.times) {
+  //     if (next === null) {
+  //       next = timeObj
+  //     } else {
+  //     }
+  //   }
   // }
 
 }
@@ -101,5 +112,9 @@ class TimeObj {
         return true
     }
     return false
+  }
+
+  isHappeningNow() {
+    return this.isHappeningAt(moment())
   }
 }
