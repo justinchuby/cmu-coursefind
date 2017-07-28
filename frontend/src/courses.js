@@ -34,7 +34,13 @@ class Courses extends Component {
   }
 
   componentWillMount() {
-    fetch(`https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/`)
+    let url
+    if (this.props.match.params.term) {
+      url = `https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/term/${this.props.match.params.term}/`
+    } else {
+      url = `https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/`
+    }
+    fetch(url)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         if (jsonResponse.course) {
