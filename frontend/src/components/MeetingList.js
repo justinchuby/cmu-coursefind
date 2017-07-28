@@ -20,22 +20,36 @@ class MeetingList extends Component {
           (time, index) => {
             return (
               <span key={index}>
-                {time.days && `${daysToString(time.days)}  | `}
+                {time.days && `${daysToString(time.days)}`}
                 {/* TODO: check the DNM case */}
-                {getFullBuildingName(time.building) ? (
-                  <span>
-                    <a className="amber-text text-accent-4"
-                      href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
-                      target="_blank" rel="nofollow">
-                      {getFullBuildingName(time.building)}
-                    </a>
-                    &nbsp;
-                    {time.room}
-                  </span>
+                {
+                  time.building ? (
+                    getFullBuildingName(time.building) ? (
+                      /* if the building abbreviation is known,
+                         display the full name
+                      */
+                      <span>
+                        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a className="amber-text text-accent-4"
+                          href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
+                          target="_blank" rel="nofollow">
+                          {getFullBuildingName(time.building)}
+                        </a>
+                        &nbsp;
+                        {time.room}
+                      </span>
+                    ) : (
+                      /* if the building abbreviation is not known, display
+                         the abbr
+                      */
+                      <span>
+                        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+                        {time.building} {time.room}
+                      </span>
+                    )
                   ) : (
-                    <span>
-                      {time.building} {time.room}
-                    </span>
+                    /* if the building is null */
+                    null
                   )
                 }
                 <br />
