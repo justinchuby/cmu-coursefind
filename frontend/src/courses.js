@@ -34,24 +34,9 @@ class Courses extends Component {
     })
   }
 
-  // componentWillMount() {
-  //   let url
-  //   // if (this.props.match.params.term) {
-  //   //   url = `https://api.cmucoursefind.xyz/course/v1/course/${this.props.match.params.courseid}/term/${this.props.match.params.term}/`
-  //   // } else {
-  //   //   url = `https://api.cmucoursefind.xyz/course/v1/courseid/${this.props.match.params.courseid}/`
-  //   // }
-  //   url = `https://api.cmucoursefind.xyz/course/v1/courseid/${this.props.match.params.courseid}/`
-  //   fetch(url)
-  //     .then((response) => { return response.json() })
-  //     .then((jsonResponse) => {
-  //       if (jsonResponse.courses) {
-  //         this.displayCourse(jsonResponse.courses)
-  //       }
-  //       // TODO: deal with the case when there's a server error
-  //       // TODO: deal with 404's
-  //     })
-  // }
+  componentWillMount() {
+    this.componentWillUpdate()
+  }
 
   componentWillUpdate() {
     let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${this.props.match.params.courseid}/`
