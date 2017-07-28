@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import Layout from './components/Layout'
 import MeetingList from './components/MeetingList'
 import { Course } from './utils/cmu_course'
-import { getSemesterFromDate, searchTips, currentISOTime } from './helpers'
+import {
+  getSemesterFromDate,
+  searchTips,
+  currentISOTime,
+  getMini } from './helpers'
 
 var moment = require('moment');
 let $ = window.jQuery = require('jquery');
@@ -31,7 +35,8 @@ class Home extends Component {
     fetch('https://api.cmucoursefind.xyz/course/v1/datetime/now/timespan/60/')
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
-        let courses = jsonResponse.courses.map(course => {return new Course(course)})
+        let courses = jsonResponse.courses.map(course => {return new Course(course)}) || []
+        // Makes sure courses is an array
         this.setState({
           courses: courses,
           // get the lectures out from each course and reduce them from 2D
@@ -45,13 +50,21 @@ class Home extends Component {
             course => {
               return course.lectures
             }).reduce(
-            (a, b) => a.concat(b), []
+              (a, b) => a.concat(b), []
+            ).filter(
+              meeting => {
+                return filterMeeting(meeting)
+              }
             ),
           sections: courses.map(
             course => {
               return course.sections
             }).reduce(
-            (a, b) => a.concat(b), []
+              (a, b) => a.concat(b), []
+            ).filter(
+              meeting => {
+                return filterMeeting(meeting)
+              }
             )
         })
       })
@@ -64,28 +77,49 @@ class Home extends Component {
           searchTips: searchTips
         }}
         mainContent={
-          (this.state.courses) ? (
-            <div className="container">
-              <div className="row">
-                <div className="col s12">
-                  <ul className="tabs">
-                    <li className="tab col s3"><a href="#lec">Lectures</a></li>
-                    <li className="tab col s3"><a href="#sec">Sections</a></li>
-                  </ul>
-                </div>
+          <div className="container">
+            <div className="row">
+              <div className="col s12">
+                <ul className="tabs">
+                  <li className="tab col s3"><a href="#lec">Lectures</a></li>
+                  <li className="tab col s3"><a href="#sec">Sections</a></li>
+                </ul>
               </div>
-
-              <div id="lec" className="row">
-                <MeetingList meetings={this.state.lectures} />
-              </div>
-              <div id="sec" className="row">
-                <MeetingList meetings={this.state.sections} />
-              </div>
-
             </div>
-          ) : (
-            null
-          )
+          
+            <div id="lec" className="row">
+              {(this.state.lectures.length !== 0) ? (
+                <div>
+                  <p className="flow-text grey-text text-darken-1">
+                    There are currently {this.state.lectures.length} lectures.
+                  </p>
+                  <MeetingList meetings={this.state.lectures} />
+                </div>
+              ) : (
+                <div>
+                  <p className="flow-text grey-text text-darken-1">
+                    No lectures happening at this time. Take a break :D
+                  </p>
+                </div>
+              )}
+            </div>
+            <div id="sec" className="row">
+              {(this.state.sections.length !== 0) ? (
+                <div>
+                  <p className="flow-text grey-text text-darken-1">
+                    There are currently {this.state.sections.length} sections.
+                  </p>
+                  <MeetingList meetings={this.state.sections} />
+                </div>
+              ) : (
+                <div>
+                  <p className="flow-text grey-text text-darken-1">
+                    No sections happening at this time. Take a break :D
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         }
         footerProps={{
           leftFooterText: getSemesterFromDate(moment()),
@@ -93,6 +127,20 @@ class Home extends Component {
         }}
       />
     )
+  }
+}
+
+function filterMeeting(meeting) {
+  if (!meeting.isHappeningNow() && !meeting.willHappenIn(60)) {
+    // Will not happen in an hour & not happening now
+    return false
+  }
+  if (meeting.location !== 'Pittsburgh, Pennsylvania') {
+    return false
+  }
+  if (meeting.course.mini !== 0 && meeting.course.mini !== getMini()) {
+    // Not the correct mini
+    return false
   }
 }
 

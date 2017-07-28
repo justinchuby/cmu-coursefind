@@ -16,6 +16,11 @@ export class Course {
     this.coreqs_obj = courseDict.coreqs_obj
     this.rundate = courseDict.rundate
     this.semester = courseDict.semester
+    this.mini = 0
+    const mini_match = this.semester.match(/(\d|[a-zA-Z])(\d)/)
+    if (mini_match !== null) {
+      this.mini = mini_match[2]
+    }
 
     this.lectures = courseDict.lectures.map(
       meeting => {
@@ -47,6 +52,7 @@ class Meeting {
       time => {
         return new TimeObj(time)
       })
+    this.location = this.times[0].location
   }
 
   isHappeningOn(day) {
@@ -70,6 +76,15 @@ class Meeting {
 
   isHappeningNow() {
     return this.isHappeningAt(moment())
+  }
+
+  willHappenIn(minute) {
+    for (const timeObj of this.times) {
+      if (timeObj.willHappenIn(minute)) {
+        return true
+      }
+    }
+    return false
   }
 
   // nextTime() {
@@ -116,5 +131,15 @@ class TimeObj {
 
   isHappeningNow() {
     return this.isHappeningAt(moment())
+  }
+
+  willHappenInFrom(minute, dateTime) {
+    dateTime.add(minute)
+    return this.isHappeningAt(dateTime)
+  }
+
+  willHappenIn(minute) {
+    // NOTE: KNOWN BUG: Does not deal with next-day events
+    return this.willHappenInFrom(minute, moment())
   }
 }
