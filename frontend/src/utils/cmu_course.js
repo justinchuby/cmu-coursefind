@@ -47,10 +47,17 @@ class Meeting {
     this.name = meetingDict["name"]
     this.instructors = meetingDict["instructors"]
     this.times = meetingDict["times"].map(
-      time => {
+      (time) => {
         return new TimeObj(time)
       })
     this.location = this.times[0].location
+    this.days = Array.from(
+      new Set(
+        this.times.map((timeObj) => { return timeObj.days }).reduce(
+          (a, b) => a.concat(b), []
+        )
+      )
+    ).sort()
   }
 
   isHappeningOn(day) {
@@ -85,15 +92,33 @@ class Meeting {
     return false
   }
 
-  // nextTime() {
-  //   next = null
-  //   for (const timeObj of this.times) {
-  //     if (next === null) {
-  //       next = timeObj
-  //     } else {
-  //     }
-  //   }
-  // }
+  currentTimeObj() {
+    for (const timeObj of this.times) {
+      if (timeObj.isHappeningAt(moment())) {
+        return timeObj
+      }
+    }
+    return null
+  }
+
+  nextTimeObj() {
+    // next time object today
+    let next = null;
+    for (const timeObj of this.times) {
+      const day = moment().isoWeekday() % 7
+      if (timeObj.isHappeningOn(day) && timeObj.begin.isAfter(moment())) {
+        // Today and begins after now
+        if (!next) {
+          // next is null
+          next = timeObj
+        } else if (timeObj.begin.isBefore(next.begin)) {
+          // next takes place after this timeObj, so use timeObj as the new next
+          next = timeObj
+        }
+      }
+    }
+    return next
+  }
 
 }
 
@@ -133,7 +158,7 @@ class TimeObj {
   }
 
   willHappenInFrom(minute, dateTime) {
-    dateTime.add(minute)
+    dateTime.add(minute, 'minutes')
     return this.isHappeningAt(dateTime)
   }
 

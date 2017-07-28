@@ -22,12 +22,9 @@ class Home extends Component {
     this.state = {
       courses: null,
       lectures: null,
-      sections: null
+      sections: null,
+      tick: false
     }
-  }
-
-  componentDidMount() {
-    $('ul.tabs').tabs();
   }
 
   componentWillMount() {
@@ -67,6 +64,20 @@ class Home extends Component {
             )
         })
       })
+  }
+
+  componentDidMount() {
+    $('ul.tabs').tabs();
+    this.interval = setInterval(() => this.tick(), 60000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  tick() {
+    // Rerender the page every minute
+    this.setState({tick: !this.state.tick})
   }
 
   render() {
@@ -144,7 +155,6 @@ class Home extends Component {
 
 function filterMeeting(meeting) {
   if (!meeting.isHappeningNow() && !meeting.willHappenIn(60)) {
-    // console.log(meeting)
     // Will not happen in an hour & not happening now
     return false
   }

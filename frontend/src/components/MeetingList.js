@@ -14,8 +14,7 @@ class MeetingList extends Component {
     // TODO: fix this
     const meetingList = this.props.meetings.map(
       meeting => {
-        // TODO: fix this
-        const currentCourseTime = meeting.times[0]
+        const currentCourseTime = meeting.currentTimeObj() || meeting.nextTimeObj()
         const courseMeeingText = meeting.times.map(
           (time, index) => {
             return (
@@ -83,18 +82,41 @@ class MeetingList extends Component {
               </span>
             ),
             rightHeaderText: (
-              <span>
-                {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
-                {/* TODO: Fix here */}
-                {currentCourseTime.begin && currentCourseTime.begin.fromNow()}
-              </span>
+              currentCourseTime ? (
+                <span>
+                  {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+                  {(currentCourseTime.isHappeningNow()) ? (
+                      `Ends ${currentCourseTime.end.fromNow()}`
+                    ) : (
+                      `Begins ${currentCourseTime.begin.fromNow()}`
+                    )
+                  }
+                </span>
+              ) : (
+                <span>
+                  {daysToString(meeting.days)}
+                </span>
+              )
             ),
             rightHeaderTextShort: (
-              <span>
-                {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
-                {/* TODO: Fix here */}
-                {currentCourseTime.begin && currentCourseTime.begin.fromNow()}
-              </span>
+              // Same with rightHeaderText
+              currentCourseTime ? (
+                <span>
+                  {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+                  {(currentCourseTime.isHappeningNow()) ? (
+                      `Ends ${currentCourseTime.end.fromNow()}`
+                    ) : (
+                      `Begins ${currentCourseTime.begin.fromNow()}`
+                    )
+                  }
+                </span>
+              ) : (
+                <span>
+                  {console.log(meeting.days)}
+                  {console.log(daysToString(meeting.days))}
+                  {daysToString(meeting.days)}
+                </span>
+              )
             ),
             bodyText: (
               <p className="grey-text text-lighten-5">
