@@ -12,6 +12,7 @@ import Home from './home'
 import About from './about'
 import Disclaimer from './disclaimer'
 import Courses from './courses'
+import Search from './search'
 
 
 class App extends Component {
@@ -25,7 +26,7 @@ class App extends Component {
           <Route exact path="/courses/:courseid(\d{2}-\d{3})" component={Courses}/>
           <Route exact path="/courses/:courseid(\d{2}-\d{3})/:term" component={Courses}/>
           {/* TODO: display the search query text on search box when access from url  */}
-          <Route exact path="/search" component={Home}/>
+          <Route exact path="/search" component={Search}/>
         </Switch>
       </Router>
     )
