@@ -142,7 +142,7 @@ export function randomPick(myArray) {
 
 export function getMini(date) {
   let mMonth = (month) => { return month - 1 }
-  if (date === null) {
+  if (!date) {
     date = moment()
   } else {
     date.year(moment().year())
