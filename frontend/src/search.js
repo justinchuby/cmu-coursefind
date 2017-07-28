@@ -67,7 +67,6 @@ class Search extends Component {
   }
 
   render() {
-    console.log(this.state.lectures)
     return (
       <Layout
         navbarProps={{

@@ -131,6 +131,7 @@ class Home extends Component {
 
 function filterMeeting(meeting) {
   if (!meeting.isHappeningNow() && !meeting.willHappenIn(60)) {
+    // console.log(meeting)
     // Will not happen in an hour & not happening now
     return false
   }
@@ -141,6 +142,7 @@ function filterMeeting(meeting) {
     // Not the correct mini
     return false
   }
+  return true
 }
 
 export default Home;

@@ -113,7 +113,6 @@ class MeetingList extends Component {
                 {courseMeeingText}
                 <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
                 {meeting.instructors.map(instructor => {
-                  console.log(instructor)
                   return convertName(instructor)
                 }).join(", ")
                 }
