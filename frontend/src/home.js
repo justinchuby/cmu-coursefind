@@ -88,14 +88,14 @@ class Home extends Component {
           
             <div id="lec" className="row">
               {(this.state.lectures.length !== 0) ? (
-                <div>
+                <div className="col s12">
                   <p className="flow-text grey-text text-darken-1">
                     There are currently {this.state.lectures.length} lectures.
                   </p>
                   <MeetingList meetings={this.state.lectures} />
                 </div>
               ) : (
-                <div>
+                <div className="col s12">
                   <p className="flow-text grey-text text-darken-1">
                     No lectures happening at this time. Take a break :D
                   </p>
@@ -104,14 +104,14 @@ class Home extends Component {
             </div>
             <div id="sec" className="row">
               {(this.state.sections.length !== 0) ? (
-                <div>
+                <div className="col s12">
                   <p className="flow-text grey-text text-darken-1">
                     There are currently {this.state.sections.length} sections.
                   </p>
                   <MeetingList meetings={this.state.sections} />
                 </div>
               ) : (
-                <div>
+                <div className="col s12">
                   <p className="flow-text grey-text text-darken-1">
                     No sections happening at this time. Take a break :D
                   </p>
