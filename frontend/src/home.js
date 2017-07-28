@@ -89,20 +89,23 @@ class Home extends Component {
             <div id="lec" className="row">
               {(this.state.lectures) ? (
                 (this.state.lectures.length !== 0) ? (
-                  <div className="col s12">
-                    <p className="flow-text grey-text text-darken-1">
-                      There are currently {this.state.lectures.length} lectures.
-                    </p>
-                    <MeetingList meetings={this.state.lectures} />
-                  </div>
+                    // some lectures are happening now
+                    <div className="col s12">
+                      <p className="flow-text grey-text text-darken-1">
+                        There are currently {this.state.lectures.length} lectures.
+                      </p>
+                      <MeetingList meetings={this.state.lectures} />
+                    </div>
                   ) : (
-                  <div className="col s12">
-                    <p className="flow-text grey-text text-darken-1">
-                      No lectures happening at this time. Take a break :D
-                    </p>
-                  </div>
+                    // no lectures now
+                    <div className="col s12">
+                      <p className="flow-text grey-text text-darken-1">
+                        No lectures happening at this time. Take a break :D
+                      </p>
+                    </div>
                   )
                 ) : (
+                  // courses not loaded
                   null
                 )
               }
