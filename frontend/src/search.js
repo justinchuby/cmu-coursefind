@@ -83,7 +83,7 @@ class Search extends Component {
                 </ul>
               </div>
             </div>
-          
+
             <div id="lec" className="row">
               {(this.state.lectures.length !== 0) ? (
                 <div>
@@ -95,7 +95,7 @@ class Search extends Component {
               ) : (
                 <div>
                   <p className="flow-text grey-text text-darken-1">
-                    No lectures are found.
+                    No lectures were found.
                   </p>
                 </div>
               )}
@@ -111,7 +111,7 @@ class Search extends Component {
               ) : (
                 <div>
                   <p className="flow-text grey-text text-darken-1">
-                    No sections are found.
+                    No sections were found.
                   </p>
                 </div>
               )}

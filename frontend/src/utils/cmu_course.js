@@ -107,11 +107,12 @@ class TimeObj {
     this.room = timeDict['room']
     /* http://momentjs.com/docs/#/parsing/string-format/ */
     // TODO: check if moment works
-    try {
-      this.begin = moment.tz(timeDict["begin"], "HH:mmA", "America/New_York")
-      this.end = moment.tz(timeDict["end"], "HH:mmA", "America/New_York")
-    } catch (err) {
+    this.begin = moment.tz(timeDict["begin"], "HH:mmA", "America/New_York")
+    this.end = moment.tz(timeDict["end"], "HH:mmA", "America/New_York")
+    if (!this.begin.isValid()) {
       this.begin = null
+    }
+    if (!this.end.isValid()) {
       this.end = null
     }
   }

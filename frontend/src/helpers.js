@@ -63,7 +63,10 @@ export function titleCase(str) {
 
 export function convertName(str) {
   const name = str.split(", ")
-  return `${name[1]} ${name[0]}`
+  if (name.length !== 1) {
+    return `${name[1]} ${name[0]}`
+  }
+  return name[0]
 }
 
 

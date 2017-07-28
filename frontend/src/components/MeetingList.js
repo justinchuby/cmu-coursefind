@@ -20,9 +20,9 @@ class MeetingList extends Component {
           (time, index) => {
             return (
               <span key={index}>
-                {daysToString(time.days)} &nbsp; | &nbsp;
+                {time.days && `${daysToString(time.days)}  | `}
                 {/* TODO: check the DNM case */}
-                {getFullBuildingName(time.building) &&
+                {getFullBuildingName(time.building) ? (
                   <span>
                     <a className="amber-text text-accent-4"
                       href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
@@ -32,6 +32,11 @@ class MeetingList extends Component {
                     &nbsp;
                     {time.room}
                   </span>
+                  ) : (
+                    <span>
+                      {time.building} {time.room}
+                    </span>
+                  )
                 }
                 <br />
                 {time.begin &&
@@ -67,14 +72,14 @@ class MeetingList extends Component {
               <span>
                 {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
                 {/* TODO: Fix here */}
-                {currentCourseTime.begin.fromNow()}
+                {currentCourseTime.begin && currentCourseTime.begin.fromNow()}
               </span>
             ),
             rightHeaderTextShort: (
               <span>
                 {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
                 {/* TODO: Fix here */}
-                {currentCourseTime.begin.fromNow()}
+                {currentCourseTime.begin && currentCourseTime.begin.fromNow()}
               </span>
             ),
             bodyText: (
@@ -94,6 +99,7 @@ class MeetingList extends Component {
                 {courseMeeingText}
                 <span className="grey-text text-lighten-2">Instructor:</span> &nbsp;
                 {meeting.instructors.map(instructor => {
+                  console.log(instructor)
                   return convertName(instructor)
                 }).join(", ")
                 }

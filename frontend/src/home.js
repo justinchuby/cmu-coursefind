@@ -5,7 +5,6 @@ import { Course } from './utils/cmu_course'
 import {
   getSemesterFromDate,
   searchTips,
-  currentISOTime,
   getMini } from './helpers'
 
 var moment = require('moment');
