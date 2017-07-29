@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Layout from './components/Layout'
-import { getSemesterFromDate, searchTips } from './helpers'
+import { getCurrentSemester, searchTips } from './helpers'
+import { Helmet } from 'react-helmet'
 
-var moment = require('moment');
 
 class About extends Component {
   render() {
@@ -37,16 +37,22 @@ class About extends Component {
       </div>
     )
     return (
-      <Layout
-        navbarProps={{
-          searchTips: searchTips
-        }}
-        mainContent={mainText}
-        footerProps={{
-          leftFooterText: getSemesterFromDate(moment()),
-          rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
-        }}
-      />
+      <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>About - CMU Course Find</title>
+        </Helmet>
+        <Layout
+          navbarProps={{
+            searchTips: searchTips
+          }}
+          mainContent={mainText}
+          footerProps={{
+            leftFooterText: getCurrentSemester(),
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+          }}
+        />
+      </div>
     )
   }
 }
