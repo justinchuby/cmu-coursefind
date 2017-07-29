@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Layout from './components/Layout'
 import MeetingList from './components/MeetingList'
 import { Course } from './utils/cmu_course'
+import { Helmet } from 'react-helmet'
 import {
   getCurrentSemester,
   searchTips,
@@ -81,73 +82,80 @@ class Home extends Component {
 
   render() {
     return (
-      <Layout
-        navbarProps={{
-          searchTips: searchTips
-        }}
-        mainContent={
-          <div className="container">
-            <div className="row">
-              <div className="col s12">
-                <ul className="tabs">
-                  <li className="tab col s3"><a href="#lec">Lectures</a></li>
-                  <li className="tab col s3"><a href="#sec">Sections</a></li>
-                </ul>
+      <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>CMU Course Find</title>
+          <meta name="description" content="A better course finder for Carnegie Mellon University. Course description, schedule, instructor info, etc. See classes that are happening and discover new courses!"/>
+        </Helmet>
+        <Layout
+          navbarProps={{
+            searchTips: searchTips
+          }}
+          mainContent={
+            <div className="container">
+              <div className="row">
+                <div className="col s12">
+                  <ul className="tabs">
+                    <li className="tab col s3"><a href="#lec">Lectures</a></li>
+                    <li className="tab col s3"><a href="#sec">Sections</a></li>
+                  </ul>
+                </div>
+              </div>
+            
+              <div id="lec" className="row">
+                {(this.state.lectures) ? (
+                  (this.state.lectures.length !== 0) ? (
+                      // some lectures are happening now
+                      <div className="col s12">
+                        <p className="flow-text grey-text text-darken-1">
+                          There are currently {this.state.lectures.length} lectures.
+                        </p>
+                        <MeetingList meetings={this.state.lectures} />
+                      </div>
+                    ) : (
+                      // no lectures now
+                      <div className="col s12">
+                        <p className="flow-text grey-text text-darken-1">
+                          No lectures happening at this time. Take a break :D
+                        </p>
+                      </div>
+                    )
+                  ) : (
+                    // courses not loaded
+                    null
+                  )
+                }
+              </div>
+              <div id="sec" className="row">
+                {(this.state.sections) ? (
+                  (this.state.sections.length !== 0) ? (
+                    <div className="col s12">
+                      <p className="flow-text grey-text text-darken-1">
+                        There are currently {this.state.sections.length} sections.
+                      </p>
+                      <MeetingList meetings={this.state.sections} />
+                    </div>
+                    ) : (
+                    <div className="col s12">
+                      <p className="flow-text grey-text text-darken-1">
+                        No sections happening at this time. Take a break :D
+                      </p>
+                    </div>
+                    )
+                  ) : (
+                    null
+                  )
+                }
               </div>
             </div>
-          
-            <div id="lec" className="row">
-              {(this.state.lectures) ? (
-                (this.state.lectures.length !== 0) ? (
-                    // some lectures are happening now
-                    <div className="col s12">
-                      <p className="flow-text grey-text text-darken-1">
-                        There are currently {this.state.lectures.length} lectures.
-                      </p>
-                      <MeetingList meetings={this.state.lectures} />
-                    </div>
-                  ) : (
-                    // no lectures now
-                    <div className="col s12">
-                      <p className="flow-text grey-text text-darken-1">
-                        No lectures happening at this time. Take a break :D
-                      </p>
-                    </div>
-                  )
-                ) : (
-                  // courses not loaded
-                  null
-                )
-              }
-            </div>
-            <div id="sec" className="row">
-              {(this.state.sections) ? (
-                (this.state.sections.length !== 0) ? (
-                  <div className="col s12">
-                    <p className="flow-text grey-text text-darken-1">
-                      There are currently {this.state.sections.length} sections.
-                    </p>
-                    <MeetingList meetings={this.state.sections} />
-                  </div>
-                  ) : (
-                  <div className="col s12">
-                    <p className="flow-text grey-text text-darken-1">
-                      No sections happening at this time. Take a break :D
-                    </p>
-                  </div>
-                  )
-                ) : (
-                  null
-                )
-              }
-            </div>
-          </div>
-        }
-        footerProps={{
-          leftFooterText: getCurrentSemester(),
-          rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
-        }}
-      />
+          }
+          footerProps={{
+            leftFooterText: getCurrentSemester(),
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+          }}
+        />
+      </div>
     )
   }
 }

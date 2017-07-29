@@ -8,6 +8,7 @@ import CoursesInstructorChips from './components/CoursesInstructorChips'
 import { Course } from './utils/cmu_course'
 import { searchTips } from './helpers'
 import { getDetailPageColor } from './utils/detailsPageColor'
+import { Helmet } from 'react-helmet'
 
 
 class Courses extends Component {
@@ -35,7 +36,7 @@ class Courses extends Component {
     })
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.componentWillReceiveProps(this.props)
   }
 
@@ -54,87 +55,98 @@ class Courses extends Component {
 
   render() {
     return (
-      <Layout
-        navbarProps={{
-          searchTips: searchTips,
-          color: this.state.colors.NavbarColor
-        }}
-        mainContent={
-          (this.state.course) ? (
-            /* course loaded */
-            <div>
-              <div className="row">
-                <div className="col s12 l9">
-                  <CoursesCard
-                    course={this.state.course}
-                    colors={this.state.colors}
-                  />
-                </div>
-              </div>
-              <div className="container">
-                <div className="section">
-                  <h4>Description</h4>
-                  <br />
-                  <div className="row">
-                    <div className="col s12 m10">
-                      <CoursesDescription content={this.state.course.desc}/>
-                    </div>
+      <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          {this.state.course && (
+            <title>{this.state.course.courseid}: {this.state.course.name} - {this.state.course.semester} - CMU Course Find</title>
+          )}
+          {this.state.course && (
+            <meta name="description" content={`${this.state.course.courseid}: ${this.state.course.name}  ${this.state.course.desc}`}/>
+          )}
+        </Helmet>
+        <Layout
+          navbarProps={{
+            searchTips: searchTips,
+            color: this.state.colors.NavbarColor
+          }}
+          mainContent={
+            (this.state.course) ? (
+              /* course loaded */
+              <div>
+                <div className="row">
+                  <div className="col s12 l9">
+                    <CoursesCard
+                      course={this.state.course}
+                      colors={this.state.colors}
+                    />
                   </div>
                 </div>
-                 <div className="section">
-                  <h4>Instructors</h4>
-                  <br />
-                  <div className="row">
-                    <div className="col s12 m10">
-                      
-                      <CoursesInstructorChips
-                        instructors={this.state.course.instructors} />
+                <div className="container">
+                  <div className="section">
+                    <h4>Description</h4>
+                    <br />
+                    <div className="row">
+                      <div className="col s12 m10">
+                        <CoursesDescription content={this.state.course.desc}/>
+                      </div>
                     </div>
                   </div>
-                </div>
-                {
-                  (this.state.course.lectures.length !== 0) ? (
-                    <div className="section">
-                      <h4>Lectures</h4>
-                      <br />
-                      <CoursesLectureCards 
-                        meetings={this.state.course.lectures}
-                        colors={this.state.colors}
-                      />
+                  <div className="section">
+                    <h4>Instructors</h4>
+                    <br />
+                    <div className="row">
+                      <div className="col s12 m10">
+                        
+                        <CoursesInstructorChips
+                          instructors={this.state.course.instructors} />
+                      </div>
                     </div>
-                  ) : (
-                    null
-                  )
-                }
-                {
-                  (this.state.course.sections.length !== 0) ? (
-                    <div className="section">
-                      <h4>Sections</h4>
-                      <br />
-                      <CoursesSectionList 
-                        meetings={this.state.course.sections}
-                        colors={this.state.colors}
-                      />
-                    </div>
-                  ) : (
-                    null
-                  )
-                }
-                <div className="section">
-                  <h4>Ratings</h4>
-                  <br />
+                  </div>
+                  {
+                    (this.state.course.lectures.length !== 0) ? (
+                      <div className="section">
+                        <h4>Lectures</h4>
+                        <br />
+                        <CoursesLectureCards 
+                          meetings={this.state.course.lectures}
+                          colors={this.state.colors}
+                        />
+                      </div>
+                    ) : (
+                      null
+                    )
+                  }
+                  {
+                    (this.state.course.sections.length !== 0) ? (
+                      <div className="section">
+                        <h4>Sections</h4>
+                        <br />
+                        <CoursesSectionList 
+                          meetings={this.state.course.sections}
+                          colors={this.state.colors}
+                        />
+                      </div>
+                    ) : (
+                      null
+                    )
+                  }
+                  <div className="section">
+                    <h4>Ratings</h4>
+                    <br />
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            null
-          )
-        }
-        footerProps={{
-          leftFooterText: this.state.course ? this.state.course.semester : '',
-          rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
-        }}
-      />
+            ) : (
+              null
+            )
+          }
+          footerProps={{
+            leftFooterText: this.state.course ? this.state.course.semester : '',
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+          }}
+        />
+      </div>
     )
   }
 }
