@@ -53,7 +53,7 @@ class Meeting {
     this.location = this.times[0].location
     this.days = Array.from(
       new Set(
-        this.times.map((timeObj) => { return timeObj.days }).reduce(
+        this.times.map((timeObj) => { return timeObj.days || [] }).reduce(
           (a, b) => a.concat(b), []
         )
       )
@@ -142,7 +142,7 @@ class TimeObj {
 
   isHappeningOn(day) {
     // day is an integer in [0...6]
-    return (this.days.includes(day))
+    return (this.days && this.days.includes(day))
   }
 
   isHappeningAt(dateTime) {
