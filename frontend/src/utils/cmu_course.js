@@ -19,7 +19,7 @@ export class Course {
     this.mini = 0
     const mini_match = this.semester.match(/(\d|[a-zA-Z])(\d)/)
     if (mini_match !== null) {
-      this.mini = parseInt(mini_match[2])
+      this.mini = parseInt(mini_match[2], 10)
     }
 
     this.lectures = courseDict.lectures.map(

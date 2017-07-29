@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import Collapsible from './Collapsible'
 import { daysToString, getFullBuildingName, convertName } from '../helpers'
 
