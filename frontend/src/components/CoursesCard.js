@@ -8,7 +8,7 @@ class CoursesCard extends Component {
     const course = this.props.course
     return (
       <div className="row">
-        <div className="col m9 offset-m2">
+        <div className="col m9 offset-m1 offset-l2">
           <h1 className={`light ${this.props.colors.courseidColor}`}>
             {course.courseid}
             <span className="hide-on-small-only flow-text"> {course.semester}</span>
@@ -26,7 +26,7 @@ class CoursesCard extends Component {
             <br/>
           </p>
         </div>
-        <div className="col s12 m5 offset-m2">
+        <div className="col s12 m5 offset-m1 offset-l2">
           Pre-requisites: {course.prereqs ? course.prereqs : "None"}
           <br/><br/>
         </div>
@@ -34,7 +34,7 @@ class CoursesCard extends Component {
           Co-requisites: {course.coreqs ? course.coreqs : "None"}
           <br/><br/>
         </div>
-        <div className="col s10 m5 offset-m2">
+        <div className="col s10 m5 offset-m1 offset-l2">
           Units: {course.units ? course.units.toFixed(1) : "Unknown"}
         </div>
       </div>
