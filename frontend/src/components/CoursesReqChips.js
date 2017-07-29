@@ -37,8 +37,11 @@ class CoursesReqChips extends Component {
 }
 
 function splitRequirementString(requirements) {
-  const re = /(\d{2}-\d{3})/
-  const splited = requirements.split(re).map(elem => (elem.replace(/^\s+/,"")))
+  const couseidRegx = /(\d{2}-\d{3})/
+  const leftTrimRegx = /^\s+/
+  const splited = requirements.split(couseidRegx).map(elem => 
+    (elem.replace(leftTrimRegx, ""))
+  )
   return splited
 }
 
