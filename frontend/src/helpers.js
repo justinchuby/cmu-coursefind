@@ -52,7 +52,6 @@ const _CMU_BUILDINGS_FROM_ABBR = {
 }
 
 export function getFullBuildingName(name) {
-  // TODO check here
   return _CMU_BUILDINGS_FROM_ABBR[name]
   // Return null if not exist
 }

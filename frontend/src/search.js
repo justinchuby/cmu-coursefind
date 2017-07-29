@@ -39,8 +39,6 @@ class Search extends Component {
     this.setState({query: query, loading: true})
     // const parsedQuery = parseQuery(query)
     // TODO: parse query
-    // TODO: how do I refresh the query string when it changes?
-    // TODO: fix fetch
     fetch(`https://api.cmucoursefind.xyz/course/v1/search/?text=${query}`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {

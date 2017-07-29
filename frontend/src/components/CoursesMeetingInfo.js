@@ -8,7 +8,6 @@ class CoursesMeetingInfo extends Component {
   render() {
     return (
       <span>
-        {/* TODO: bug - does not display */}
         {this.props.times.map(
           (time, index) => {
             return (

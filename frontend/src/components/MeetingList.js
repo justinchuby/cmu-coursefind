@@ -15,7 +15,6 @@ class MeetingList extends Component {
   }
 
   render() {
-    // TODO: fix this
     const meetingList = this.props.meetings.map(
       meeting => {
         const currentCourseTime = meeting.currentTimeObj() || meeting.nextTimeObj()
@@ -24,7 +23,6 @@ class MeetingList extends Component {
             return (
               <span key={index}>
                 {time.days && `${daysToString(time.days)}`}
-                {/* TODO: check the DNM case */}
                 {
                   time.building ? (
                     getFullBuildingName(time.building) ? (
