@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Card from './Card'
+import CoursesReqChips from './CoursesReqChips'
 
 class CoursesCard extends Component {
   // props: course, colors:{majorColor, textMajorColor, courseidColor, textAccentColor}
@@ -27,11 +28,25 @@ class CoursesCard extends Component {
           </p>
         </div>
         <div className="col s12 m5 offset-m1 offset-l2">
-          Pre-requisites: {course.prereqs ? course.prereqs : "None"}
+          Pre-requisites: {
+            course.prereqs ? (
+              <CoursesReqChips
+                requirements={course.prereqs}
+                colors={this.props.colors} />
+            ) : (
+              "None"
+            )}
           <br/><br/>
         </div>
         <div className="col s12 m5">
-          Co-requisites: {course.coreqs ? course.coreqs : "None"}
+          Co-requisites: {
+            course.coreqs ? (
+              <CoursesReqChips
+                requirements={course.coreqs}
+                colors={this.props.colors} />
+            ) : (
+              "None"
+            )}
           <br/><br/>
         </div>
         <div className="col s10 m5 offset-m1 offset-l2">
