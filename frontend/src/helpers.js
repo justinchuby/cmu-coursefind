@@ -163,6 +163,10 @@ export function getMini(date) {
   return 0
 }
 
+export function getCurrentSemester() {
+  return getSemesterFromDate(moment())
+}
+
 export function getSemesterFromDate(date) {
   if (date === null) {
     date = moment()

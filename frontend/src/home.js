@@ -3,11 +3,10 @@ import Layout from './components/Layout'
 import MeetingList from './components/MeetingList'
 import { Course } from './utils/cmu_course'
 import {
-  getSemesterFromDate,
+  getCurrentSemester,
   searchTips,
   getMini } from './helpers'
 
-var moment = require('moment');
 let $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
 
@@ -145,7 +144,7 @@ class Home extends Component {
           </div>
         }
         footerProps={{
-          leftFooterText: getSemesterFromDate(moment()),
+          leftFooterText: getCurrentSemester(),
           rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
         }}
       />

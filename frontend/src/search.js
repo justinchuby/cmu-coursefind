@@ -4,11 +4,10 @@ import MeetingList from './components/MeetingList'
 import Spinner from './components/Spinner'
 import { Course } from './utils/cmu_course'
 import {
-  getSemesterFromDate,
+  getCurrentSemester,
   searchTips} from './helpers'
 import 'url-search-params-polyfill';
 
-var moment = require('moment');
 let $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
 
@@ -74,7 +73,6 @@ class Search extends Component {
   }
 
   render() {
-    console.log(this.state.loading)
     return (
       <Layout
         navbarProps={{
@@ -139,7 +137,7 @@ class Search extends Component {
           </div>
         }
         footerProps={{
-          leftFooterText: getSemesterFromDate(moment()),
+          leftFooterText: getCurrentSemester(),
           rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
         }}
       />
