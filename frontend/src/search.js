@@ -16,9 +16,9 @@ class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: [],
-      lectures: [],
-      sections: [],
+      courses: null,
+      lectures: null,
+      sections: null,
       query: null
     }
   }
@@ -84,36 +84,48 @@ class Search extends Component {
             </div>
 
             <div id="lec" className="row">
-              {(this.state.lectures.length !== 0) ? (
-                <div>
-                  <p className="flow-text grey-text text-darken-1">
-                    Found {this.state.lectures.length} lectures.
-                  </p> 
-                  <MeetingList meetings={this.state.lectures} />
-                </div>
-              ) : (
-                <div>
-                  <p className="flow-text grey-text text-darken-1">
-                    No lectures were found.
-                  </p>
-                </div>
-              )}
+              {
+                (this.state.lectures) ? (
+                  (this.state.lectures.length !== 0) ? (
+                    <div>
+                      <p className="flow-text grey-text text-darken-1">
+                        Found {this.state.lectures.length} lectures.
+                      </p> 
+                      <MeetingList meetings={this.state.lectures} />
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="flow-text grey-text text-darken-1">
+                        No lectures were found. Try something else!
+                      </p>
+                    </div>
+                  )
+                ) : (
+                  null
+                )
+              }
             </div>
             <div id="sec" className="row">
-              {(this.state.sections.length !== 0) ? (
-                <div>
-                  <p className="flow-text grey-text text-darken-1">
-                    Found {this.state.sections.length} sections.
-                  </p>
-                  <MeetingList meetings={this.state.sections} />
-                </div>
-              ) : (
-                <div>
-                  <p className="flow-text grey-text text-darken-1">
-                    No sections were found.
-                  </p>
-                </div>
-              )}
+              {
+                (this.state.sections) ? (
+                  (this.state.sections.length !== 0) ? (
+                    <div>
+                      <p className="flow-text grey-text text-darken-1">
+                        Found {this.state.sections.length} sections.
+                      </p> 
+                      <MeetingList meetings={this.state.sections} />
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="flow-text grey-text text-darken-1">
+                        No sections were found. Try something else!
+                      </p>
+                    </div>
+                  )
+                ) : (
+                  null
+                )
+              }
             </div>
           </div>
         }
