@@ -4,6 +4,7 @@ import CoursesCard from './components/CoursesCard'
 import CoursesDescription from './components/CoursesDescription'
 import CoursesLectureCards from './components/CoursesLectureCards'
 import CoursesSectionList from './components/CoursesSectionList'
+import CoursesInstructorChips from './components/CoursesInstructorChips'
 import { Course } from './utils/cmu_course'
 import { searchTips } from './helpers'
 import { getDetailPageColor } from './utils/detailsPageColor'
@@ -34,11 +35,7 @@ class Courses extends Component {
     })
   }
 
-  componentWillMount() {
-    this.componentWillUpdate()
-  }
-
-  componentWillUpdate() {
+  componentDidMount() {
     let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${this.props.match.params.courseid}/`
     fetch(url)
       .then((response) => { return response.json() })
@@ -77,6 +74,17 @@ class Courses extends Component {
                   <div className="row">
                     <div className="col s12 m10">
                       <CoursesDescription content={this.state.course.desc}/>
+                    </div>
+                  </div>
+                </div>
+                 <div className="section">
+                  <h4>Instructors</h4>
+                  <br />
+                  <div className="row">
+                    <div className="col s12 m10">
+                      
+                      <CoursesInstructorChips
+                        instructors={this.state.course.instructors} />
                     </div>
                   </div>
                 </div>
