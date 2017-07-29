@@ -112,8 +112,6 @@ class MeetingList extends Component {
                 </span>
               ) : (
                 <span>
-                  {console.log(meeting.days)}
-                  {console.log(daysToString(meeting.days))}
                   {daysToString(meeting.days)}
                 </span>
               )
@@ -139,8 +137,8 @@ class MeetingList extends Component {
                 }).join(", ")
                 }
                 <br /><br />
-                <Link 
-                  to={`/courses/${meeting.course.courseid}/`}
+                <a 
+                  href={`/courses/${meeting.course.courseid}/`}
                   className="waves-effect waves-light grey-text text-lighten-5">
                   {"< "}
                   {/* TODO: make this more like a button */}
@@ -148,7 +146,7 @@ class MeetingList extends Component {
                   <span className="amber-text text-accent-4"> details </span>
                   about this course
                   {" >"}
-                </Link>
+                </a>
               </p>
             )
           }
