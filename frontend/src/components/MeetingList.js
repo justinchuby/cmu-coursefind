@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom'
 import Collapsible from './Collapsible'
-import { daysToString, getFullBuildingName, convertName } from '../helpers'
+import {
+  daysToString,
+  getFullBuildingName,
+  convertName,
+  getCurrentSemester } from '../helpers'
 
 
 class MeetingList extends Component {
@@ -82,38 +86,50 @@ class MeetingList extends Component {
               </span>
             ),
             rightHeaderText: (
-              currentCourseTime ? (
+              (meeting.course.semester !== getCurrentSemester()) ? (
                 <span>
-                  {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
-                  {(currentCourseTime.isHappeningNow()) ? (
-                      `Ends ${currentCourseTime.end.fromNow()}`
-                    ) : (
-                      `Begins ${currentCourseTime.begin.fromNow()}`
-                    )
-                  }
+                  {meeting.course.semester}
                 </span>
               ) : (
-                <span>
-                  {daysToString(meeting.days)}
-                </span>
+                currentCourseTime ? (
+                  <span>
+                    {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+                    {(currentCourseTime.isHappeningNow()) ? (
+                        `Ends ${currentCourseTime.end.fromNow()}`
+                      ) : (
+                        `Begins ${currentCourseTime.begin.fromNow()}`
+                      )
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {daysToString(meeting.days)}
+                  </span>
+                )
               )
             ),
             rightHeaderTextShort: (
               // Same with rightHeaderText
-              currentCourseTime ? (
+              (meeting.course.semester !== getCurrentSemester()) ? (
                 <span>
-                  {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
-                  {(currentCourseTime.isHappeningNow()) ? (
-                      `Ends ${currentCourseTime.end.fromNow()}`
-                    ) : (
-                      `Begins ${currentCourseTime.begin.fromNow()}`
-                    )
-                  }
+                  {meeting.course.semester}
                 </span>
               ) : (
-                <span>
-                  {daysToString(meeting.days)}
-                </span>
+                currentCourseTime ? (
+                  <span>
+                    {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+                    {(currentCourseTime.isHappeningNow()) ? (
+                        `Ends ${currentCourseTime.end.fromNow()}`
+                      ) : (
+                        `Begins ${currentCourseTime.begin.fromNow()}`
+                      )
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {daysToString(meeting.days)}
+                  </span>
+                )
               )
             ),
             bodyText: (
