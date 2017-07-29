@@ -9,7 +9,7 @@ class Navbar extends Component {
     super(props);
     this.state = {
       searchPrompt: "Search",
-      searchValue: "",
+      searchValue: props.searchValue,
       searchSubmitted: false
     }
   }
@@ -26,7 +26,6 @@ class Navbar extends Component {
   handleSubmit(e) {
     e.preventDefault()
     this.setState({searchSubmitted: true})
-    alert('A name was submitted: ' + this.state.searchValue)
   }
 
   handleFocus(e) {

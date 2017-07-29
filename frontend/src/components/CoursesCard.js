@@ -4,7 +4,6 @@ import CoursesReqChips from './CoursesReqChips'
 
 class CoursesCard extends Component {
   // props: course, colors:{majorColor, textMajorColor, courseidColor, textAccentColor}
-  // TODO: consider store the colors into a sigle object
   cardContent() {
     const course = this.props.course
     return (
