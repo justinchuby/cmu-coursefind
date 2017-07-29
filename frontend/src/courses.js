@@ -36,7 +36,11 @@ class Courses extends Component {
   }
 
   componentDidMount() {
-    let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${this.props.match.params.courseid}/`
+    this.componentWillReceiveProps(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${nextProps.match.params.courseid}/`
     fetch(url)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
