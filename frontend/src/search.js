@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
 import MeetingList from './components/MeetingList'
+import Spinner from './components/Spinner'
 import { Course } from './utils/cmu_course'
 import {
   getSemesterFromDate,
@@ -19,7 +20,8 @@ class Search extends Component {
       courses: null,
       lectures: null,
       sections: null,
-      query: null
+      query: null,
+      loading: false
     }
   }
 
@@ -28,10 +30,14 @@ class Search extends Component {
   }
 
   componentWillMount() {
-    const search = this.props.location.search; // could be '?foo=bar'
+    this.componentWillReceiveProps(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const search = nextProps.location.search; // could be '?foo=bar'
     const params = new URLSearchParams(search);
     const query = params.get('q');
-    this.setState({query: query})
+    this.setState({query: query, loading: true})
     // const parsedQuery = parseQuery(query)
     // TODO: parse query
     // TODO: how do I refresh the query string when it changes?
@@ -61,16 +67,19 @@ class Search extends Component {
               return course.sections
             }).reduce(
               (a, b) => a.concat(b), []
-            )
+            ),
+          loading: false
         })
       })
   }
 
   render() {
+    console.log(this.state.loading)
     return (
       <Layout
         navbarProps={{
-          searchTips: searchTips
+          searchTips: searchTips,
+          searchValue: this.state.query
         }}
         mainContent={
           <div className="container">
@@ -85,7 +94,7 @@ class Search extends Component {
 
             <div id="lec" className="row">
               {
-                (this.state.lectures) ? (
+                (!this.state.loading) ? (
                   (this.state.lectures.length !== 0) ? (
                     <div>
                       <p className="flow-text grey-text text-darken-1">
@@ -101,13 +110,13 @@ class Search extends Component {
                     </div>
                   )
                 ) : (
-                  null
+                  <Spinner />
                 )
               }
             </div>
             <div id="sec" className="row">
               {
-                (this.state.sections) ? (
+                (!this.state.loading) ? (
                   (this.state.sections.length !== 0) ? (
                     <div>
                       <p className="flow-text grey-text text-darken-1">
@@ -123,7 +132,7 @@ class Search extends Component {
                     </div>
                   )
                 ) : (
-                  null
+                  <Spinner />
                 )
               }
             </div>
