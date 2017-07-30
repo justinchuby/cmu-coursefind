@@ -144,7 +144,7 @@ class Search extends Component {
                 {
                   (this.state.lectures) ? (
                     (this.state.lectures && this.state.lectures.length !== 0) ? (
-                      <div>
+                      <div className="col s12">
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.lectures.length} lectures.
                         </p>
@@ -154,22 +154,22 @@ class Search extends Component {
                           size={this.state.pageSize} />
                       </div>
                     ) : (
-                        <div>
-                          <p className="flow-text grey-text text-darken-1">
-                            No lectures were found. Try something else!
+                      <div className="col s12">
+                        <p className="flow-text grey-text text-darken-1">
+                          No lectures were found. Try something else!
                         </p>
-                        </div>
-                      )
-                  ) : (
-                      null
+                      </div>
                     )
+                  ) : (
+                    null
+                  )
                 }
               </div>
               <div id="sec" className="row">
                 {
                   (this.state.sections) ? (
                     (this.state.sections && this.state.sections.length !== 0) ? (
-                      <div>
+                      <div className="col s12">
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.sections.length} sections.
                         </p>
@@ -179,15 +179,15 @@ class Search extends Component {
                           size={this.state.pageSize} />
                       </div>
                     ) : (
-                        <div>
-                          <p className="flow-text grey-text text-darken-1">
-                            No sections were found. Try something else!
+                      <div className="col s12">
+                        <p className="flow-text grey-text text-darken-1">
+                          No sections were found. Try something else!
                         </p>
-                        </div>
-                      )
-                  ) : (
-                      null
+                      </div>
                     )
+                  ) : (
+                    null
+                  )
                 }
               </div>
             </div>
