@@ -69,7 +69,7 @@ class Search extends Component {
 
   parsePageNumberFromHash(hash) {
     hash = hash.slice(1)
-    return parseInt(hash) || null
+    return parseInt(hash, 10) || null
   }
 
   executeSearch(url, paramsList, shouldRetry) {
