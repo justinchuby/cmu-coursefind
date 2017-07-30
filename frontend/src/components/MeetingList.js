@@ -5,13 +5,55 @@ import {
   daysToString,
   getFullBuildingName,
   convertName,
-  getCurrentSemester } from '../helpers'
+  getCurrentSemester,
+  getMini } from '../helpers'
 
 
 class MeetingList extends Component {
   constructor(props) {
     super(props);
     //   // TODO: how should I manipulate the course list?
+  }
+
+  getRightHeaderText(meeting) {
+        //meeting.course.mini !== 0 && meeting.course.mini !== getMini()
+    if (meeting.course.semester !== getCurrentSemester()) {
+      // Not the current semester, show semester
+      return (
+        <span>
+          {meeting.course.semester}
+        </span>
+      )
+    } else if (meeting.course.mini !== 0 && meeting.course.mini !== getMini()) {
+      // Not the corrent Mini
+      return (
+        <span>
+          Mini {meeting.course.mini}
+        </span>
+      )
+    } else {
+      const currentCourseTime = meeting.currentTimeObj() || meeting.nextTimeObj()
+      if (currentCourseTime) {
+        // Show at what time it will begin/end
+        return (
+          <span>
+            {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
+            {(currentCourseTime.isHappeningNow()) ? (
+                `Ends ${currentCourseTime.end.fromNow()}`
+              ) : (
+                `Begins ${currentCourseTime.begin.fromNow()}`
+              )
+            }
+          </span>
+        )
+      } else {
+        return (
+          <span>
+              {daysToString(meeting.days)}
+          </span>
+        )
+      }
+    }
   }
 
   render() {
@@ -84,51 +126,11 @@ class MeetingList extends Component {
               </span>
             ),
             rightHeaderText: (
-              (meeting.course.semester !== getCurrentSemester()) ? (
-                <span>
-                  {meeting.course.semester}
-                </span>
-              ) : (
-                currentCourseTime ? (
-                  <span>
-                    {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
-                    {(currentCourseTime.isHappeningNow()) ? (
-                        `Ends ${currentCourseTime.end.fromNow()}`
-                      ) : (
-                        `Begins ${currentCourseTime.begin.fromNow()}`
-                      )
-                    }
-                  </span>
-                ) : (
-                  <span>
-                    {daysToString(meeting.days)}
-                  </span>
-                )
-              )
+              this.getRightHeaderText(meeting)
             ),
             rightHeaderTextShort: (
               // Same with rightHeaderText
-              (meeting.course.semester !== getCurrentSemester()) ? (
-                <span>
-                  {meeting.course.semester}
-                </span>
-              ) : (
-                currentCourseTime ? (
-                  <span>
-                    {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
-                    {(currentCourseTime.isHappeningNow()) ? (
-                        `Ends ${currentCourseTime.end.fromNow()}`
-                      ) : (
-                        `Begins ${currentCourseTime.begin.fromNow()}`
-                      )
-                    }
-                  </span>
-                ) : (
-                  <span>
-                    {daysToString(meeting.days)}
-                  </span>
-                )
-              )
+              this.getRightHeaderText(meeting)
             ),
             bodyText: (
               <p className="grey-text text-lighten-5">
