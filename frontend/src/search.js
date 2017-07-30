@@ -44,6 +44,7 @@ class Search extends Component {
         this.setState({query: query, loading: true})
 
         let parsedQuery = parseSearchQuery(query)
+        parsedQuery.filtered_fields = 'desc'
         let clonedQuery = Object.assign({}, parsedQuery)
         clonedQuery.instructor = clonedQuery.text
         delete clonedQuery.text
@@ -57,8 +58,8 @@ class Search extends Component {
     }
   }
 
-  executeSearch(url, params, shouldRetry) {
-    fetch(`${url}?${encodeURIParams(params.shift())}`)
+  executeSearch(url, paramsList, shouldRetry) {
+    fetch(`${url}?${encodeURIParams(paramsList.shift())}`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         let courses = jsonResponse.courses.map(course => {return new Course(course)})
@@ -89,7 +90,7 @@ class Search extends Component {
         } else {
           // no matching courses
           if (shouldRetry) {
-            this.executeSearch(url, params, false)
+            this.executeSearch(url, paramsList, false)
           } else {
             this.setState({
               courses: [],

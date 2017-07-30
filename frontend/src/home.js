@@ -28,7 +28,7 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    fetch('https://api.cmucoursefind.xyz/course/v1/datetime/now/timespan/60/')
+    fetch('https://api.cmucoursefind.xyz/course/v1/datetime/now/timespan/60/?filtered_fields=desc')
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         let courses = jsonResponse.courses.map(course => {return new Course(course)}) || []
