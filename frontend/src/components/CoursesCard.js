@@ -12,11 +12,23 @@ class CoursesCard extends Component {
           <div className="col m9 offset-m1 offset-l2">
             <h1 className={`light ${this.props.colors.courseidColor}`}>
               {course.courseid}
-              <span className="hide-on-small-only flow-text"> {course.semester}</span>
+              <Dropdown
+                name="semester-dropdown"
+                content={
+                  <Chip
+                    content={
+                      <span className={`flow-text ${this.props.colors.textMajorColor}`}>
+                        {course.semester}
+                      </span>
+                    }
+                    style={{backgroundColor: "rgba(255, 255, 255, 0.2)"}}
+                  />
+                }
+                dropdownContents={this.courses.map((course) => course.semester)}
+// HERE
+
+
             </h1>
-            <p className={`hide-on-med-and-up flow-text ${this.props.colors.textMajorColor}`}>
-              {course.semester}
-            </p>
             <h4 className={`light ${this.props.colors.textMajorColor}`}>{course.name}</h4>
             <p>
               {`/ ${course.department} /`}
@@ -61,12 +73,12 @@ class CoursesCard extends Component {
 
   render() {
     return (
-                <Card
-                  cardColor={this.props.colors.majorColor}
-                  extraClassName="hoverable"
-                  textColor={this.props.colors.textMajorColor}
-                  content={this.cardContent()}
-                />
+      <Card
+        cardColor={this.props.colors.majorColor}
+        extraClassName="hoverable"
+        textColor={this.props.colors.textMajorColor}
+        content={this.cardContent()}
+      />
     );
   }
 }

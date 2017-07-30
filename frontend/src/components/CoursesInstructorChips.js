@@ -27,7 +27,7 @@ class CoursesInstructorChips extends Component {
                   </a> */}
                 </span>
               }
-              extraClass="hoverable" />
+              extraClasses=["hoverable"] />
           )
         }
       )}
