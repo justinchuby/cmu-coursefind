@@ -7,7 +7,8 @@ import {
   getCurrentSemester,
   searchTips,
   parseSearchQuery,
-  encodeURIParams} from './helpers'
+  encodeURIParams
+} from './helpers'
 import 'url-search-params-polyfill';
 import { Helmet } from 'react-helmet'
 
@@ -41,7 +42,7 @@ class Search extends Component {
       const params = new URLSearchParams(search);
       const query = params.get('q');
       if (query && query !== '') {
-        this.setState({query: query, loading: true})
+        this.setState({ query: query, loading: true })
 
         let parsedQuery = parseSearchQuery(query)
         parsedQuery.filtered_fields = 'desc'
@@ -62,7 +63,7 @@ class Search extends Component {
     fetch(`${url}?${encodeURIParams(paramsList.shift())}`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
-        let courses = jsonResponse.courses.map(course => {return new Course(course)})
+        let courses = jsonResponse.courses.map(course => { return new Course(course) })
         if (courses && courses.length > 0) {
           this.setState({
             courses: courses,
@@ -77,13 +78,13 @@ class Search extends Component {
               course => {
                 return course.lectures
               }).reduce(
-                (a, b) => a.concat(b), []
+              (a, b) => a.concat(b), []
               ),
             sections: courses.map(
               course => {
                 return course.sections
               }).reduce(
-                (a, b) => a.concat(b), []
+              (a, b) => a.concat(b), []
               ),
             loading: false
           })
@@ -134,19 +135,19 @@ class Search extends Component {
                       <div>
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.lectures.length} lectures.
-                        </p> 
+                        </p>
                         <MeetingList meetings={this.state.lectures} />
                       </div>
                     ) : (
-                      <div>
-                        <p className="flow-text grey-text text-darken-1">
-                          No lectures were found. Try something else!
+                        <div>
+                          <p className="flow-text grey-text text-darken-1">
+                            No lectures were found. Try something else!
                         </p>
-                      </div>
-                    )
+                        </div>
+                      )
                   ) : (
-                    null
-                  )
+                      null
+                    )
                 }
               </div>
               <div id="sec" className="row">
@@ -156,26 +157,26 @@ class Search extends Component {
                       <div>
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.sections.length} sections.
-                        </p> 
+                        </p>
                         <MeetingList meetings={this.state.sections} />
                       </div>
                     ) : (
-                      <div>
-                        <p className="flow-text grey-text text-darken-1">
-                          No sections were found. Try something else!
+                        <div>
+                          <p className="flow-text grey-text text-darken-1">
+                            No sections were found. Try something else!
                         </p>
-                      </div>
-                    )
+                        </div>
+                      )
                   ) : (
-                    null
-                  )
+                      null
+                    )
                 }
               </div>
             </div>
           }
           footerProps={{
             leftFooterText: getCurrentSemester(),
-            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br /></span>
           }}
         />
       </div>
