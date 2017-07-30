@@ -155,9 +155,9 @@ export var searchTips = [
 ]
 
 var queryRe = {
-  courseid: /\b\d{2}-\d{3}|\d{5}\b/,
-  building: /\bbh|cfa|cic|cyh|dh|eds|ges|ghc|gym|hbh|hh|hl|ia|ini|mi|mm|nsh|pca|pos|ph|ptc|reh|scr|sei|sh|uc|wh|weh\b/,
-  buidlingFull: /\bbaker|cyert|doherty|stadium|gates|weigand|gymnasium|gym|hamburg|hamerschlag|hunt|library|tepper|posner|gsia|mellon|newell|simon|purnell|porter|roberts|scaife|warner|wean\b/,
+  courseid: /\b(\d{2}-\d{3}|\d{5})\b/,
+  building: /\b(bh|cfa|cic|cyh|dh|eds|ges|ghc|gym|hbh|hh|hl|ia|ini|mi|mm|nsh|pca|pos|ph|ptc|reh|scr|sei|sh|uc|wh|weh)\b/,
+  buidlingFull: /\b(baker|cyert|doherty|stadium|gates|weigand|gymnasium|gym|hamburg|hamerschlag|hunt|library|tepper|posner|gsia|mellon|newell|simon|purnell|porter|roberts|scaife|warner|wean)\b/,
   room: /\b\w?\d+\w?\b/,
   buildingRoom: /\b(bh|cfa|cic|cyh|dh|eds|ges|ghc|gym|hbh|hh|hl|ia|ini|mi|mm|nsh|pca|pos|ph|ptc|reh|scr|sei|sh|uc|wh|weh)(\w?\d+\w?)\b/
 }
