@@ -27,7 +27,6 @@ class Disclaimer extends Component {
     return (
       <div>
         <Helmet>
-          <meta charSet="utf-8" />
           <title>Disclaimer - CMU Course Find</title>
         </Helmet>
         <Layout

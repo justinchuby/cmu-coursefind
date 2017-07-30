@@ -85,7 +85,6 @@ class Home extends Component {
     return (
       <div>
         <Helmet>
-          <meta charSet="utf-8" />
           <title>CMU Course Find</title>
           <meta name="description" content="A better course finder for Carnegie Mellon University. Course description, schedule, instructor info, etc. See classes that are happening and discover new courses!" />
         </Helmet>

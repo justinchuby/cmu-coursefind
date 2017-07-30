@@ -39,7 +39,6 @@ class About extends Component {
     return (
       <div>
         <Helmet>
-          <meta charSet="utf-8" />
           <title>About - CMU Course Find</title>
         </Helmet>
         <Layout

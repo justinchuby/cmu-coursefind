@@ -57,7 +57,6 @@ class Courses extends Component {
     return (
       <div>
         <Helmet>
-          <meta charSet="utf-8" />
           {this.state.course && (
             <title>{this.state.course.courseid}: {this.state.course.name} - {this.state.course.semester} - CMU Course Find</title>
           )}
