@@ -6,7 +6,8 @@ import {
   getFullBuildingName,
   convertName,
   getCurrentSemester,
-  getMini } from '../helpers'
+  getMini
+} from '../helpers'
 
 
 class MeetingList extends Component {
@@ -16,7 +17,7 @@ class MeetingList extends Component {
   }
 
   getRightHeaderText(meeting) {
-        //meeting.course.mini !== 0 && meeting.course.mini !== getMini()
+    //meeting.course.mini !== 0 && meeting.course.mini !== getMini()
     if (meeting.course.semester !== getCurrentSemester()) {
       // Not the current semester, show semester
       return (
@@ -39,8 +40,8 @@ class MeetingList extends Component {
           <span>
             {currentCourseTime.building} {currentCourseTime.room} | &nbsp;
             {(currentCourseTime.isHappeningNow()) ? (
-                `Ends ${currentCourseTime.end.fromNow()}`
-              ) : (
+              `Ends ${currentCourseTime.end.fromNow()}`
+            ) : (
                 `Begins ${currentCourseTime.begin.fromNow()}`
               )
             }
@@ -49,7 +50,7 @@ class MeetingList extends Component {
       } else {
         return (
           <span>
-              {daysToString(meeting.days)}
+            {daysToString(meeting.days)}
           </span>
         )
       }
@@ -82,18 +83,18 @@ class MeetingList extends Component {
                         {time.room}
                       </span>
                     ) : (
-                      /* if the building abbreviation is not known, display
-                         the abbr
-                      */
-                      <span>
-                        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+                        /* if the building abbreviation is not known, display
+                           the abbr
+                        */
+                        <span>
+                          &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
                         {time.building} {time.room}
-                      </span>
-                    )
+                        </span>
+                      )
                   ) : (
-                    /* if the building is null */
-                    null
-                  )
+                      /* if the building is null */
+                      null
+                    )
                 }
                 <br />
                 {time.begin &&
@@ -153,7 +154,7 @@ class MeetingList extends Component {
                 }).join(", ")
                 }
                 <br /><br />
-                <a 
+                <a
                   href={`/courses/${meeting.course.courseid}/`}
                   className="waves-effect waves-light grey-text text-lighten-5">
                   {"< "}

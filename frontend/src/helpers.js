@@ -52,30 +52,30 @@ const _CMU_BUILDINGS_FROM_ABBR = {
 }
 
 const _CMU_BUILDINGS = {
-    "baker": "BH",
-    "cyert": "CYH",
-    "doherty": "DH",
-    "stadium": "GES",
-    "gates": "GHC",
-    "weigand": "GYM",
-    "gymnasium": "GYM",
-    "gym": "GYM",
-    "hamburg": "HBH",
-    "hamerschlag": "HH",
-    "hunt": "HL",
-    "library": "HL",
-    "tepper": "POS",
-    "posner": "POS",
-    "gsia": "IA",
-    "mellon": "MI",
-    "newell": "NSH",
-    "simon": "NSH",
-    "purnell": "PCA",
-    "porter": "PH",
-    "roberts": "REH",
-    "scaife": "SH",
-    "warner": "WH",
-    "wean": "WEH"
+  "baker": "BH",
+  "cyert": "CYH",
+  "doherty": "DH",
+  "stadium": "GES",
+  "gates": "GHC",
+  "weigand": "GYM",
+  "gymnasium": "GYM",
+  "gym": "GYM",
+  "hamburg": "HBH",
+  "hamerschlag": "HH",
+  "hunt": "HL",
+  "library": "HL",
+  "tepper": "POS",
+  "posner": "POS",
+  "gsia": "IA",
+  "mellon": "MI",
+  "newell": "NSH",
+  "simon": "NSH",
+  "purnell": "PCA",
+  "porter": "PH",
+  "roberts": "REH",
+  "scaife": "SH",
+  "warner": "WH",
+  "wean": "WEH"
 }
 
 export function getFullBuildingName(name) {
@@ -196,6 +196,6 @@ export function parseSearchQuery(query) {
 
 export function encodeURIParams(params) {
   return Object.keys(params)
-      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-      .join('&')
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+    .join('&')
 }

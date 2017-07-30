@@ -6,7 +6,8 @@ import { Helmet } from 'react-helmet'
 import {
   getCurrentSemester,
   searchTips,
-  getMini } from './helpers'
+  getMini
+} from './helpers'
 
 let $ = window.jQuery = require('jquery');
 require('materialize-css/dist/js/materialize');
@@ -31,7 +32,7 @@ class Home extends Component {
     fetch('https://api.cmucoursefind.xyz/course/v1/datetime/now/timespan/60/?filtered_fields=desc')
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
-        let courses = jsonResponse.courses.map(course => {return new Course(course)}) || []
+        let courses = jsonResponse.courses.map(course => { return new Course(course) }) || []
         // Makes sure courses is an array
         this.setState({
           courses: courses,
@@ -46,21 +47,21 @@ class Home extends Component {
             course => {
               return course.lectures
             }).reduce(
-              (a, b) => a.concat(b), []
+            (a, b) => a.concat(b), []
             ).filter(
-              meeting => {
-                return filterMeeting(meeting)
-              }
+            meeting => {
+              return filterMeeting(meeting)
+            }
             ),
           sections: courses.map(
             course => {
               return course.sections
             }).reduce(
-              (a, b) => a.concat(b), []
+            (a, b) => a.concat(b), []
             ).filter(
-              meeting => {
-                return filterMeeting(meeting)
-              }
+            meeting => {
+              return filterMeeting(meeting)
+            }
             )
         })
       })
@@ -77,7 +78,7 @@ class Home extends Component {
 
   tick() {
     // Rerender the page every minute
-    this.setState({tick: !this.state.tick})
+    this.setState({ tick: !this.state.tick })
   }
 
   render() {
@@ -86,7 +87,7 @@ class Home extends Component {
         <Helmet>
           <meta charSet="utf-8" />
           <title>CMU Course Find</title>
-          <meta name="description" content="A better course finder for Carnegie Mellon University. Course description, schedule, instructor info, etc. See classes that are happening and discover new courses!"/>
+          <meta name="description" content="A better course finder for Carnegie Mellon University. Course description, schedule, instructor info, etc. See classes that are happening and discover new courses!" />
         </Helmet>
         <Layout
           navbarProps={{
@@ -102,18 +103,18 @@ class Home extends Component {
                   </ul>
                 </div>
               </div>
-            
+
               <div id="lec" className="row">
                 {(this.state.lectures) ? (
                   (this.state.lectures.length !== 0) ? (
-                      // some lectures are happening now
-                      <div className="col s12">
-                        <p className="flow-text grey-text text-darken-1">
-                          There are currently {this.state.lectures.length} lectures.
+                    // some lectures are happening now
+                    <div className="col s12">
+                      <p className="flow-text grey-text text-darken-1">
+                        There are currently {this.state.lectures.length} lectures.
                         </p>
-                        <MeetingList meetings={this.state.lectures} />
-                      </div>
-                    ) : (
+                      <MeetingList meetings={this.state.lectures} />
+                    </div>
+                  ) : (
                       // no lectures now
                       <div className="col s12">
                         <p className="flow-text grey-text text-darken-1">
@@ -121,7 +122,7 @@ class Home extends Component {
                         </p>
                       </div>
                     )
-                  ) : (
+                ) : (
                     // courses not loaded
                     null
                   )
@@ -136,14 +137,14 @@ class Home extends Component {
                       </p>
                       <MeetingList meetings={this.state.sections} />
                     </div>
-                    ) : (
-                    <div className="col s12">
-                      <p className="flow-text grey-text text-darken-1">
-                        No sections happening at this time. Take a break :D
-                      </p>
-                    </div>
-                    )
                   ) : (
+                      <div className="col s12">
+                        <p className="flow-text grey-text text-darken-1">
+                          No sections happening at this time. Take a break :D
+                      </p>
+                      </div>
+                    )
+                ) : (
                     null
                   )
                 }
@@ -152,7 +153,7 @@ class Home extends Component {
           }
           footerProps={{
             leftFooterText: getCurrentSemester(),
-            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br /></span>
           }}
         />
       </div>

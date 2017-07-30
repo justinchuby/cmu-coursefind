@@ -16,51 +16,51 @@ class Navbar extends Component {
   }
 
   clearSearchBar(event) {
-    this.setState({searchValue: ""})
+    this.setState({ searchValue: "" })
     event.target.blur()
   }
 
   handleChange(event) {
-    this.setState({searchValue: event.target.value})
+    this.setState({ searchValue: event.target.value })
   }
 
   handleSubmit(e) {
     e.preventDefault()
-    this.setState({searchSubmitted: true})
+    this.setState({ searchSubmitted: true })
   }
 
   handleFocus(e) {
     this.setState({
       searchPrompt: randomPick(this.props.searchTips)
-    })  
+    })
   }
 
   handleBlur(e) {
     this.setState({
       searchPrompt: "Search"
-    })  
+    })
   }
 
   componentDidUpdate() {
     if (this.state.searchSubmitted) {
-      this.setState({searchSubmitted: false})
+      this.setState({ searchSubmitted: false })
     }
   }
 
   render() {
     if (this.state.searchSubmitted) {
       return <Redirect push to={{
-          pathname: '/search',
-          search: `?q=${this.state.searchValue}`
-        }}/>
+        pathname: '/search',
+        search: `?q=${this.state.searchValue}`
+      }} />
     } else {
       return (
-        <div className="navbar-fixed" style={{height: '100px'}}>
+        <div className="navbar-fixed" style={{ height: '100px' }}>
           <nav className={this.props.color}>
             <div className="nav-wrapper">
               <a data-activates="slide-out"
                 className="button-collapse hide-on-med-and-up">
-                  <i className="material-icons">menu</i>
+                <i className="material-icons">menu</i>
               </a>
               <Link to="/"
                 className="brand-logo left hide-on-small-only light"
@@ -77,7 +77,7 @@ class Navbar extends Component {
                       required maxLength="100"
                       value={this.state.searchValue}
                       placeholder={this.state.searchPrompt}
-                      id="search-text" 
+                      id="search-text"
                       onFocus={this.handleFocus.bind(this)}
                       onBlur={this.handleBlur.bind(this)}
                       onChange={this.handleChange.bind(this)}></input>
@@ -85,8 +85,8 @@ class Navbar extends Component {
                       {this.props.loader ? (
                         <Spinner />
                       ) : (
-                        <i className="material-icons">search</i>
-                      )}
+                          <i className="material-icons">search</i>
+                        )}
                     </label>
                     <i className="material-icons"
                       onClick={this.clearSearchBar.bind(this)}>

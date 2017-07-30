@@ -32,12 +32,12 @@ class Disclaimer extends Component {
         </Helmet>
         <Layout
           navbarProps={{
-              searchTips: searchTips
-            }}
+            searchTips: searchTips
+          }}
           mainContent={mainText}
           footerProps={{
             leftFooterText: getCurrentSemester(),
-            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br /></span>
           }}
         />
       </div>

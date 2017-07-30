@@ -147,7 +147,7 @@ class TimeObj {
   isHappeningAt(dateTime) {
     const day = dateTime.isoWeekday() % 7  // integer
     if (this.isHappeningOn(day) && (dateTime.isBetween(this.begin, this.end))) {
-        return true
+      return true
     }
     return false
   }

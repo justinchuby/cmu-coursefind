@@ -4,7 +4,7 @@ class Spinner extends Component {
   render() {
     return (
       <div className="preloader-wrapper small active"
-        style={{verticalAlign: "middle"}}>
+        style={{ verticalAlign: "middle" }}>
         <div className="spinner-layer spinner-blue">
           <div className="circle-clipper left">
             <div className="circle"></div>

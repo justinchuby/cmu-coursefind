@@ -62,7 +62,7 @@ class Courses extends Component {
             <title>{this.state.course.courseid}: {this.state.course.name} - {this.state.course.semester} - CMU Course Find</title>
           )}
           {this.state.course && (
-            <meta name="description" content={`${this.state.course.courseid}: ${this.state.course.name}  ${this.state.course.desc}`}/>
+            <meta name="description" content={`${this.state.course.courseid}: ${this.state.course.name}  ${this.state.course.desc}`} />
           )}
         </Helmet>
         <Layout
@@ -88,7 +88,7 @@ class Courses extends Component {
                     <br />
                     <div className="row">
                       <div className="col s12 m10">
-                        <CoursesDescription content={this.state.course.desc}/>
+                        <CoursesDescription content={this.state.course.desc} />
                       </div>
                     </div>
                   </div>
@@ -97,7 +97,7 @@ class Courses extends Component {
                     <br />
                     <div className="row">
                       <div className="col s12 m10">
-                        
+
                         <CoursesInstructorChips
                           instructors={this.state.course.instructors} />
                       </div>
@@ -108,28 +108,28 @@ class Courses extends Component {
                       <div className="section">
                         <h4>Lectures</h4>
                         <br />
-                        <CoursesLectureCards 
+                        <CoursesLectureCards
                           meetings={this.state.course.lectures}
                           colors={this.state.colors}
                         />
                       </div>
                     ) : (
-                      null
-                    )
+                        null
+                      )
                   }
                   {
                     (this.state.course.sections.length !== 0) ? (
                       <div className="section">
                         <h4>Sections</h4>
                         <br />
-                        <CoursesSectionList 
+                        <CoursesSectionList
                           meetings={this.state.course.sections}
                           colors={this.state.colors}
                         />
                       </div>
                     ) : (
-                      null
-                    )
+                        null
+                      )
                   }
                   <div className="section">
                     <h4>Ratings</h4>
@@ -138,12 +138,12 @@ class Courses extends Component {
                 </div>
               </div>
             ) : (
-              null
-            )
+                null
+              )
           }
           footerProps={{
             leftFooterText: this.state.course ? this.state.course.semester : '',
-            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br/></span>
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br /></span>
           }}
         />
       </div>

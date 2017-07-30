@@ -26,7 +26,7 @@ class Search extends Component {
       query: null,
       loading: false,
       pageSize: 20,
-      page: {lectures: 1, sections:1}
+      page: { lectures: 1, sections: 1 }
     }
   }
 
@@ -61,9 +61,9 @@ class Search extends Component {
     }
     const page = this.parsePageNumberFromHash(nextProps.location.hash)
     if (page) {
-      this.setState({page: {lectures: page, sections: page}})
+      this.setState({ page: { lectures: page, sections: page } })
     } else {
-      this.setState({page: {lectures: 1, sections: 1}})
+      this.setState({ page: { lectures: 1, sections: 1 } })
     }
   }
 
@@ -100,7 +100,7 @@ class Search extends Component {
               (a, b) => a.concat(b), []
               ),
             loading: false,
-            page: {lectures: 1, sections:1}
+            page: { lectures: 1, sections: 1 }
           })
         } else {
           // no matching courses
@@ -112,7 +112,7 @@ class Search extends Component {
               lectures: [],
               sections: [],
               loading: false,
-              page: {lectures: 1, sections:1}
+              page: { lectures: 1, sections: 1 }
             })
           }
         }
@@ -151,6 +151,10 @@ class Search extends Component {
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.lectures.length} lectures.
                         </p>
+                        <PaginatedMeetingList
+                          meetings={this.state.lectures}
+                          page={this.state.page.lectures}
+                          size={this.state.pageSize} />
                       </div>
                     ) : (
                         <div>
@@ -172,6 +176,10 @@ class Search extends Component {
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.sections.length} sections.
                         </p>
+                        <PaginatedMeetingList
+                          meetings={this.state.sections}
+                          page={this.state.page.sections}
+                          size={this.state.pageSize} />
                       </div>
                     ) : (
                         <div>

@@ -8,13 +8,13 @@ class PaginatedMeetingList extends Component {
     const page = this.props.page
     const size = this.props.size
     if (size > 0) {
-      const meetings = this.props.meetings.slice((page-1)*size, (page)*size)
+      const meetings = this.props.meetings.slice((page - 1) * size, (page) * size)
       // Adjusted page number
       return (
         <div>
           <MeetingList meetings={meetings} />
-          <br/><br/>
-          <Pagination page={page} totalPage={Math.ceil(this.props.meetings.length/size)} />
+          <br /><br />
+          <Pagination page={page} totalPage={Math.ceil(this.props.meetings.length / size)} />
         </div>
       )
     }
