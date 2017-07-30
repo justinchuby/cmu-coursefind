@@ -5,7 +5,9 @@ import Spinner from './components/Spinner'
 import { Course } from './utils/cmu_course'
 import {
   getCurrentSemester,
-  searchTips} from './helpers'
+  searchTips,
+  parseSearchQuery,
+  encodeURIParams} from './helpers'
 import 'url-search-params-polyfill';
 import { Helmet } from 'react-helmet'
 
@@ -37,39 +39,65 @@ class Search extends Component {
     const search = nextProps.location.search; // could be '?foo=bar'
     const params = new URLSearchParams(search);
     const query = params.get('q');
-    // const parsedQuery = parseQuery(query)
-    // TODO: parse query
     if (query && query !== '') {
       this.setState({query: query, loading: true})
-      fetch(`https://api.cmucoursefind.xyz/course/v1/search/?text=${query}`)
+
+      let parsedQuery = parseSearchQuery(query)
+      let clonedQuery = Object.assign({}, parsedQuery)
+      clonedQuery.instructor = clonedQuery.text
+      delete clonedQuery.text
+
+      this.executeSearch(
+        "https://api.cmucoursefind.xyz/course/v1/search/",
+        [clonedQuery, parsedQuery],
+        true
+      )
+    }
+  }
+
+  executeSearch(url, params, shouldRetry) {
+    fetch(`${url}?${encodeURIParams(params.shift())}`)
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         let courses = jsonResponse.courses.map(course => {return new Course(course)})
-        this.setState({
-          courses: courses,
-          // get the lectures out from each course and reduce them from 2D
-          // array to 1D array
+        if (courses && courses.length > 0) {
+          this.setState({
+            courses: courses,
+            // get the lectures out from each course and reduce them from 2D
+            // array to 1D array
 
-          // TODO: write functions to filter and sort the sections before
-          // display
-          // make the sorting function flexible
+            // TODO: write functions to filter and sort the sections before
+            // display
+            // make the sorting function flexible
 
-          lectures: courses.map(
-            course => {
-              return course.lectures
-            }).reduce(
-              (a, b) => a.concat(b), []
-            ),
-          sections: courses.map(
-            course => {
-              return course.sections
-            }).reduce(
-              (a, b) => a.concat(b), []
-            ),
-          loading: false
-        })
+            lectures: courses.map(
+              course => {
+                return course.lectures
+              }).reduce(
+                (a, b) => a.concat(b), []
+              ),
+            sections: courses.map(
+              course => {
+                return course.sections
+              }).reduce(
+                (a, b) => a.concat(b), []
+              ),
+            loading: false
+          })
+        } else {
+          // no matching courses
+          if (shouldRetry) {
+            this.executeSearch(url, params, false)
+          } else {
+            this.setState({
+              courses: [],
+              lectures: [],
+              sections: [],
+              loading: false
+            })
+          }
+        }
       })
-    }
   }
 
   render() {

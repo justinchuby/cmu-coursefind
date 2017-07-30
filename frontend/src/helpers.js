@@ -51,6 +51,33 @@ const _CMU_BUILDINGS_FROM_ABBR = {
   "CFA": "College of Fine Arts"
 }
 
+const _CMU_BUILDINGS = {
+    "baker": "BH",
+    "cyert": "CYH",
+    "doherty": "DH",
+    "stadium": "GES",
+    "gates": "GHC",
+    "weigand": "GYM",
+    "gymnasium": "GYM",
+    "gym": "GYM",
+    "hamburg": "HBH",
+    "hamerschlag": "HH",
+    "hunt": "HL",
+    "library": "HL",
+    "tepper": "POS",
+    "posner": "POS",
+    "gsia": "IA",
+    "mellon": "MI",
+    "newell": "NSH",
+    "simon": "NSH",
+    "purnell": "PCA",
+    "porter": "PH",
+    "roberts": "REH",
+    "scaife": "SH",
+    "warner": "WH",
+    "wean": "WEH"
+}
+
 export function getFullBuildingName(name) {
   return _CMU_BUILDINGS_FROM_ABBR[name]
   // Return null if not exist
@@ -67,73 +94,6 @@ export function convertName(str) {
   }
   return name[0]
 }
-
-
-// let _CMU_NUMBER_DEPARTMENTS = {
-//     "48": "Architecture",
-//     "60": "Art",
-//     "52": "BXA Intercollege Degree Programs",
-//     "83": "Biological Sciences",
-//     "42": "Biomedical Engineering",
-//     "70": "Business Administration",
-//     "62": "CFA Interdisciplinary",
-//     "39": "CIT Interdisciplinary",
-//     "99": "Carnegie Mellon University-Wide Studies",
-//     "64": "Center for the Arts in Society",
-//     "86": "Center for the Neural Basis of Cognition",
-//     "06": "Chemical Engineering",
-//     "09": "Chemistry",
-//     "12": "Civil & Environmental Engineering",
-//     "02": "Computational Biology",
-//     "15": "Computer Science",
-//     "62": "Computer Science and Arts",
-//     "93": "Creative Enterprise:Sch of Pub Pol & Mgt",
-//     "51": "Design",
-//     "67": "Dietrich College Information Systems",
-//     "66": "Dietrich College Interdisciplinary",
-//     "54": "Drama",
-//     "73": "Economics",
-//     "18": "Electrical & Computer Engineering",
-//     "20": "Electronic Commerce",
-//     "19": "Engineering & Public Policy",
-//     "76": "English",
-//     "53": "Entertainment Technology Pittsburgh",
-//     "65": "General Dietrich College",
-//     "94": "Heinz College Wide Courses",
-//     "79": "History",
-//     "05": "Human-Computer Interaction",
-//     "62": "Humanities and Arts",
-//     "04": "Information & Communication Technology",
-//     "14": "Information Networking Institute",
-//     "95": "Information Systems:Sch of IS & Mgt",
-//     "84": "Institute for Politics and Strategy",
-//     "08": "Institute for Software Research",
-//     "49": "Integrated Innovation Institute",
-//     "11": "Language Technologies Institute",
-//     "38": "MCS Interdisciplinary",
-//     "10": "Machine Learning",
-//     "27": "Materials Science & Engineering",
-//     "21": "Mathematical Sciences",
-//     "24": "Mechanical Engineering",
-//     "92": "Medical Management:Sch of Pub Pol & Mgt",
-//     "82": "Modern Languages",
-//     "57": "Music",
-//     "32": "Naval Science - ROTC",
-//     "80": "Philosophy",
-//     "69": "Physical Education",
-//     "33": "Physics",
-//     "85": "Psychology",
-//     "91": "Public Management:Sch of Pub Pol & Mgt",
-//     "90": "Public Policy & Mgt: Sch of Pub Pol & Mgt",
-//     "16": "Robotics",
-//     "62": "Science and Arts",
-//     "88": "Social & Decision Sciences",
-//     "17": "Software Engineering",
-//     "36": "Statistics",
-//     "98": "StuCo (Student Led Courses)",
-//     "45": "Tepper School of Business",
-//     "03": " Biological Sciences"
-// }
 
 export function randomPick(myArray) {
   return myArray[Math.floor(Math.random() * myArray.length)];
@@ -193,3 +153,50 @@ export var searchTips = [
   "a time '8:00am'",
   "a day 'Monday'"
 ]
+
+var queryRe = {
+  courseid: /\b\d{2}-\d{3}|\d{5}\b/,
+  building: /\bbh|cfa|cic|cyh|dh|eds|ges|ghc|gym|hbh|hh|hl|ia|ini|mi|mm|nsh|pca|pos|ph|ptc|reh|scr|sei|sh|uc|wh|weh\b/,
+  buidlingFull: /\bbaker|cyert|doherty|stadium|gates|weigand|gymnasium|gym|hamburg|hamerschlag|hunt|library|tepper|posner|gsia|mellon|newell|simon|purnell|porter|roberts|scaife|warner|wean\b/,
+  room: /\b\w?\d+\w?\b/,
+  buildingRoom: /\b(bh|cfa|cic|cyh|dh|eds|ges|ghc|gym|hbh|hh|hl|ia|ini|mi|mm|nsh|pca|pos|ph|ptc|reh|scr|sei|sh|uc|wh|weh)(\w?\d+\w?)\b/
+}
+
+export function parseSearchQuery(query) {
+  let parsedQuery = {}
+  // Only keep the first 100 letters in the query
+  query = query.slice(0, 100).toLowerCase()
+  if (queryRe.courseid.test(query)) {
+    parsedQuery.courseid = query.match(queryRe.courseid)[0]
+    parsedQuery.courseid = parsedQuery.courseid.replace(/(\d{2})(\d{3})/, "$1-$2")
+    query = query.replace(queryRe.courseid, '')
+  }
+  if (queryRe.buildingRoom.test(query)) {
+    parsedQuery.building = query.match(queryRe.buildingRoom)[1]
+    parsedQuery.room = query.match(queryRe.buildingRoom)[2]
+    query = query.replace(queryRe.buildingRoom, '')
+  } else {
+    if (queryRe.building.test(query)) {
+      parsedQuery.building = query.match(queryRe.building)[0]
+      query = query.replace(queryRe.building, '')
+    } else if (queryRe.buidlingFull.test(query)) {
+      parsedQuery.building = query.match(queryRe.buidlingFull)[0]
+      query = query.replace(queryRe.buidlingFull, '')
+    }
+    if (queryRe.room.test(query)) {
+      parsedQuery.room = query.match(queryRe.room)[0]
+      query = query.replace(queryRe.room, '')
+    }
+  }
+  if (query && query.trim() !== "") {
+    parsedQuery.text = query
+  }
+  console.log(parsedQuery)
+  return parsedQuery
+}
+
+export function encodeURIParams(params) {
+  return Object.keys(params)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+      .join('&')
+}
