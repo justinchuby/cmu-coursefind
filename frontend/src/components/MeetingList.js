@@ -111,7 +111,7 @@ class MeetingList extends Component {
         )
         return (
           {
-            key: meeting.course.courseid + meeting.name,
+            key: meeting.course.courseid + meeting.name + meeting.course.semester,
             leftHeaderIcon: (
               <i className="material-icons hide-on-small-only">class</i>
             ),
