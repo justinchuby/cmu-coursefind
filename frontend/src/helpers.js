@@ -191,7 +191,6 @@ export function parseSearchQuery(query) {
   if (query && query.trim() !== "") {
     parsedQuery.text = query
   }
-  console.log(parsedQuery)
   return parsedQuery
 }
 

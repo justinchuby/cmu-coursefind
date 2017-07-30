@@ -36,22 +36,24 @@ class Search extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const search = nextProps.location.search; // could be '?foo=bar'
-    const params = new URLSearchParams(search);
-    const query = params.get('q');
-    if (query && query !== '') {
-      this.setState({query: query, loading: true})
+    if (!this.state.courses || nextProps.location.search !== this.props.location.search) {
+      const search = nextProps.location.search; // could be '?foo=bar'
+      const params = new URLSearchParams(search);
+      const query = params.get('q');
+      if (query && query !== '') {
+        this.setState({query: query, loading: true})
 
-      let parsedQuery = parseSearchQuery(query)
-      let clonedQuery = Object.assign({}, parsedQuery)
-      clonedQuery.instructor = clonedQuery.text
-      delete clonedQuery.text
+        let parsedQuery = parseSearchQuery(query)
+        let clonedQuery = Object.assign({}, parsedQuery)
+        clonedQuery.instructor = clonedQuery.text
+        delete clonedQuery.text
 
-      this.executeSearch(
-        "https://api.cmucoursefind.xyz/course/v1/search/",
-        [clonedQuery, parsedQuery],
-        true
-      )
+        this.executeSearch(
+          "https://api.cmucoursefind.xyz/course/v1/search/",
+          [clonedQuery, parsedQuery],
+          true
+        )
+      }
     }
   }
 
