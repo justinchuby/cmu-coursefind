@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
-import MeetingList from './components/MeetingList'
+import PaginatedMeetingList from './components/PaginatedMeetingList'
 
 import { Course } from './utils/cmu_course'
 import {
@@ -24,7 +24,9 @@ class Search extends Component {
       lectures: null,
       sections: null,
       query: null,
-      loading: false
+      loading: false,
+      pageSize: 20,
+      page: {lectures: 1, sections:1}
     }
   }
 
@@ -57,6 +59,17 @@ class Search extends Component {
         )
       }
     }
+    const page = this.parsePageNumberFromHash(nextProps.location.hash)
+    if (page) {
+      this.setState({page: {lectures: page, sections: page}})
+    } else {
+      this.setState({page: {lectures: 1, sections: 1}})
+    }
+  }
+
+  parsePageNumberFromHash(hash) {
+    hash = hash.slice(1)
+    return parseInt(hash) || null
   }
 
   executeSearch(url, paramsList, shouldRetry) {
@@ -86,7 +99,8 @@ class Search extends Component {
               }).reduce(
               (a, b) => a.concat(b), []
               ),
-            loading: false
+            loading: false,
+            page: {lectures: 1, sections:1}
           })
         } else {
           // no matching courses
@@ -97,7 +111,8 @@ class Search extends Component {
               courses: [],
               lectures: [],
               sections: [],
-              loading: false
+              loading: false,
+              page: {lectures: 1, sections:1}
             })
           }
         }
@@ -136,7 +151,6 @@ class Search extends Component {
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.lectures.length} lectures.
                         </p>
-                        <MeetingList meetings={this.state.lectures} />
                       </div>
                     ) : (
                         <div>
@@ -158,7 +172,6 @@ class Search extends Component {
                         <p className="flow-text grey-text text-darken-1">
                           Found {this.state.sections.length} sections.
                         </p>
-                        <MeetingList meetings={this.state.sections} />
                       </div>
                     ) : (
                         <div>
