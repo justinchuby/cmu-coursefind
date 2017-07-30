@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom'
 import { randomPick } from '../helpers';
 import './Navbar.css';
+import Spinner from './Spinner'
 
 
 class Navbar extends Component {
@@ -10,7 +11,7 @@ class Navbar extends Component {
     this.state = {
       searchPrompt: "Search",
       searchValue: props.searchValue,
-      searchSubmitted: false
+      searchSubmitted: false,
     }
   }
 
@@ -81,7 +82,11 @@ class Navbar extends Component {
                       onBlur={this.handleBlur.bind(this)}
                       onChange={this.handleChange.bind(this)}></input>
                     <label className="label-icon" htmlFor="search-text">
-                      <i className="material-icons">search</i>
+                      {this.props.loader ? (
+                        <Spinner />
+                      ) : (
+                        <i className="material-icons">search</i>
+                      )}
                     </label>
                     <i className="material-icons"
                       onClick={this.clearSearchBar.bind(this)}>

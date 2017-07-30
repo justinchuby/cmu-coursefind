@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Layout from './components/Layout'
 import MeetingList from './components/MeetingList'
-import Spinner from './components/Spinner'
+
 import { Course } from './utils/cmu_course'
 import {
   getCurrentSemester,
@@ -112,7 +112,8 @@ class Search extends Component {
         <Layout
           navbarProps={{
             searchTips: searchTips,
-            searchValue: this.state.query
+            searchValue: this.state.query,
+            loader: this.state.loading
           }}
           mainContent={
             <div className="container">
@@ -127,7 +128,7 @@ class Search extends Component {
 
               <div id="lec" className="row">
                 {
-                  (!this.state.loading) ? (
+                  (this.state.lectures) ? (
                     (this.state.lectures && this.state.lectures.length !== 0) ? (
                       <div>
                         <p className="flow-text grey-text text-darken-1">
@@ -143,13 +144,13 @@ class Search extends Component {
                       </div>
                     )
                   ) : (
-                    <Spinner />
+                    null
                   )
                 }
               </div>
               <div id="sec" className="row">
                 {
-                  (!this.state.loading) ? (
+                  (this.state.sections) ? (
                     (this.state.sections && this.state.sections.length !== 0) ? (
                       <div>
                         <p className="flow-text grey-text text-darken-1">
@@ -165,7 +166,7 @@ class Search extends Component {
                       </div>
                     )
                   ) : (
-                    <Spinner />
+                    null
                   )
                 }
               </div>
