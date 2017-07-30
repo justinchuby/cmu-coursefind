@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class Dropdown extends Component {
-  // props: name, content, dropdownContents, extraClasses
+  // props: name, content, dropdownContents, extraClass
   render() {
     const dropdownContents = this.props.dropdownContents.map((elem, index) => {
       return (
@@ -10,7 +10,7 @@ class Dropdown extends Component {
     })
     return (
       <span>
-        <a class={`dropdown-button ${...extraClasses}`} href='#' data-activates={this.props.name}>{this.props.content}</a>
+        <a class={`dropdown-button ${this.props.extraClass}`} href='#' data-activates={this.props.name}>{this.props.content}</a>
         <ul id={this.props.name} class='dropdown-content'>
           {dropdownContents}
         </ul>

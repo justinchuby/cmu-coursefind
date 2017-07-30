@@ -5,7 +5,7 @@ class Chip extends Component {
   render() {
     return (
       <div
-        className={`chip ${...this.props.extraClasses}`}
+        className={`chip ${this.props.extraClass}`}
         style={this.props.style}>
         {this.props.content}
       </div>

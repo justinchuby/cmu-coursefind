@@ -199,3 +199,58 @@ export function encodeURIParams(params) {
     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
     .join('&')
 }
+
+export function compareSemesters(a, b) {
+  let term, year
+  [aTerm, aYear] = a.toLowerCase().split(" ")
+  [bTerm, bYear] = b.toLowerCase().split(" ")
+  if (aYear < bYear) {
+    return -1
+  }
+  else if (aTerm === 'spring') {
+    switch (bTerm) {
+      case 'spring':
+        return 0
+      case 'fall':
+        return -1
+      case 'summer one/all':
+        return -1
+      case 'summer two':
+        return -1
+    }
+  } else if (aTerm === 'fall') {
+    switch (bTerm) {
+      case 'spring':
+        return 1
+      case 'fall':
+        return 0
+      case 'summer one/all':
+        return -1
+      case 'summer two':
+        return -1
+    }
+  } else if (aTerm === 'summer one/all') {
+    switch (bTerm) {
+      case 'spring':
+        return 1
+      case 'fall':
+        return 1
+      case 'summer one/all':
+        return 0
+      case 'summer two':
+        return -1
+    }
+  } else if (aTerm === 'summer two') {
+    switch (bTerm) {
+      case 'spring':
+        return 1
+      case 'fall':
+        return 1
+      case 'summer one/all':
+        return 1
+      case 'summer two':
+        return 0
+    }
+  }
+  return 0
+}

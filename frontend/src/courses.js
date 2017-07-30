@@ -6,7 +6,11 @@ import CoursesLectureCards from './components/CoursesLectureCards'
 import CoursesSectionList from './components/CoursesSectionList'
 import CoursesInstructorChips from './components/CoursesInstructorChips'
 import { Course } from './utils/cmu_course'
-import { searchTips } from './helpers'
+import {
+  searchTips,
+  getCurrentSemester,
+  compareSemesters
+} from './helpers'
 import { getDetailPageColor } from './utils/detailsPageColor'
 import { Helmet } from 'react-helmet'
 
@@ -15,7 +19,8 @@ class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: null,
+      courses: null,
+      semester: null,
       colors: {
         majorColor: 'purple lighten-1',
         textMajorColor: 'white-text',
@@ -28,11 +33,16 @@ class Courses extends Component {
   }
 
   displayCourse(courses) {
-    let courseObj = new Course(courses[0])
-    // TODO: add button to switch between courses
+    let courseObjs = {}
+    for (let course of courses) {
+      // Use semester as key
+      courseObjs[course.semester] = course
+    }
     this.setState({
-      course: courseObj,
-      colors: getDetailPageColor(courseObj.courseid)
+      courses: courseObjs,
+      // TODO: get a better name for this function
+      semester: pickSemesterFromCourses(courseObjs),
+      colors: getDetailPageColor(this.params.match.courseid)
     })
   }
 
@@ -76,7 +86,7 @@ class Courses extends Component {
                 <div className="row">
                   <div className="col s12 l9">
                     <CoursesCard
-                      course={this.state.course}
+                      courses={this.state.courses}
                       colors={this.state.colors}
                     />
                   </div>
@@ -151,3 +161,13 @@ class Courses extends Component {
 }
 
 export default Courses;
+
+function pickSemesterFromCourses(courses) {
+  // todo check this
+  currentSemester = getCurrentSemester()
+  if (courses.hasOwnProperty(currentSemester)) {
+    return currentSemester
+  }
+  sortedCourses = courses.map((course) => course).sort(compareSemesters).reverse()
+  return sortedCourses[0].semester
+}

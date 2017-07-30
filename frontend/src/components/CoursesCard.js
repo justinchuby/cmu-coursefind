@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Card from './Card'
+import Dropdown from './Dropdown'
+import Chip from './Chip'
 import CoursesReqChips from './CoursesReqChips'
 
 class CoursesCard extends Component {
-  // props: course, colors:{majorColor, textMajorColor, courseidColor, textAccentColor}
+  // props: courses, colors:{majorColor, textMajorColor, courseidColor, textAccentColor}
   cardContent() {
     const course = this.props.course
     return (
@@ -24,10 +26,8 @@ class CoursesCard extends Component {
                     style={{backgroundColor: "rgba(255, 255, 255, 0.2)"}}
                   />
                 }
-                dropdownContents={this.courses.map((course) => course.semester)}
-// HERE
-
-
+                dropdownContents={this.props.courses.map((course) => course.semester)}
+              />
             </h1>
             <h4 className={`light ${this.props.colors.textMajorColor}`}>{course.name}</h4>
             <p>
