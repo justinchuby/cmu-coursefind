@@ -99,8 +99,7 @@ class Search extends Component {
               }).reduce(
               (a, b) => a.concat(b), []
               ),
-            loading: false,
-            page: { lectures: 1, sections: 1 }
+            loading: false
           })
         } else {
           // no matching courses
@@ -111,8 +110,7 @@ class Search extends Component {
               courses: [],
               lectures: [],
               sections: [],
-              loading: false,
-              page: { lectures: 1, sections: 1 }
+              loading: false
             })
           }
         }
