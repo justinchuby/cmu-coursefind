@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Collapsible from './Collapsible'
 import {
   daysToString,
@@ -136,11 +136,11 @@ class MeetingList extends Component {
             bodyText: (
               <p className="grey-text text-lighten-5">
                 <span className="flow-text">
-                  <a className="amber-text text-accent-4"
-                    href={`/search?q=${meeting.course.courseid}`}
+                  <Link className="amber-text text-accent-4"
+                    to={`/search?q=${meeting.course.courseid}`}
                     rel="nofollow">
                     {meeting.course.courseid}
-                  </a> &nbsp;
+                  </Link> &nbsp;
                   {meeting.course.name} &nbsp;
                   {meeting.name} &nbsp;
                 </span>
