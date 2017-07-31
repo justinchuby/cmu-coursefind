@@ -51,7 +51,8 @@ class Home extends Component {
             ).filter(
             meeting => {
               return filterMeeting(meeting)
-            }
+            }).sort(
+              compareCourse
             ),
           sections: courses.map(
             course => {
@@ -61,7 +62,8 @@ class Home extends Component {
             ).filter(
             meeting => {
               return filterMeeting(meeting)
-            }
+            }).sort(
+              compareCourse
             )
         })
       })
@@ -176,3 +178,19 @@ function filterMeeting(meeting) {
 }
 
 export default Home;
+
+function compareCourse(a, b) {
+  // NOTE: Nasty comparator for homepage sorting
+  // TODO: rewrite this
+  if (a.isHappeningNow()) {
+    if (b.isHappeningNow()) {
+      return 0
+    } else {
+      return -1
+    }
+  } else if (b.isHappeningNow()) {
+    return 1
+  } else {
+    return 0
+  }
+}
