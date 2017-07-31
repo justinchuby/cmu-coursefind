@@ -28,3 +28,7 @@ nav {
     -o-transition: background-color 200ms ease-out;
     transition: background-color 200ms ease-out;
 }
+
+.navbar-fixed {
+    height: 90px;
+}

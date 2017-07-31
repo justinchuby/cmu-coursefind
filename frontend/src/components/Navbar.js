@@ -55,7 +55,7 @@ class Navbar extends Component {
       }} />
     } else {
       return (
-        <div className="navbar-fixed" style={{ height: '100px' }}>
+        <div className="navbar-fixed">
           <nav className={this.props.color}>
             <div className="nav-wrapper">
               <a data-activates="slide-out"
