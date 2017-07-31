@@ -121,7 +121,7 @@ class MeetingList extends Component {
               {meeting.name !== "Lec" &&
                   meeting.name
                 }
-                &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 {meeting.course.name}
               </span>
             ),

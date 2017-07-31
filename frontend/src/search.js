@@ -60,7 +60,7 @@ class Search extends Component {
       }
     }
     const page = this.parsePageNumberFromHash(nextProps.location.hash)
-    if (page) {
+    if (page > 0 ) {
       this.setState({ page: { lectures: page, sections: page } })
     } else {
       this.setState({ page: { lectures: 1, sections: 1 } })

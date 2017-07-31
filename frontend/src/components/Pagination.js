@@ -12,24 +12,26 @@ class Pagination extends Component {
     })
     return (
       <ul className="pagination">
-        <li className={`${this.props.page === 1 ? 'disabled' : 'waves-effect'}`}>
-          <a href={`#${
-            (this.props.page > 1) ? (
-              this.props.page - 1
-            ) : (
-                this.props.page
-              )}`}>
+        <li className={`${this.props.page === 1 ? 'disabled waves-effect' : 'waves-effect'}`}>
+          <a {...{
+            href: (this.props.page > 1) ? (
+              `#${this.props.page - 1}`
+              ) : (
+              null
+              )
+          }}>
             <i className="material-icons">chevron_left</i>
           </a>
         </li>
         {lis}
-        <li className={`${this.props.page === this.props.totalPage ? 'disabled' : 'waves-effect'}`}>
-          <a href={`#${
-            (this.props.page < this.props.totalPage) ? (
-              this.props.page + 1
+        <li className={`${this.props.page === this.props.totalPage ? 'disabled waves-effect' : 'waves-effect'}`}>
+          <a {...{
+            href: (this.props.page < this.props.totalPage) ? (
+              `#${this.props.page + 1}`
             ) : (
-                this.props.page
-              )}`}>
+              null
+            )
+          }}>
             <i className="material-icons">chevron_right</i>
           </a>
         </li>
