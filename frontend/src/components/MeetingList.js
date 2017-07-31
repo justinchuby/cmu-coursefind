@@ -60,7 +60,6 @@ class MeetingList extends Component {
   render() {
     const meetingList = this.props.meetings.map(
       meeting => {
-        const currentCourseTime = meeting.currentTimeObj() || meeting.nextTimeObj()
         const courseMeeingText = meeting.times.map(
           (time, index) => {
             return (

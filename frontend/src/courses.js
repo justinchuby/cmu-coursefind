@@ -9,17 +9,18 @@ import { Course } from './utils/cmu_course'
 import {
   searchTips,
   getCurrentSemester,
-  compareSemesters
+  compareSemesters,
+  semesterFromAbbr
 } from './helpers'
 import { getDetailPageColor } from './utils/detailsPageColor'
 import { Helmet } from 'react-helmet'
-
+import { Redirect } from 'react-router-dom'
 
 class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: null,
+      courses: {},
       semester: null,
       colors: {
         majorColor: 'purple lighten-1',
@@ -32,17 +33,24 @@ class Courses extends Component {
     }
   }
 
-  displayCourse(courses) {
+  displayCourse(props, courses) {
     let courseObjs = {}
     for (let course of courses) {
       // Use semester as key
-      courseObjs[course.semester] = course
+      courseObjs[course.semester] = new Course(course)
+    }
+    let semester
+    console.log(props.match.params.semester)
+    if (props.match.params.semester) {
+      semester = semesterFromAbbr(props.match.params.semester)
+    } else {
+      semester = pickSemesterFromCourses(courseObjs)
     }
     this.setState({
       courses: courseObjs,
       // TODO: get a better name for this function
-      semester: pickSemesterFromCourses(courseObjs),
-      colors: getDetailPageColor(this.params.match.courseid)
+      semester: semester,
+      colors: getDetailPageColor(props.match.params.courseid)
     })
   }
 
@@ -56,7 +64,7 @@ class Courses extends Component {
       .then((response) => { return response.json() })
       .then((jsonResponse) => {
         if (jsonResponse.courses) {
-          this.displayCourse(jsonResponse.courses)
+          this.displayCourse(nextProps, jsonResponse.courses)
         }
         // TODO: deal with the case when there's a server error
         // TODO: deal with 404's
@@ -64,14 +72,32 @@ class Courses extends Component {
   }
 
   render() {
+    const selectedCourse = this.state.courses[this.state.semester]
+    if (!selectedCourse && Object.keys(this.state.courses).length !== 0) {
+      // No information about the requested semester
+      return (
+        <Redirect push to={{
+          pathname: `/courses/${this.props.match.params.courseid}`
+          }}
+        />
+      )
+    }
+    if (Object.keys(this.state.courses).length === 0) {
+      // No information about the course
+      return (
+        null
+        // TODO: implement not found page
+        // <NotFound message="Couldn't find this course"/>
+      )
+    }
     return (
       <div>
         <Helmet>
-          {this.state.course && (
-            <title>{this.state.course.courseid}: {this.state.course.name} - {this.state.course.semester} - CMU Course Find</title>
+          {selectedCourse && (
+            <title>{selectedCourse.courseid}: {selectedCourse.name} - {selectedCourse.semester} - CMU Course Find</title>
           )}
-          {this.state.course && (
-            <meta name="description" content={`${this.state.course.courseid}: ${this.state.course.name}  ${this.state.course.desc}`} />
+          {selectedCourse && (
+            <meta name="description" content={`${selectedCourse.courseid}: ${selectedCourse.name}  ${selectedCourse.desc}`} />
           )}
         </Helmet>
         <Layout
@@ -80,13 +106,14 @@ class Courses extends Component {
             color: this.state.colors.NavbarColor
           }}
           mainContent={
-            (this.state.course) ? (
+            (selectedCourse) ? (
               /* course loaded */
               <div>
                 <div className="row">
                   <div className="col s12 l9">
                     <CoursesCard
                       courses={this.state.courses}
+                      semester={this.state.semester}
                       colors={this.state.colors}
                     />
                   </div>
@@ -97,7 +124,7 @@ class Courses extends Component {
                     <br />
                     <div className="row">
                       <div className="col s12 m10">
-                        <CoursesDescription content={this.state.course.desc} />
+                        <CoursesDescription content={selectedCourse.desc} />
                       </div>
                     </div>
                   </div>
@@ -106,19 +133,18 @@ class Courses extends Component {
                     <br />
                     <div className="row">
                       <div className="col s12 m10">
-
                         <CoursesInstructorChips
-                          instructors={this.state.course.instructors} />
+                          instructors={selectedCourse.instructors} />
                       </div>
                     </div>
                   </div>
                   {
-                    (this.state.course.lectures.length !== 0) ? (
+                    (selectedCourse.lectures.length !== 0) ? (
                       <div className="section">
                         <h4>Lectures</h4>
                         <br />
                         <CoursesLectureCards
-                          meetings={this.state.course.lectures}
+                          meetings={selectedCourse.lectures}
                           colors={this.state.colors}
                         />
                       </div>
@@ -127,12 +153,12 @@ class Courses extends Component {
                       )
                   }
                   {
-                    (this.state.course.sections.length !== 0) ? (
+                    (selectedCourse.sections.length !== 0) ? (
                       <div className="section">
                         <h4>Sections</h4>
                         <br />
                         <CoursesSectionList
-                          meetings={this.state.course.sections}
+                          meetings={selectedCourse.sections}
                           colors={this.state.colors}
                         />
                       </div>
@@ -151,7 +177,7 @@ class Courses extends Component {
               )
           }
           footerProps={{
-            leftFooterText: this.state.course ? this.state.course.semester : '',
+            leftFooterText: selectedCourse ? selectedCourse.semester : '',
             rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br /></span>
           }}
         />
@@ -164,10 +190,13 @@ export default Courses;
 
 function pickSemesterFromCourses(courses) {
   // todo check this
-  currentSemester = getCurrentSemester()
+  const currentSemester = getCurrentSemester()
   if (courses.hasOwnProperty(currentSemester)) {
     return currentSemester
   }
-  sortedCourses = courses.map((course) => course).sort(compareSemesters).reverse()
+  
+  const sortedCourses = [...Object.values(courses)]
+    .sort((a, b) => compareSemesters(a.semester, b.semester))
+    .reverse()
   return sortedCourses[0].semester
 }

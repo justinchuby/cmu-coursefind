@@ -137,7 +137,7 @@ export function getSemesterFromDate(date) {
   } else if (3 <= mini && mini <= 4) {
     semester = "Spring"
   } else if (mini === 5) {
-    semester = "Summer One"
+    semester = "Summer One/All"
   } else {
     semester = "Summer Two"
   }
@@ -146,12 +146,12 @@ export function getSemesterFromDate(date) {
 
 export var searchTips = [
   "a course number '15-112'",
-  "name of an instructor",
+  "name of an instructor 'Kosbie'",
   "name of a course",
   "a room 'DH2210'",
   "a building 'Doherty'",
-  "a time '8:00am'",
-  "a day 'Monday'"
+  // "a time '8:00am'",
+  // "a day 'Monday'"
 ]
 
 var queryRe = {
@@ -201,9 +201,8 @@ export function encodeURIParams(params) {
 }
 
 export function compareSemesters(a, b) {
-  let term, year
-  [aTerm, aYear] = a.toLowerCase().split(" ")
-  [bTerm, bYear] = b.toLowerCase().split(" ")
+  const [aTerm, aYear] = a.toLowerCase().match(/(.+) (\d{4})/).slice(1, 3)
+  const [bTerm, bYear] = b.toLowerCase().match(/(.+) (\d{4})/).slice(1, 3)
   if (aYear < bYear) {
     return -1
   }
@@ -253,4 +252,26 @@ export function compareSemesters(a, b) {
     }
   }
   return 0
+}
+
+export function semesterToAbbr(semester) {
+  const [term, year] = semester.toLowerCase().match(/(.+) (\d{4})/).slice(1, 3)
+  const dict = {
+    'fall': 'f',
+    'spring': 's',
+    'summer one/all': 'm1',
+    'summer two': 'm2'
+  }
+  return dict[term] + year.slice(2)
+}
+
+export function semesterFromAbbr(abbr) {
+  const [term, year] = abbr.toLowerCase().match(/(f|s|m1|m2)(\d{2})/).slice(1, 3)
+  const dict = {
+    'f': 'Fall',
+    's': 'Spring',
+    'm1': 'Summer One/All',
+    'm2': 'Summer Two'
+  }
+  return dict[term] + ' 20' + year
 }
