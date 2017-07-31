@@ -206,7 +206,10 @@ export function compareSemesters(a, b) {
   if (aYear < bYear) {
     return -1
   }
-  else if (aTerm === 'spring') {
+  if (aYear > bYear) {
+    return 1
+  }
+  if (aTerm === 'spring') {
     switch (bTerm) {
       case 'spring':
         return 0

@@ -40,7 +40,6 @@ class Courses extends Component {
       courseObjs[course.semester] = new Course(course)
     }
     let semester
-    console.log(props.match.params.semester)
     if (props.match.params.semester) {
       semester = semesterFromAbbr(props.match.params.semester)
     } else {
