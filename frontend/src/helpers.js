@@ -224,16 +224,16 @@ export function compareSemesters(a, b) {
       case 'fall':
         return 0
       case 'summer one/all':
-        return -1
+        return 1
       case 'summer two':
-        return -1
+        return 1
     }
   } else if (aTerm === 'summer one/all') {
     switch (bTerm) {
       case 'spring':
         return 1
       case 'fall':
-        return 1
+        return -1
       case 'summer one/all':
         return 0
       case 'summer two':
@@ -244,7 +244,7 @@ export function compareSemesters(a, b) {
       case 'spring':
         return 1
       case 'fall':
-        return 1
+        return -1
       case 'summer one/all':
         return 1
       case 'summer two':
