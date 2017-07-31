@@ -25,7 +25,7 @@ class Search extends Component {
       sections: null,
       query: null,
       loading: false,
-      pageSize: 20,
+      pageSize: 30,
       page: { lectures: 1, sections: 1 }
     }
   }
