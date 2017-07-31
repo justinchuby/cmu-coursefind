@@ -266,7 +266,11 @@ export function semesterToAbbr(semester) {
 }
 
 export function semesterFromAbbr(abbr) {
-  const [term, year] = abbr.toLowerCase().match(/(f|s|m1|m2)(\d{2})/).slice(1, 3)
+  const match = abbr.toLowerCase().match(/^(f|s|m1|m2)(\d{2})$/)
+  if (!match) {
+    return null
+  }
+  const [term, year] = match.slice(1, 3)
   const dict = {
     'f': 'Fall',
     's': 'Spring',
