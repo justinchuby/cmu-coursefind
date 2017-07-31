@@ -99,9 +99,9 @@ class MeetingList extends Component {
                 {time.begin &&
                   <span>
                     <span className="grey-text text-lighten-2"> From </span>
-                    {time.begin.format("HH:mmA")}
+                    {time.begin.format("h:mm a")}
                     <span className="grey-text text-lighten-2"> to </span>
-                    {time.end.format("HH:mmA")}
+                    {time.end.format("h:mm a")}
                     <br /><br />
                   </span>
                 }
