@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Helmet } from 'react-helmet'
+import { Redirect } from 'react-router-dom'
 import Layout from './components/Layout'
 import CoursesCard from './components/CoursesCard'
 import CoursesDescription from './components/CoursesDescription'
@@ -13,8 +15,7 @@ import {
   semesterFromAbbr
 } from './helpers'
 import { getDetailPageColor } from './utils/detailsPageColor'
-import { Helmet } from 'react-helmet'
-import { Redirect } from 'react-router-dom'
+import NotFound from './404'
 
 class Courses extends Component {
   constructor(props) {
@@ -64,6 +65,8 @@ class Courses extends Component {
       .then((jsonResponse) => {
         if (jsonResponse.courses) {
           this.displayCourse(nextProps, jsonResponse.courses)
+          // jsonResponse.courses.length !== 0
+          // TODO: check response status code and decide if 404
         }
         // TODO: deal with the case when there's a server error
         // TODO: deal with 404's
@@ -84,9 +87,10 @@ class Courses extends Component {
     if (Object.keys(this.state.courses).length === 0) {
       // No information about the course
       return (
-        null
-        // TODO: implement not found page
-        // <NotFound message="Couldn't find this course"/>
+        <NotFound message={
+          `We can't find ${this.props.match.params.courseid} for now. 
+          If you think this is an error, please ${<a href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">report it</a>}. Thanks!`
+        }/>
       )
     }
     return (
