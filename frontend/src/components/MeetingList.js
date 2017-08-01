@@ -154,7 +154,7 @@ class MeetingList extends Component {
                 }
                 <br /><br />
                 <a
-                  href={`/courses/${meeting.course.courseid}/`}
+                  href={`/courses/${meeting.course.courseid}`}
                   className="waves-effect waves-light grey-text text-lighten-5">
                   {"< "}
                   {/* TODO: make this more like a button */}

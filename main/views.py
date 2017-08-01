@@ -11,6 +11,18 @@ class Home(View):
         return render(request, 'main/index.html')
 
 
+class CourseDetails(View):
+    def get(self, request, **kwargs):
+        courseid = kwargs.get("courseid")
+        course_index = kwargs.get("index")
+        if course_index:
+            r = requests.get('https://api.cmucoursefind.xyz/course/v1/course/{}/term/{}/'.format(courseid, course_index))
+        else:
+            r = requests.get('https://api.cmucoursefind.xyz/course/v1/course/{}/'.format(courseid))
+        context = {'course': r.json().get('course')}
+        return render(request, 'main/course_details.html', context)
+
+
 def page_not_found(request):
     return render(request, 'main/index.html')
 
