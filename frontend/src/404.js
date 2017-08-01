@@ -9,7 +9,7 @@ class NotFound extends Component {
     return (
       <div>
         <Helmet>
-          <title>Not Found - CMU Course Find</title>
+          <title>{this.props.title || 'Not Found'} - CMU Course Find</title>
         </Helmet>
         <Layout
           navbarProps={{
@@ -17,12 +17,16 @@ class NotFound extends Component {
           }}
           mainContent={
             <div className="container">
-              <div class="section white">
-                <div class="row container">
-                  <div class="col s11">
-                  <h4 class="grey-text text-darken-3">
-                    404<br/><br/>
-                    {this.props.message || 'Opps! The page disappears.'}</h4>
+              <div className="section">
+                <div className="row container">
+                  <div className="col s11">
+                    <h3 className="grey-text text-darken-3">
+                      {this.props.title || '404 Oops'}
+                    </h3>
+                    <br/>
+                    <p className="grey-text text-darken-3 flow-text">
+                      {this.props.message || 'Opps! The page disappears.'}
+                    </p>
                   </div>
                 </div>
               </div>

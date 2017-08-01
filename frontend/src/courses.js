@@ -30,11 +30,15 @@ class Courses extends Component {
         titleColor: 'purple-text text-darken-3',
         textAccentColor: 'teal-text text-accent-2',
         NavbarColor: ''
-      }
+      },
+      response: {}
     }
   }
 
   displayCourse(props, courses) {
+    if (courses.length === 0) {
+      throw 'displayCourse: Courses must have a length of more than 0'
+    }
     let courseObjs = {}
     for (let course of courses) {
       // Use semester as key
@@ -48,7 +52,6 @@ class Courses extends Component {
     }
     this.setState({
       courses: courseObjs,
-      // TODO: get a better name for this function
       semester: semester,
       colors: getDetailPageColor(props.match.params.courseid)
     })
@@ -61,36 +64,43 @@ class Courses extends Component {
   componentWillReceiveProps(nextProps) {
     let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${nextProps.match.params.courseid}/`
     fetch(url)
-      .then((response) => { return response.json() })
-      .then((jsonResponse) => {
-        if (jsonResponse.courses) {
-          this.displayCourse(nextProps, jsonResponse.courses)
-          // jsonResponse.courses.length !== 0
-          // TODO: check response status code and decide if 404
+      .then((response) => {
+        this.setState({response: response})
+        if (response.ok) {
+          // A course is found
+          return response.json()
         }
-        // TODO: deal with the case when there's a server error
-        // TODO: deal with 404's
+        return {}
+      })
+      .then((jsonResponse) => {
+        if (jsonResponse.courses && jsonResponse.courses.length !== 0) {
+          this.displayCourse(nextProps, jsonResponse.courses)
+        }
       })
   }
 
   render() {
+    if (this.state.response.status === 404) {
+      // No information about the course
+      return (
+        <NotFound message={
+          <span>
+          We don't have information about the course {this.props.match.params.courseid} for now. 
+          If you think this is an error, please 
+          <a href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank"> report it</a>
+          . Thanks!
+          </span>
+        }/>
+      )
+    }
     const selectedCourse = this.state.courses[this.state.semester]
-    if (!selectedCourse && Object.keys(this.state.courses).length !== 0) {
+    if (!selectedCourse) {
       // No information about the requested semester
       return (
         <Redirect push to={{
           pathname: `/courses/${this.props.match.params.courseid}`
           }}
         />
-      )
-    }
-    if (Object.keys(this.state.courses).length === 0) {
-      // No information about the course
-      return (
-        <NotFound message={
-          `We can't find ${this.props.match.params.courseid} for now. 
-          If you think this is an error, please ${<a href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">report it</a>}. Thanks!`
-        }/>
       )
     }
     return (
