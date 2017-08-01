@@ -94,12 +94,9 @@ class Courses extends Component {
           </span>
         }/>
       )
-    } else if (!this.state.loaded) {
-      // Not loaded
-      return null
     }
     const selectedCourse = this.state.courses[this.state.semester]
-    if (!selectedCourse) {
+    if (this.state.loaded && !selectedCourse) {
       // No information about the requested semester
       return (
         <Redirect push to={{
