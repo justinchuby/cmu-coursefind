@@ -19,7 +19,10 @@ class CourseDetails(View):
             r = requests.get('https://api.cmucoursefind.xyz/course/v1/course/{}/term/{}/'.format(courseid, course_index))
         else:
             r = requests.get('https://api.cmucoursefind.xyz/course/v1/course/{}/'.format(courseid))
-        context = {'course': r.json().get('course')}
+        context = {
+            'course': r.json().get('course'),
+            'course_index': course_index
+        }
         return render(request, 'main/course_details.html', context)
 
 
