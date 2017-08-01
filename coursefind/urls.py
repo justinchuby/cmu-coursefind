@@ -23,5 +23,10 @@ urlpatterns = [
     url(r'^search[/]?', main.views.Home.as_view()),
     url(r'^about[/]?', main.views.Home.as_view()),
     url(r'^disclaimer[/]?', main.views.Home.as_view()),
-    url(r'^courses/', main.views.Home.as_view())
+    url(r'^courses/', main.views.Home.as_view()),
+    # legacy urls
+    url(r'^(?P<index>(f|s|m1|m2)\d{2})/(?P<courseid>\d{2}-\d{3})[/]?$', main.views.redirect_to_course_detail),
+    url(r'^(?P<index>(f|s|m1|m2)\d{2})/(?P<courseid>\d{5})[/]?$', main.views.redirect_to_course_detail),
+    # site map
+    url(r'^sitemaps/sitemap-(?P<index>((f|s|m1|m2)\d{2})|current)\.txt$', main.views.sitemap),
 ]
