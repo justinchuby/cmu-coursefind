@@ -65,8 +65,10 @@ class Courses extends Component {
 
   componentDidMount() {
     let elems = document.getElementsByClassName("plain-text")
-    for (let elem of elems) {
-      elem.style.cssText = "display: none;"
+    if (elems.length !== 0) {
+      for (let i in elems) {
+        elems[i].style.cssText = "display: none;"
+      }
     }
   }
 
