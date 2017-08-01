@@ -22,9 +22,10 @@
   </head>
 
   <body>
-    <div id="root">
-      {% if course %}
-      <div class="container">
+    <div id="root"></div>
+
+    {% if course %}
+      <div class="container plain-text">
         <h1>
         {{ course.id }}<br/>
         {{ course.name }}
@@ -64,7 +65,7 @@
 
         <h3>Sections</h3>
         <p>
-       {% for section in course.sections %}
+        {% for section in course.sections %}
           {{ section.name }}<br/>
           {{ section.instructors }}
           {% for time in section.times %}
@@ -83,9 +84,8 @@
         </p>
         <br/><br/><br/>
         <p>cmu {{ course.id }} - CMU Coursefind</p>
-      {% endif %}
       </div>
-    </div>
+    {% endif %}
     {% render_bundle 'main' 'js' %}
   </body>
 </html>

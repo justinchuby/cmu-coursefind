@@ -63,6 +63,13 @@ class Courses extends Component {
     this.componentWillReceiveProps(this.props)
   }
 
+  componentDidMount() {
+    let elems = document.getElementsByClassName("plain-text")
+    for (let elem of elems) {
+      elem.style.cssText = "display: none;"
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${nextProps.match.params.courseid}/`
     fetch(url)
