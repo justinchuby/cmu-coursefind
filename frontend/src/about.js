@@ -9,8 +9,13 @@ class About extends Component {
     const mainText = (
       <div className="container">
         <div className="row">
-          <div className="col s11">
+          <div className="col s12">
+            <div className="right">
+              <iframe src="https://ghbtns.com/github-btn.html?user=justinchuby&repo=cmu-coursefind&type=star&count=true&size=large" frameBorder="0" scrolling="0" width="160px" height="30px"></iframe>
+            </div>
             <h2 className="light">Hi !</h2>
+          </div>
+          <div className="col s11">
             <h4 className="grey-text text-darken-3">About CMU Course Find</h4>
             <p className="grey-text text-darken-2">
               <br />
