@@ -31,7 +31,8 @@ class Courses extends Component {
         textAccentColor: 'teal-text text-accent-2',
         NavbarColor: ''
       },
-      response: {}
+      response: {},
+      loaded: false
     }
   }
 
@@ -53,7 +54,8 @@ class Courses extends Component {
     this.setState({
       courses: courseObjs,
       semester: semester,
-      colors: getDetailPageColor(props.match.params.courseid)
+      colors: getDetailPageColor(props.match.params.courseid),
+      loaded: true
     })
   }
 
@@ -92,6 +94,9 @@ class Courses extends Component {
           </span>
         }/>
       )
+    } else if (!this.state.loaded) {
+      // Not loaded
+      return null
     }
     const selectedCourse = this.state.courses[this.state.semester]
     if (!selectedCourse) {
