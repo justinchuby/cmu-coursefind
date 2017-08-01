@@ -43,14 +43,18 @@ def redirect_to_course_detail(request, **kwargs):
 def sitemap(request, **kwargs):
     course_index = kwargs.get("index")
     r = requests.get('https://api.cmucoursefind.xyz/course/v1/list-all-courses/term/{}/'.format(course_index))
-    print(course_index)
     courseids = r.json().get('courseids')
 
     if courseids:
         output = ''
-        for courseid in courseids:
-            output += "https://www.cmucoursefind.xyz/courses/{}/{}\n".format(
-                courseid.strip(), course_index.strip())
+        if course_index == 'current':
+            for courseid in courseids:
+                output += "https://www.cmucoursefind.xyz/courses/{}\n".format(
+                    courseid.strip())
+        else:
+            for courseid in courseids:
+                output += "https://www.cmucoursefind.xyz/courses/{}/{}\n".format(
+                    courseid.strip(), course_index.strip())
         return HttpResponse(output, content_type="text/plain")
-        
+
     raise Http404("No sitemap for /{}".format(course_index))
