@@ -10,7 +10,7 @@ class Navbar extends Component {
     super(props);
     this.state = {
       searchPrompt: "Search",
-      searchValue: props.searchValue,
+      searchValue: props.searchValue || "",
       searchSubmitted: false,
     }
   }
