@@ -27,7 +27,7 @@ class CourseDetails(View):
 
 
 def page_not_found(request):
-    return render(request, 'main/index.html')
+    return render(request, 'main/index.html', status=404)
 
 
 def redirect_to_course_detail(request, **kwargs):
