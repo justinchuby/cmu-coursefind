@@ -1,0 +1,18 @@
+main {
+    /*padding-top: 30px;*/
+    flex: 1 0 auto;
+}
+
+.nomargin
+{
+    margin: 0px;
+    outline: 0px;
+    border: 0px;
+    padding: 0px;
+}
+
+.flexbox-wrapper {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}

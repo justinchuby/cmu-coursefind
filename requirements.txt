@@ -1,5 +1,7 @@
 django<2
 gunicorn
-whitenoise==3.2
+whitenoise>=3.3
 elasticsearch
 django-htmlmin
+requests
+django-webpack-loader

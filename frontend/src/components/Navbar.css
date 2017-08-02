@@ -1,0 +1,34 @@
+.icon-block {
+  padding: 0 15px;
+}
+
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+#search-box {
+    padding-left: 190px;
+}
+
+@media (max-width : 600px) {
+    #search-box {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/*Fix nav display on Chrome*/
+nav .nav-wrapper form, nav .nav-wrapper form .input-field {
+    height: 100%;
+}
+
+nav {
+    -webkit-transition: background-color 200ms ease-out;
+    -moz-transition: background-color 200ms ease-out;
+    -o-transition: background-color 200ms ease-out;
+    transition: background-color 200ms ease-out;
+}
+
+.navbar-fixed {
+    height: 90px;
+}
