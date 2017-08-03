@@ -121,7 +121,7 @@ class Courses extends Component {
             <title>{selectedCourse.courseid}: {selectedCourse.name} - {selectedCourse.semester} - CMU Course Find</title>
           )}
           {selectedCourse && (
-            <meta name="description" content={`${selectedCourse.courseid}: ${selectedCourse.name}  ${selectedCourse.desc}`} />
+            <meta name="description" content={`${selectedCourse.courseid}: ${selectedCourse.name}.  ${selectedCourse.desc}`} />
           )}
         </Helmet>
         <Layout
