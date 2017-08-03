@@ -38,7 +38,7 @@ class Courses extends Component {
 
   displayCourse(props, courses) {
     if (courses.length === 0) {
-      throw 'displayCourse: Courses must have a length of more than 0'
+      throw new Error('displayCourse: Courses must have a length of more than 0')
     }
     let courseObjs = {}
     for (let course of courses) {
@@ -98,7 +98,7 @@ class Courses extends Component {
           <span>
           We don't have information about the course {this.props.match.params.courseid} for now. 
           If you think this is an error, please 
-          <a href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank"> report it</a>
+          <a href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank" rel="nofollow noopener noreferrer"> report it</a>
           . Thanks!
           </span>
         }/>
@@ -202,7 +202,7 @@ class Courses extends Component {
           }
           footerProps={{
             leftFooterText: selectedCourse ? selectedCourse.semester : '',
-            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank">send me feedbacks !</a><br /></span>
+            rightFooterText: <span>Please <a className="teal-text text-accent-1" href="http://www.google.com/recaptcha/mailhide/d?k=01wipM4Cpr-h45UvtXdN2QKQ==&c=r0MIa1Nhtz6i9zAotzfExghYzS_a8HaYrmn_MGl-GBE=" target="_blank" rel="nofollow noopener noreferrer">send me feedbacks !</a><br /></span>
           }}
         />
       </div>

@@ -11,10 +11,6 @@ import {
 
 
 class MeetingList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   getRightHeaderText(meeting) {
     if (meeting.course.semester !== getCurrentSemester()) {
       // Not the current semester, show semester
@@ -73,7 +69,7 @@ class MeetingList extends Component {
                         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
                         <a className="amber-text text-accent-4"
                           href={`https://www.google.com/maps/search/${getFullBuildingName(time.building)}`}
-                          target="_blank" rel="nofollow">
+                          target="_blank" rel="nofollow noopener noreferrer">
                           {getFullBuildingName(time.building)}
                         </a>
                         &nbsp;

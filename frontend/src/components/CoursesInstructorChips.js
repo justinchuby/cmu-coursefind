@@ -22,7 +22,7 @@ class CoursesInstructorChips extends Component {
                   {/* &nbsp;&nbsp;
                   <a className="waves-effect grey-text text-darken-3"
                     href={`http://www.ratemyprofessors.com/search.jsp?query=${instructor}`}
-                    target="_blank" rel="nofollow">
+                    target="_blank" rel="nofollow noopener noreferrer">
                     <i className="material-icons tiny">launch</i>
                   </a> */}
                 </span>

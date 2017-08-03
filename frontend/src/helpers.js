@@ -51,32 +51,32 @@ const _CMU_BUILDINGS_FROM_ABBR = {
   "CFA": "College of Fine Arts"
 }
 
-const _CMU_BUILDINGS = {
-  "baker": "BH",
-  "cyert": "CYH",
-  "doherty": "DH",
-  "stadium": "GES",
-  "gates": "GHC",
-  "weigand": "GYM",
-  "gymnasium": "GYM",
-  "gym": "GYM",
-  "hamburg": "HBH",
-  "hamerschlag": "HH",
-  "hunt": "HL",
-  "library": "HL",
-  "tepper": "POS",
-  "posner": "POS",
-  "gsia": "IA",
-  "mellon": "MI",
-  "newell": "NSH",
-  "simon": "NSH",
-  "purnell": "PCA",
-  "porter": "PH",
-  "roberts": "REH",
-  "scaife": "SH",
-  "warner": "WH",
-  "wean": "WEH"
-}
+// const _CMU_BUILDINGS = {
+//   "baker": "BH",
+//   "cyert": "CYH",
+//   "doherty": "DH",
+//   "stadium": "GES",
+//   "gates": "GHC",
+//   "weigand": "GYM",
+//   "gymnasium": "GYM",
+//   "gym": "GYM",
+//   "hamburg": "HBH",
+//   "hamerschlag": "HH",
+//   "hunt": "HL",
+//   "library": "HL",
+//   "tepper": "POS",
+//   "posner": "POS",
+//   "gsia": "IA",
+//   "mellon": "MI",
+//   "newell": "NSH",
+//   "simon": "NSH",
+//   "purnell": "PCA",
+//   "porter": "PH",
+//   "roberts": "REH",
+//   "scaife": "SH",
+//   "warner": "WH",
+//   "wean": "WEH"
+// }
 
 export function getFullBuildingName(name) {
   return _CMU_BUILDINGS_FROM_ABBR[name]
