@@ -13,11 +13,9 @@ import {
 class MeetingList extends Component {
   constructor(props) {
     super(props);
-    //   // TODO: how should I manipulate the course list?
   }
 
   getRightHeaderText(meeting) {
-    //meeting.course.mini !== 0 && meeting.course.mini !== getMini()
     if (meeting.course.semester !== getCurrentSemester()) {
       // Not the current semester, show semester
       return (
@@ -118,7 +116,7 @@ class MeetingList extends Component {
             leftHeaderText: (
               <span>
                 {meeting.course.courseid} &nbsp;
-              {meeting.name !== "Lec" &&
+                {meeting.name !== "Lec" &&
                   meeting.name
                 }
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -135,13 +133,14 @@ class MeetingList extends Component {
             bodyText: (
               <p className="grey-text text-lighten-5">
                 <span className="flow-text">
-                  <Link className="amber-text text-accent-4"
-                    to={`/search?q=${meeting.course.courseid}`}
-                    rel="nofollow">
-                    {meeting.course.courseid}
-                  </Link> &nbsp;
-                  {meeting.course.name} &nbsp;
-                  {meeting.name} &nbsp;
+                  <a className="grey-text text-lighten-5"
+                    href={`/courses/${meeting.course.courseid}`}>
+                    <span className="amber-text text-accent-4">
+                      {meeting.course.courseid} &nbsp;
+                    </span>
+                    {meeting.course.name} &nbsp;
+                    {meeting.name} &nbsp;
+                  </a>
                 </span>
                 <br /><br />
                 / &nbsp; {(meeting.course.department)} &nbsp; /
@@ -155,13 +154,9 @@ class MeetingList extends Component {
                 <br /><br />
                 <a
                   href={`/courses/${meeting.course.courseid}`}
-                  className="waves-effect waves-light grey-text text-lighten-5">
-                  {"< "}
-                  {/* TODO: make this more like a button */}
-                  More
-                  <span className="amber-text text-accent-4"> details </span>
-                  about this course
-                  {" >"}
+                  className="waves-effect waves-light grey-text text-lighten-5 btn blue-grey">
+                  <span className="amber-text text-accent-4">Click </span>
+                  for details
                 </a>
               </p>
             )
