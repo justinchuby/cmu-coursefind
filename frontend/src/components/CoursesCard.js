@@ -45,7 +45,9 @@ class CoursesCard extends Component {
                 style={{backgroundColor: "rgba(255, 255, 255, 0.2)"}}
               />
             </h1>
-            <h4 className={`light ${this.props.colors.textMajorColor}`}>{course.name}</h4>
+            <h4 className={`light ${this.props.colors.textMajorColor}`}>
+              {course.name}
+            </h4>
             <p>
               {`/ ${course.department} /`}
               <br/>

@@ -29,6 +29,7 @@ class Dropdown extends Component {
       <span>
         <a
           className={`dropdown-button ${this.props.extraClass}`}
+          href="#!"
           data-activates={this.props.name}>
           {this.props.content}
         </a>
