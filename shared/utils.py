@@ -52,14 +52,14 @@ class Listdict(dict):
 ##
 ## @return     (int) minutes, or and Empty object if failed to convert.
 ##
-def inMinutes(time):
-    # represent a time in minutes
-    if isinstance(time, datetime.time) or isinstance(time, datetime.datetime):
-        return time.hour * 60 + time.minute
-    elif isinstance(time, datetime.timedelta):
-        return time.seconds // 60
-    else:
-        return Empty()
+# def inMinutes(time):
+#     # represent a time in minutes
+#     if isinstance(time, datetime.time) or isinstance(time, datetime.datetime):
+#         return time.hour * 60 + time.minute
+#     elif isinstance(time, datetime.timedelta):
+#         return time.seconds // 60
+#     else:
+#         return Empty()
 
 
 ##
@@ -155,6 +155,7 @@ def getBuildingText(building):
     else:
         return building
 
+
 ##
 ## @brief      Gets the name of the department that offers the course.
 ##
@@ -162,18 +163,18 @@ def getBuildingText(building):
 ##
 ## @return     The name of the department if found, original input of not found.
 ##
-def getCourseDepartment(number_searchable):
-    try:
-        num = number_searchable[0]
-    except:
-        return ""
+# def getCourseDepartment(number_searchable):
+#     try:
+#         num = number_searchable[0]
+#     except:
+#         return ""
 
-    _CMU_NUMBER_DEPARTMENTS = cmu_info.CMU_NUMBER_DEPARTMENTS
+#     _CMU_NUMBER_DEPARTMENTS = cmu_info.CMU_NUMBER_DEPARTMENTS
 
-    if num in _CMU_NUMBER_DEPARTMENTS:
-        return _CMU_NUMBER_DEPARTMENTS[num]
-    else:
-        return num
+#     if num in _CMU_NUMBER_DEPARTMENTS:
+#         return _CMU_NUMBER_DEPARTMENTS[num]
+#     else:
+#         return num
 
 
 ##
@@ -188,8 +189,8 @@ def containsNone(thing):
         return True
     if isinstance(thing, str):
         return False
-    if ((isinstance(thing, list) or isinstance(thing, tuple)
-        or isinstance(thing, set) or isinstance(thing, dict)) and None in thing):
+    if ((isinstance(thing, list) or isinstance(thing, tuple) or
+         isinstance(thing, set) or isinstance(thing, dict)) and None in thing):
         return True
     return False
 
@@ -212,7 +213,7 @@ def parse_time(time_string):
         return datetime.datetime.strptime(time_string, "%I:%M%p").time()
     except:
         pass
-    try: 
+    try:
         return datetime.datetime.strptime(time_string, "%H:%M").time()
     except:
         return None
@@ -280,8 +281,7 @@ def word_limit(f):
     def g(*args, **kwargs):
         new_args = []
         new_kwargs = {}
-        for i in range(len(args)):
-            arg = args[i]
+        for arg in args:
             if type(arg) == str and len(arg) > limit:
                 new_args.append(arg[0:limit])
             else:
