@@ -106,17 +106,17 @@ export function getMini(date) {
   } else {
     date.year(moment().year())
   }
-  if (date.isBetween(moment({ month: mMonth(8), day: 20 }), moment({ month: mMonth(10), day: 15 }))) {
+  if (date.isBetween(moment({ month: mMonth(8), day: 20 }), moment({ month: mMonth(10), day: 15 }), null, '(]')) {
     return 1
-  } else if (date.isBetween(moment({ month: mMonth(10), day: 15 }), moment({ month: mMonth(12), day: 31 }))) {
+  } else if (date.isBetween(moment({ month: mMonth(10), day: 15 }), moment({ month: mMonth(12), day: 31 }), null, '(]')) {
     return 2
-  } else if (date.isBetween(moment({ month: mMonth(1), day: 1 }), moment({ month: mMonth(3), day: 15 }))) {
+  } else if (date.isBetween(moment({ month: mMonth(1), day: 1 }), moment({ month: mMonth(3), day: 15 }), null, '(]')) {
     return 3
-  } else if (date.isBetween(moment({ month: mMonth(3), day: 15 }), moment({ month: mMonth(5), day: 15 }))) {
+  } else if (date.isBetween(moment({ month: mMonth(3), day: 15 }), moment({ month: mMonth(5), day: 15 }), null, '(]')) {
     return 4
-  } else if (date.isBetween(moment({ month: mMonth(5), day: 15 }), moment({ month: mMonth(7), day: 1 }))) {
+  } else if (date.isBetween(moment({ month: mMonth(5), day: 15 }), moment({ month: mMonth(7), day: 1 }), null, '(]')) {
     return 5
-  } else if (date.isBetween(moment({ month: mMonth(7), day: 1 }), moment({ month: mMonth(8), day: 20 }))) {
+  } else if (date.isBetween(moment({ month: mMonth(7), day: 1 }), moment({ month: mMonth(8), day: 20 }), null, '(]')) {
     return 6
   }
   return 0
