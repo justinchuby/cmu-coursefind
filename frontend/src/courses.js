@@ -66,14 +66,15 @@ class Courses extends Component {
   componentDidMount() {
     let elems = document.getElementsByClassName("plain-text")
     if (elems.length !== 0) {
-      for (let i = 0; i < elems.length; i++) {
-        elems[i].style.cssText = "display: none;"
-      }
+      // for (let i = 0; i < elems.length; i++) {
+      //   elems[i].style.cssText = "display: none;"
+      // }
+      elems.map(elem => elem.style.cssText = "display: none;")
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    let url = `https://api.cmucoursefind.xyz/course/v1/courseid/${nextProps.match.params.courseid}/`
+    const url = `https://api.cmucoursefind.xyz/course/v1/courseid/${nextProps.match.params.courseid}/`
     fetch(url)
       .then((response) => {
         this.setState({response: response})
