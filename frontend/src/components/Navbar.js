@@ -58,9 +58,8 @@ class Navbar extends Component {
         <div className="navbar-fixed">
           <nav className={this.props.color}>
             <div className="nav-wrapper">
-              <a
-                data-target="slide-out"
-                className="button-collapse hide-on-med-and-up sidenav-trigger">
+              <a data-activates="slide-out"
+                className="button-collapse hide-on-med-and-up">
                 <i className="material-icons">menu</i>
               </a>
               <Link to="/"
@@ -70,7 +69,7 @@ class Navbar extends Component {
               </Link>
               <div className="row" style={{ height: '100%' }}>
                 <form
-                  className="col s7 m10 l11"
+                  className="col s8 m10 l11"
                   id="search-box"
                   onSubmit={this.handleSubmit.bind(this)}>
                   <div className="input-field">

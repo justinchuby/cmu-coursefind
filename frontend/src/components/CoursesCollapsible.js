@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import CoursesCollapsibleElement from './CoursesCollapsibleElement'
 
-// var $ = window.jQuery = require('jquery');
-const M = require('materialize-css/dist/js/materialize');
+var $ = window.jQuery = require('jquery');
+require('materialize-css/dist/js/materialize');
 
 class CoursesCollapsible extends Component {
   componentDidMount() {
     // This would initialize all collapsibles but whatever
-    const elems = document.querySelectorAll('.collapsible')
-    const instances = M.Collapsible.init(elems, {})
+    $('.collapsible').collapsible();
   }
 
   render() {

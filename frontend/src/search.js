@@ -12,8 +12,8 @@ import {
 import 'url-search-params-polyfill';
 import { Helmet } from 'react-helmet'
 
-// let $ = window.jQuery = require('jquery');
-const M = require('materialize-css/dist/js/materialize');
+let $ = window.jQuery = require('jquery');
+require('materialize-css/dist/js/materialize');
 
 
 class Search extends Component {
@@ -31,8 +31,7 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    const elems = document.querySelectorAll('ul.tabs')
-    const instance = M.Tabs.init(elems, {})
+    $('ul.tabs').tabs();
   }
 
   componentWillMount() {

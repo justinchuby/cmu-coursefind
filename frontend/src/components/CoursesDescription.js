@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import Linkify from 'linkifyjs/react';
 
 // const sanitizeHtml = require('sanitize-html')
-let $ = require('jquery');
+var $ = require('jquery');
 require('../utils/readmore')
 
 class CoursesDescription extends Component {
   // props: content
   componentDidMount() {
     $('.readmore').readmore();
-    // document.querySelectorAll('.readmore').readmore()
   }
 
   render() {

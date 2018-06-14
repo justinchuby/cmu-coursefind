@@ -9,8 +9,8 @@ import {
   getMini
 } from './helpers'
 
-// let $ = window.jQuery = require('jquery');
-const M = require('materialize-css/dist/js/materialize')
+let $ = window.jQuery = require('jquery');
+require('materialize-css/dist/js/materialize');
 
 // import 'url-search-params-polyfill';
 // const search = props.location.search; // could be '?foo=bar'
@@ -70,9 +70,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const elems = document.querySelectorAll('ul.tabs')
-    const instance = M.Tabs.init(elems, {})
-    this.interval = setInterval(() => this.tick(), 60000)
+    $('ul.tabs').tabs();
+    this.interval = setInterval(() => this.tick(), 60000);
   }
 
   componentWillUnmount() {
