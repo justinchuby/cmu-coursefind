@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Linkify from 'linkifyjs/react';
 
 // const sanitizeHtml = require('sanitize-html')
-var $ = require('jquery');
+const $ = require('jquery')
 require('../utils/readmore')
 
 class CoursesDescription extends Component {

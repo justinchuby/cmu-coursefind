@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import CollapsibleElement from './CollapsibleElement'
 
-var $ = window.jQuery = require('jquery');
-require('materialize-css/dist/js/materialize');
+const $ = window.jQuery = require('jquery')
+require('materialize-css/dist/js/materialize')
 
 class Collapsible extends Component {
   componentDidMount() {

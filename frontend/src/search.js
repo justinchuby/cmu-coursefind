@@ -9,11 +9,11 @@ import {
   parseSearchQuery,
   encodeURIParams
 } from './helpers'
-import 'url-search-params-polyfill';
+import 'url-search-params-polyfill'
 import { Helmet } from 'react-helmet'
 
-let $ = window.jQuery = require('jquery');
-require('materialize-css/dist/js/materialize');
+const $ = window.jQuery = require('jquery')
+require('materialize-css/dist/js/materialize')
 
 
 class Search extends Component {

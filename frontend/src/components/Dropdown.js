@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-var $ = window.jQuery = require('jquery');
+const $ = window.jQuery = require('jquery')
 require('materialize-css/dist/js/materialize');
 
 class Dropdown extends Component {

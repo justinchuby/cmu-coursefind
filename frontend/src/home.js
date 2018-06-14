@@ -9,13 +9,8 @@ import {
   getMini
 } from './helpers'
 
-let $ = window.jQuery = require('jquery');
-require('materialize-css/dist/js/materialize');
-
-// import 'url-search-params-polyfill';
-// const search = props.location.search; // could be '?foo=bar'
-// const params = new URLSearchParams(search);
-// const foo = params.get('foo'); // bar
+const $ = window.jQuery = require('jquery')
+require('materialize-css/dist/js/materialize')
 
 class Home extends Component {
   constructor(props) {

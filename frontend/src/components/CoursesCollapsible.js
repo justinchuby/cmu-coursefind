@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CoursesCollapsibleElement from './CoursesCollapsibleElement'
 
-var $ = window.jQuery = require('jquery');
+const $ = window.jQuery = require('jquery')
 require('materialize-css/dist/js/materialize');
 
 class CoursesCollapsible extends Component {

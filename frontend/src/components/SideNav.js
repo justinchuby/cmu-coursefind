@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
 
-let $ = window.jQuery = require('jquery');
-require('materialize-css/dist/js/materialize');
+const $ = window.jQuery = require('jquery')
+require('materialize-css/dist/js/materialize')
 
 class SideNav extends Component {
   componentDidMount() {
