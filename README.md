@@ -2,6 +2,8 @@
 
 
 ## Introduction
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjustinchuby%2Fcmu-coursefind.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjustinchuby%2Fcmu-coursefind?ref=badge_shield)
+
 
 The project I am working on is a course finder, **CourseFind**.
 
@@ -26,3 +28,7 @@ $ python3 manage.py runserver
 ## Current progress
 
 Currently, a new version is being developed.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjustinchuby%2Fcmu-coursefind.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjustinchuby%2Fcmu-coursefind?ref=badge_large)
