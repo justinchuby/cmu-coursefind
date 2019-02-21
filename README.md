@@ -1,6 +1,10 @@
 # README #
 
 
+## Status
+
+Currently, a new version is being developed. The website is down right now. 
+
 ## Introduction
 
 The project I am working on is a course finder, **CourseFind**.
@@ -22,7 +26,3 @@ With CourseFind, students can easily find out what’s going on in a class room.
 ```bash
 $ python3 manage.py runserver
 ```
-
-## Current progress
-
-Currently, a new version is being developed.
